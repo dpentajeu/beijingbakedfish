@@ -39,34 +39,44 @@
 </head>
 
 <body>
-
-	<div class="header">
+    <div class="header">
     	<div class="stripe">
-        	<div class="logo">
-            	<a href="#">Beijing Baked Fish Restaurant</a>
+            <div class="logo">
+                <a href="#">Beijing Baked Fish Restaurant</a>
             </div><!-- end .logo -->
             <ul class="social">
-				<li class="phone">8 Jalan ABC, Melaka. +6017-8888888</li>
+		<li class="phone">8 Jalan ABC, Melaka. +6017-8888888</li>
                 <li class="twitter"><a href="http://twitter.com/">Twitter</a></li>
                 <li class="facebook"><a href="http://facebook.com/">Facebook</a></li>
             </ul><!-- end .social -->
         </div><!-- end .stripe -->
         
-            <div class="showcase">
-            <div class="form">
-                <form class="booking" action="#" name="booking">
+        <div class="showcase">
+           <div class="form">
+                <?php $form=$this->beginWidget('CActiveForm', array(
+                    'id'=>'registration-form',
+                    'enableClientValidation'=>true,
+                    'clientOptions'=>array(
+                            'validateOnSubmit'=>true,
+                            ),
+                    )); ?>
+                    <?php if (!empty($this->Regmsg)): ?>
+                            <a href="#" style="font-size: 14px; color:red;"><?php echo $this->Regmsg; ?></a><br/><br/>
+                    <?php endif; ?>
+
                     <label class="type">Name:</label>
-                    <input type="text" name="name" class="name required" />   
-                    <label class="from">Phone:</label>
-                    <input type="text" name="from" class="date-start required" />
-                    <label class="to">D.O.B:</label>
-                    <input type="text" name="to" class="date date-end required" />
+                    <?php echo CHtml::textField('Registration[name]', '', array('class'=>'name required')); ?>
+                    <label class="type">Phone:</label>
+                    <?php echo CHtml::textField('Registration[contact]', '', array('class'=>'required')); ?>
+                    <label class="type">Date of birth:</label>
+                    <?php echo CHtml::textField('Registration[dateOfBirth]', '', array('class'=>'date date-end required')); ?><br/><br/><br/><br/><br/>
                     <label class="type">Address:</label>
-                    <input type="text" name="address" class="name required" />
-                    <label class="for-email">Email:</label>
-                    <input type="text" name="email" class="email required" />
-                    <input type="submit" class="submit" name="submit" value="Register" />
-                </form>
+                    <?php echo CHtml::textField('Registration[address]', '', array('class'=>'name required')); ?>
+                    <label class="type">Email:</label>
+                    <?php echo CHtml::textField('Registration[email]', '', array('class'=>'name required')); ?>
+
+                    <?php echo CHtml::submitButton('Register', array('class'=>'submit')); ?> 	
+                <?php $this->endWidget(); ?>
             </div><!-- end .form -->
         </div><!-- end .showcase -->
     </div><!-- end .header -->

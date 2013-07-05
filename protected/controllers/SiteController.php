@@ -2,9 +2,34 @@
 
 class SiteController extends Controller
 {
+        public $Regmsg='';
 	/**
 	 * Declares class-based actions.
 	 */
+    
+        protected final function beforeAction($action)
+        {
+            if (isset($_POST['Registration']))
+            {
+                $model = new User;
+
+                $model->attributes = $_POST['Registration'];
+                try
+                {
+                        if (!$model->validate())
+                                throw new Exception("Please fill in all the forms and proper email.");
+                        $model->createUser();
+                        $this->Regmsg = 'Member has been created succesfully.';
+                        $model = new User;
+                }
+                catch (Exception $e)
+                {
+                        $this->Regmsg = $e->getMessage();
+                }
+            }
+            return true;
+        }
+         
 	public function actions()
 	{
 		return array(
