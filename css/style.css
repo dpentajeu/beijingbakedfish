@@ -1,0 +1,790 @@
+/* STYLESHEET SECTIONS */
+/* ------------------------ */
+/* 1 - GENERAL SETTINGS */
+/* 2 - HEADER STYLES */
+/* 3 - CONTENT STYLES */
+/* 4 - FOOTER STYLES */
+/* 5 - FLEXSLIDER STYLES
+/* 6 - RESPONSIVE LAYOUTS */
+/* ------------------------ */
+
+
+/* 1 - GENERAL SETTINGS */
+
+@font-face {
+    font-family: 'OpenSansCondensedBold';
+    src: url('../fonts/OpenSans-CondBold-webfont.eot');
+    src: url('../fonts/OpenSans-CondBold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/OpenSans-CondBold-webfont.woff') format('woff'),
+         url('../fonts/OpenSans-CondBold-webfont.ttf') format('truetype'),
+         url('../fonts/OpenSans-CondBold-webfont.svg#OpenSansCondensedBold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+body {
+	background: #fff;
+	margin: 0; padding: 0;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 14px;
+	color: #000;
+	/* text-shadow: #eee 1px 1px 1px; */
+}
+
+a {
+	color: #00aeff;
+	text-decoration: none;
+	outline: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+strong {
+	font-weight: bold;
+}
+
+.header {
+	height: 440px;
+	width: 100%;
+	color: #fff;
+	clear: both;
+	overflow: hidden;
+	background: url(../images/bg-stripe.png) repeat-x top;
+	margin: 0 0 50px 0;
+}
+
+.content {
+	width: 960px;
+	margin: 0 auto 0px;
+	padding: 0;
+	clear: both;
+	overflow: hidden;
+}
+
+/* 2 -HEADER STYLES */
+.header .stripe {
+	width: 960px;
+	height: 40px;
+	margin: 0 auto;
+}
+
+.header .stripe .logo {
+	float: left;
+}
+
+.header .stripe .logo a {
+	color: #fff;
+	font-family: 'OpenSansCondensedBold', Helvetica, Arial, sans-serif;
+	font-size: 24px;
+	letter-spacing: -0.35px;
+	margin: 10px 0 0 0;
+	display: block;
+}
+
+.header .stripe .logo a:hover {
+	text-decoration: none;
+}
+
+.header .stripe .social {
+	float: right;
+}
+
+.header .stripe .social li {
+	float: left;
+}
+
+.header .stripe .social li a {
+	margin: 0 0 0 40px;
+}
+
+.header .stripe .social li.phone {
+	font-style: italic;
+	padding: 12px 0 0 0;
+}
+
+.header .stripe .social li.twitter,
+.header .stripe .social li.facebook {
+
+	text-indent: -9999px;
+}
+
+.header .stripe .social li.twitter a,
+.header .stripe .social li.facebook a {
+	width:40px; height: 40px;
+	display: block;
+	cursor: pointer;
+    -webkit-transition: all 0.123s ease-in;
+    -moz-transition: all 0.123s ease-in;
+    -ms-transition: all 0.123s ease-in;
+    -o-transition: all 0.123s ease-in;
+    transition: all 0.123s ease-in;
+	background: url(../images/ico-social.png) no-repeat;
+}
+
+.header .stripe .social li.twitter a {
+	background-position: 0 0;
+	margin: 0 0 0 40px;
+}
+.header .stripe .social li.twitter a:hover {
+	background-position: 0px -40px;
+}
+
+.header .stripe .social li.facebook a {
+	background-position: -40px 0;
+	margin: 0 0 0 0px;
+}
+.header .stripe .social li.facebook a:hover {
+	background-position: -40px -40px;;
+}
+.header .showcase {
+	color: #000;
+	height: 400px;
+	font-family: 'OpenSansCondensedBold', Helvetica, Arial, sans-serif;
+	font-size: 18px;
+	background: url(../images/header.png) no-repeat center top;
+}
+
+.header .showcase .form {
+	width: 960px;
+	margin: 0 auto;
+	padding: 90px 0 0 0;
+}
+
+.header .showcase .form form {
+	width: 460px;
+	float: right;
+	padding: 35px 40px 30px 40px;
+	background: rgb(0, 0, 0);
+	background: rgba(0, 0, 0, 0.6);
+}
+
+.header .showcase .form form label,
+.header .showcase .form form input,
+.header .showcase .form form select {
+	float: left;
+	height: 38px;
+	border: none;
+	padding: 0;
+}
+
+.header .showcase .form form label {
+	padding: 12px 0 0 ;
+	height: 28px;
+	color: #fff;
+}
+
+.header .showcase .form form input {
+	background: #fff;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 14px;
+    border: 1px solid rgba(0,0,0,0.15);
+    box-shadow: 0 1px 1px rgba(50,50,50,0.1);
+}
+
+.header .showcase .form form label.from,
+.header .showcase .form form label.to,
+.header .showcase .form form label.type,
+.header .showcase .form form label.for-email {
+	width: 58px;
+}
+.header .showcase .form form label.to {
+	width: 38px;
+	padding: 12px 0 0 15px;
+}
+.header .showcase .form form select.roomtype {
+	width: 398px;
+	float: left;
+	border: none;
+}
+
+.header .showcase .form form .date {
+	width: 120px;
+	margin: 0 0 5px 0;
+	padding: 0 0 0 10px;
+}
+
+.header .showcase .form form .date-start {
+	margin: 0 40px 5px 0;
+}
+
+.header .showcase .form form .email {
+	width: 290px;
+	margin: 0 5px 0 0;
+	padding: 0 0 0 10px;
+}
+
+.header .showcase .form form .name {
+	width: 385px;
+	margin: 0 5px 5px 0;
+	padding: 0 0 0 10px;
+}
+
+.header .showcase .form form .date-start.error,
+.header .showcase .form form .date-end.error,
+.header .showcase .form form .email.error {
+	    border: 1px solid #F00;
+}
+
+.header .showcase .form form .submit,
+.content .boxes .box p a.btn-book,
+.header .showcase .form form .submit[disabled=disabled]:hover {
+	width: 95px;
+	outline: none;
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-clip: padding-box;
+    background-color: #D8E6F4;
+    background-image: -moz-linear-gradient(center top , #F1F6FF 0%, #D3DDE7 70%, #BFCDDC 100%);
+
+    border-image: none;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-color: #B2BCC8 #ACB6C0 #97ABBA;
+    box-shadow: 0 1px 1px rgba(50,50,50,0.1);
+    color: #597490;
+    display: block;
+    font-size: 13px;
+    font-weight: bold;
+    height: 40px;
+    line-height: 38px;
+    margin-bottom: 10px;
+    padding: 0 14px;
+
+    -webkit-transition: all 0.05s linear;
+    -moz-transition: all 0.05s linear;
+    -ms-transition: all 0.05s linear;
+    -o-transition: all 0.05s linear;
+    transition: all 0.05s linear;
+
+    text-decoration: none;
+    text-shadow: 0 1px rgba(255, 255, 255, 0.8);
+}
+input::-moz-focus-inner {
+  border: 0;
+}
+
+.content .boxes .box p a.btn-book:hover,
+.header .showcase .form form .submit:hover {
+	cursor: pointer;
+    background-clip: border-box;
+    color: #F6FDFF;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.4);
+    background-color: #99ABB9;
+    background-image: -moz-linear-gradient(center top , #99ABB9, #7E93A8);
+    border-color: #718190;
+}
+
+.content .boxes .box p a.btn-book {
+	height: 34px;
+	margin: 20px auto 0;
+    padding: 0 14px 3px;
+	font-size: 15px;
+}
+
+
+/* CSS DROPDOWN */
+.wrapper-dropdown {
+    /* Size and position */
+    position: relative;
+    width: 380px;
+    margin: 0 0 5px 58px;
+    padding: 11px 10px 9px;
+	height: 18px;
+
+    /* Styles */
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.15);
+    box-shadow: 0 1px 1px rgba(50,50,50,0.1);
+    cursor: pointer;
+    outline: none;
+
+    /* Font settings */
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 14px;
+    font-weight: normal;
+    color: #000;
+}
+
+.wrapper-dropdown:after {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    margin-top: -3px;
+    border-width: 6px 6px 0 6px;
+    border-style: solid;
+    border-color: #000 transparent;
+}
+
+.wrapper-dropdown .dropdown {
+  /* Size & position */
+    position: absolute;
+    top: 140%;
+    left: 0;
+    right: 0;
+
+    /* Styles */
+    background: white;
+    border: 1px solid rgba(0,0,0,0.17);
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    font-weight: normal;
+    -webkit-transition: all 0.123s ease-in;
+    -moz-transition: all 0.123s ease-in;
+    -ms-transition: all 0.123s ease-in;
+    -o-transition: all 0.123s ease-in;
+    transition: all 0.123s ease-in;
+    list-style: none;
+
+    /* Hiding */
+    opacity: 0;
+    pointer-events: none;
+}
+
+.wrapper-dropdown .dropdown { display /*\**/: none\9 }
+.wrapper-dropdown .dropdown:hover, .wrapper-dropdown .dropdown:active { display /*\**/: block\9 }
+
+
+.wrapper-dropdown .dropdown:after {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: 100%;
+    right: 15px;
+    border-width: 0 6px 6px 6px;
+    border-style: solid;
+    border-color: #fff transparent;    
+}
+
+.wrapper-dropdown .dropdown:before {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    bottom: 100%;
+    right: 13px;
+    border-width: 0 8px 8px 8px;
+    border-style: solid;
+    border-color: rgba(0,0,0,0.1) transparent;    
+}
+
+.wrapper-dropdown .dropdown li a {
+    display: block;
+    padding: 12px 10px 8px;
+	height: 20px;
+    text-decoration: none;
+    color: #000;
+    border-bottom: 1px solid #e6e8ea;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,1);
+    -webkit-transition: all 0.123s ease-out;
+    -moz-transition: all 0.123s ease-out;
+    -ms-transition: all 0.123s ease-out;
+    -o-transition: all 0.123s ease-out;
+    transition: all 0.123s ease-out;
+}
+
+.wrapper-dropdown .dropdown li:first-of-type a {}
+.wrapper-dropdown .dropdown li:last-of-type a {border: none;}
+/* Hover state */
+.wrapper-dropdown .dropdown li:hover a {background: #f3f8f8;}
+/* Active state */
+.wrapper-dropdown.active .dropdown {opacity: 1;pointer-events: auto;}
+/* No CSS3 support */
+.no-opacity       .wrapper-dropdown .dropdown,
+.no-pointerevents .wrapper-dropdown .dropdown {
+    display: none;
+    opacity: 1; /* If opacity support but no pointer-events support */
+    pointer-events: auto; /* If pointer-events support but no pointer-events support */
+}
+.no-opacity       .wrapper-dropdown.active .dropdown,
+.no-pointerevents .wrapper-dropdown.active .dropdown {
+    display: block;
+}
+
+/* 3 - CONTENT STYLES */
+.content h1 {
+	font-size: 36px;
+	padding: 0; margin: 0 auto 30px;
+	font-family: 'OpenSansCondensedBold', Helvetica, Arial, sans-serif;
+	letter-spacing: -0.75px;
+	text-align: center;
+}
+
+.content h2 {
+	font-size: 18px;
+	line-height: 32px;
+	padding: 0; margin: 0 auto 60px;
+	text-align: center;
+	font-style: italic;
+	padding: 0 0 50px 0;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.content .boxes {
+	clear: both;
+	overflow: hidden;
+	margin: 0 0 80px 0;
+	padding: 0 0 60px 0;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.content .boxes li {
+	width: 290px;
+	margin: 0 45px 0 0;
+	float: left;
+}
+
+.content .boxes li.last {
+	margin: 0;
+}
+
+.content .boxes li h3 {
+	height: 38px;
+	background: #f2f2f2;
+	font-size: 18px;
+	text-align: center;
+	padding: 22px 0 0 0;
+	font-family: 'OpenSansCondensedBold', Helvetica, Arial, sans-serif;
+}
+
+.content .boxes li .photo {
+	width: 290px;
+	height: 230px;
+	position: relative;
+	margin: 0 0 20px 0;
+}
+
+.content .boxes li .photo span {
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	background: rgba(255, 255, 255, 0.5);
+	height: 48px;
+	width: 120px;
+	padding: 12px 0 0 0;
+	text-align: center;
+	font-size: 30px;
+	font-style: italic;
+}
+
+.content .boxes li .facilities {
+	text-indent: -9999px;
+	clear: both;
+	overflow: hidden;
+	margin: 0 0 30px 0;
+}
+
+.content .boxes li .facilities li {
+	float: left;
+	margin: 0 20px 0 0;
+	height: 30px;
+	width: 30px;
+}
+
+.content .boxes li .facilities li:last-child {
+	margin: 0;
+}
+
+.content .boxes li .facilities li.accessible {background: url(../img/ico-accessible.png) no-repeat center;}
+.content .boxes li .facilities li.food {background: url(../img/ico-food.png) no-repeat center;}
+.content .boxes li .facilities li.gym {background: url(../img/ico-gym.png) no-repeat center;}
+.content .boxes li .facilities li.internet {background: url(../img/ico-internet.png) no-repeat center;}
+.content .boxes li .facilities li.ironing {background: url(../img/ico-ironing.png) no-repeat center;}
+.content .boxes li .facilities li.laundry {background: url(../img/ico-laundry.png) no-repeat center;}
+.content .boxes li .facilities li.parking {background: url(../img/ico-parking.png) no-repeat center;}
+.content .boxes li .facilities li.phone {background: url(../img/ico-phone.png) no-repeat center;}
+.content .boxes li .facilities li.safe {background: url(../img/ico-safe.png) no-repeat center;}
+.content .boxes li .facilities li.shower {background: url(../img/ico-shower.png) no-repeat center;}
+.content .boxes li .facilities li.swimming {background: url(../img/ico-swimming.png) no-repeat center;}
+.content .boxes li .facilities li.tv {background: url(../img/ico-tv.png) no-repeat center;}
+.content .boxes li .facilities li.wake {background: url(../img/ico-wake.png) no-repeat center;}
+
+.content .boxes li p {
+	font-size: 15px;
+	line-height: 24px;
+}
+
+.content .testimonials {
+	clear: both;
+	overflow: hidden;
+	margin: 0 0 20px 0;
+	padding: 0 0 80px 0;
+}
+
+.content .testimonials li {
+	width: 450px;
+	margin: 0 60px 0 0;
+	float: left;
+	font-size: 13px;
+	font-style: italic;
+	line-height: 20px;
+}
+
+.content .testimonials li.last {
+	margin: 0;
+}
+
+.content .testimonials li img {
+	float: left;
+	margin: 0 30px 0 0;
+	width: 80px;
+	height: 80px;
+}
+
+.content .testimonials li span {
+	font-family: 'OpenSansCondensedBold', Helvetica, Arial, sans-serif;
+	font-style: normal;
+	font-size: 18px;
+	float: right;
+}
+
+/* 4 - FOOTER STYLES */
+.footer {
+	background: url(../images/footer-bg.jpg) repeat-x top;
+	height: 300px;
+	width: 100%;
+	padding: 80px 0 0 0;
+}
+
+.footer .columns {
+	width: 960px;
+	margin: 0 auto;
+	color: #ddd;
+}
+
+.footer .columns li.address {
+	width: 440px;
+	float: left;
+}
+
+.footer .columns li p {
+	line-height: 21px;
+	margin: 0 0 20px 0;
+}
+
+.footer .columns li.map {
+	width: 440px;
+	float: right;
+}
+
+.footer .columns li.map iframe {
+	border: 7px solid #5a5a5a;
+}
+
+/* 5 - FLEXSLIDER STYLES */
+/*
+ * jQuery FlexSlider v1.4
+ * http://flex.madebymufffin.com
+ *
+ * Copyright 2011, Tyler Smith
+ * Free to use under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ */
+
+/* FlexSlider Necessary Styles
+*********************************/ 
+.flexslider {width: 100%; margin: 0; padding: 0; height: 230px;}
+.flexslider .slides li {display: none;    } /* Hide the slides before the JS is loaded. Avoids image jumping */
+.flexslider .slides li {background: url(../img/slide-overlay.png) no-repeat;}
+.flexslider .slides li img {	-webkit-transition: all 0.1s linear;
+    -moz-transition: all 0.1s linear;
+    -ms-transition: all 0.1s linear;
+    -o-transition: all 0.1s linear;
+    transition: all 0.1s linear;}
+
+.flexslider .slides li:hover img {opacity: 0.1; cursor: pointer;}
+.flexslider .slides img {max-width: 100%; display: block;}
+
+
+/* FlexSlider Default Theme
+*********************************/
+.flexslider {background: #fff; position: relative;}
+.flexslider .slides  li {position: relative;}
+/* Suggested container for "Slide" animation setups. Can replace this with your own, if you wish */
+.flexslider-container {position: relative;}
+
+
+/* Caption style */
+.flex-caption {width: 96%; padding: 2%; position: absolute; left: 0; bottom: 0; background: rgba(0,0,0,.3); color: #fff; text-shadow: 0 -1px 0 rgba(0,0,0,.3); font-size: 15px; line-height: 18px;}
+
+/* Direction Nav */
+.flex-direction-nav li a {width: 23px; height: 23px; margin: -12px 0 0 0; display: block; background: url(../img/slides-nav-bg.png) no-repeat 0 0; position: absolute; top: 50%; cursor: pointer; text-indent: -9999px;
+    -webkit-transition: all 0.1s ease-in;
+    -moz-transition: all 0.1s ease-in;
+    -ms-transition: all 0.1s ease-in;
+    -o-transition: all 0.1s ease-in;
+    transition: all 0.1s ease-in;} /* set negative margin-top equal to half the height on the directional-nav for perfect vertical centering */
+.flex-direction-nav li a.flex-next {background-position: -23px 0; right: 0px;}
+.flex-direction-nav li a.flex-next:hover {background-position: -23px -23px; right: 0px;}
+.flex-direction-nav li a.flex-prev {background-position: 0 0; left: 0px;}
+.flex-direction-nav li a.flex-prev:hover {background-position: 0 -23px; left: 0px;}
+
+/* Control Nav */
+.flex-control-nav {display: none;} /* set negative margin-left equal to half the width on the control-nav for perfect centering */
+
+
+
+
+/* 6 - RESPONSIVE LAYOUTS */
+
+@media screen and (min-width: 220px) and (max-width: 300px),
+handheld and (min-width: 220px) and (max-width: 300px),
+screen and (min-device-width: 220px) and (max-device-width: 300px) {
+	body { width: 238px;margin: 0 auto }
+	.content { width: 238px; }
+	.header { height: 540px; }
+	.header .stripe { width: 238px; height: 120px; background: #000 }
+	.header .stripe .logo {padding: 0 0 0 20px;}
+	.header .stripe .social li.twitter,
+	.header .stripe .social li.facebook {float: left; margin: 0; width: 40px;}
+	.header .stripe .social li.twitter a {margin: 0; width: 40px;}
+	.header .stripe .social li.phone { width: 100%; padding: 0 20px;}
+
+	.wrapper-dropdown {width: 170px !important; float: left; margin: 0 0 0 20px !important;}
+
+	.header .showcase .form {width: 238px; margin: 0; padding: 10px 0 0 0;}
+	.header .showcase .form form { width: 100%; padding: 0 0 20px 0; float: left; }
+	.header .showcase .form form input { width: 180px !important; clear: both; overflow: hidden; margin-left: 20px !important; display: block;}
+	.header .showcase .form form label { width: 180px !important; clear: both; overflow: hidden;text-align: left; padding-left: 20px;}
+	.header .showcase .form form .submit { width: 192px !important; clear: both; overflow: hidden; margin: 20px 0 0 0;}
+	.wrapper-dropdown { width: 218px; margin: 0; clear: both;}
+
+	.content .boxes li {width: 238px;margin: 0 0 40px 0;}
+	.content .boxes li ul li {margin: 0;}
+	.content .boxes li .photo {width: 238px; height: 200px}
+	.content .boxes li .photo span {bottom: 20px;}
+	.content .boxes li .photo img {width: 238px}
+	.content .boxes li .facilities {margin: 0 0 20px 0;}
+	.content .boxes li .facilities li {	margin: 0 20px 10px 0;}
+	
+	.flexslider {height: 200px;}
+
+	.content .testimonials li { width: 238px; margin: 0 0 20px 0;}
+	.content .testimonials li img {margin: 0 10px 40px 0;}
+
+	.footer { clear: both; overflow: hidden; height: auto; padding-bottom: 20px;}
+	.footer .columns { width: 218px; }
+	.footer .columns .map, .footer .columns .map iframe { width: 218px !important; }
+
+}
+
+@media screen and (min-width: 300px) and (max-width: 440px),
+handheld and (min-width: 300px) and (max-width: 440px),
+screen and (min-device-width: 300px) and (max-device-width: 440px) {
+	body { width: 318px; margin: 0 auto}
+	.content { width: 318px; }
+	.header { height: 540px; }
+	.header .stripe { width: 318px; height: 120px; background: #000 }
+	.header .stripe .logo {padding: 0 0 0 20px;}
+	.header .stripe .social li.twitter,
+	.header .stripe .social li.facebook {float: left; margin: 0; width: 40px;}
+	.header .stripe .social li.twitter a {margin: 0; width: 40px;}
+	.header .stripe .social li.phone { width: 100%; padding: 0 20px;}
+
+	.wrapper-dropdown {width: 235px !important; float: left; margin: 0 0 0 20px !important;}
+
+	.header .showcase .form {width: 298px; margin: 0 auto; padding: 10px 0 0 0;}
+	.header .showcase .form form { width: 100%; padding: 0 0 20px 0; float: left; }
+	.header .showcase .form form input { width: 245px !important; clear: both; overflow: hidden; margin-left: 20px !important; display: block;}
+	.header .showcase .form form label { width: 245px !important; clear: both; overflow: hidden; text-align: left; padding-left: 20px;}
+	.header .showcase .form form .submit { width: 256px !important; clear: both; overflow: hidden; margin: 20px 0 0 0;}
+	.wrapper-dropdown { width: 278px; margin: 0; clear: both;}
+
+	.content .boxes li, .content .boxes li.last {width: 290px; margin: 0 auto 40px ; float: none;}
+	.content .boxes li ul li {margin: 0 auto;}
+
+	
+	.flexslider {height: 220px;}
+
+	.content .testimonials { margin: 0; border: none; padding: 0}
+	.content .testimonials li, .content .testimonials li.last { width: 298px; margin: 0 auto 20px; float: none; clear: both; overflow: hidden;}
+	.content .testimonials li img {margin: 0 10px 40px 0;}
+
+	.footer { clear: both; overflow: hidden; height: auto; padding-bottom: 20px;}
+	.footer .columns { width: 288px; }
+	.footer .columns .map, .footer .columns .map iframe { width: 288px !important; }
+}
+
+
+@media screen and (min-width: 440px) and (max-width: 720px),
+handheld and (min-width: 440px) and (max-width: 720px),
+screen and (min-device-width: 440px) and (max-device-width: 720px) {
+	body { width: 480px; overflow-x: hidden; margin: 0 auto}
+	.content { width: 480px; overflow: hidden; }
+	.content h2 {width: 460px;}
+	.header { height: 540px; }
+	.header .stripe { width: 480px; height: 120px; background: #000 }
+	.header .stripe .logo {padding: 0 0 0 20px;}
+	.header .stripe .social li.twitter,
+	.header .stripe .social li.facebook {float: left; margin: 0; width: 40px;}
+	.header .stripe .social li.twitter a {margin: 0; width: 40px;}
+	.header .stripe .social li.phone { width: 100%; padding: 0 20px;}
+
+	.wrapper-dropdown {width: 260px !important; float: left; margin: 0 0 0 20px !important;}
+
+	.header .showcase .form {width: 320px; margin: 0; padding: 10px 0 0 0;}
+	.header .showcase .form form { width: 320px; padding: 0 0 20px 0; float: left; margin: 0 0 0 50px; }
+	.header .showcase .form form input { width: 270px !important; clear: both; overflow: hidden; margin-left: 20px !important; display: block;}
+	.header .showcase .form form label { width: 270px !important; clear: both; overflow: hidden; text-align: left; padding-left: 20px;}
+	.header .showcase .form form .submit { width: 282px !important; clear: both; overflow: hidden; margin: 20px 0 0 0;}
+	.wrapper-dropdown { width: 300px; margin: 0; clear: both;}
+
+	.content .boxes {width: 460px; margin: 0 auto;}
+	.content .boxes li, .content .boxes li.last {width: 290px; margin: 0 auto 40px ; float: none;}
+	.content .boxes li ul li {margin: 0 auto;}
+
+	.content .testimonials { margin: 0; border: none; padding: 40px 0 0 0}
+	.content .testimonials li, .content .testimonials li.last { width: 460px; margin: 0 auto 20px; float: none; clear: both; overflow: hidden;}
+	.content .testimonials li img {margin: 0 10px 40px 0;}
+
+	.footer { clear: both; overflow: hidden; height: auto; padding-bottom: 20px;}
+	.footer .columns { width: 460px; }
+	.footer .columns .map, .footer .columns .map iframe { width: 425px !important; float: left !important; }
+}
+
+@media screen and (min-width: 720px) and (max-width: 980px),
+handheld and (min-width: 720px) and (max-width: 980px),
+screen and (min-device-width: 720px) and (max-device-width: 980px) {
+	body { width: 766px; }
+	.content { width: 766px; }
+	.content h2 {width: 766px;}
+	.header { height: 520px; }
+	.header .stripe { width: 766px; height: 120px; background: #000 }
+	.header .stripe .logo {padding: 0 0 0 20px;}
+	.header .stripe .social li.twitter,
+	.header .stripe .social li.facebook {float: left; margin: 0; width: 40px;}
+	.header .stripe .social li.twitter a {margin: 0; width: 40px;}
+
+	.header .showcase .form {margin: 0 auto; padding: 10px 0 0 0; float: left;}
+	.header .showcase .form form {float: left; margin: 50px 0 0 50px;}
+
+	.content .boxes {width: 460px; margin: 0 auto;}
+	.content .boxes li, .content .boxes li.last {width: 290px; margin: 0 auto 40px ; float: none;}
+	.content .boxes li ul li {margin: 0 auto;}
+
+	.content .testimonials { margin: 0; border: none; padding: 0}
+	.content .testimonials li { width: 320px; margin: 0 40px 0px 0;}
+	.content .testimonials li img {margin: 0 10px 40px 0;}
+
+	.footer { clear: both; overflow: hidden; height: auto; padding-bottom: 20px;}
+	.footer .columns { width: 460px; }
+	.footer .columns .map, .footer .columns .map iframe { width: 425px !important; float: left !important; }
+
+}
+
+@media screen and (min-width: 980px) and (max-width: 1600px),
+handheld and (min-width: 980px) and (max-width: 1600px),
+screen and (min-device-width: 980px) and (max-device-width: 1600px) {
+
+	body { width: 100% }
+	.content { width: 960px; }
+	.header .stripe { width: 960px; }
+	.footer .columns { width: 960px; }
+
+}
