@@ -3,8 +3,8 @@
 <head>
 	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width" />
-    <meta name="description" content="Beijing Baked Fish Restaurant" />
-
+    <meta name="description" content="Beijing Baked Fish Restaurant Melaka" />
+    <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/favicon.ico" />
 	<title>Beijing Baked Fish Restaurant</title>
 
 	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/reset.css" type="text/css" media="all" />
@@ -42,10 +42,10 @@
     <div class="header">
     	<div class="stripe">
             <div class="logo">
-                <a href="#">Beijing Baked Fish Restaurant</a>
+                <a href="/">Beijing Baked Fish Restaurant</a>
             </div><!-- end .logo -->
             <ul class="social">
-		<li class="phone">8 Jalan ABC, Melaka. +6017-8888888</li>
+		<li class="phone">58 & 60,Jalan MR 23,Taman Melaka raya,75000 Melaka. +06-2815070</li>
                 <li class="twitter"><a href="http://twitter.com/">Twitter</a></li>
                 <li class="facebook"><a href="http://facebook.com/">Facebook</a></li>
             </ul><!-- end .social -->
@@ -62,8 +62,7 @@
                     )); ?>
                     <?php if (!empty($this->Regmsg)): ?>
                             <a href="#" style="font-size: 14px; color:red;"><?php echo $this->Regmsg; ?></a><br/><br/>
-                    <?php endif; ?>
-
+                    <?php endif; ?>                    
                     <label class="type">Name:</label>
                     <?php echo CHtml::textField('Registration[name]', '', array('class'=>'name required')); ?>
                     <label class="type">Phone:</label>
@@ -86,15 +85,16 @@
     	<ul class="columns">
         	<li class="address"><p>
 				<strong>Beijing Baked Fish Restaurant</strong><br />
-				8 Jalan ABC<br />
-				Tmn EFG, Melaka<br />
-				LA12 8NN</p><p>
-                Phone: +6017-8888888<br />
-                Email: <a href="mailto:some@email.com">hotel@yourdomain.com</a>
+				58&60, Jalan MR 23, <br />
+				Taman Melaka raya, <br />
+				75000, Melaka.</p><p>
+                Phone: +06-2815070<br />
+                <!-- Email: <a href="mailto:some@email.com">hotel@yourdomain.com</a><br/> -->
+                1040690-T
                 </p>
             </li>
             <li class="map">
-				<iframe width="420" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.co.uk/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=fell+foot+park&amp;aq=&amp;sll=54.273469,-2.95455&amp;sspn=0.019295,0.055747&amp;ie=UTF8&amp;hq=&amp;hnear=Fell+Foot+Park,+Newby+Bridge,+Windermere,+Cumbria+LA12+8NN,+United+Kingdom&amp;ll=54.274027,-2.95261&amp;spn=0.019295,0.055747&amp;t=m&amp;z=14&amp;output=embed"></iframe>
+				<iframe width="420" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=58+%26+60,Jalan+melaka+raya+23,Taman+Melaka+raya&amp;aq=&amp;sll=2.213023,102.271385&amp;sspn=0.095373,0.157928&amp;ie=UTF8&amp;hq=&amp;hnear=Jalan+Melaka+Raya+23+%26+Jalan+Melaka+Raya+20,+75000+Melaka,+Malaysia&amp;ll=2.182965,102.262061&amp;spn=0.00298,0.004935&amp;t=m&amp;z=14&amp;iwloc=A&amp;output=embed"></iframe>
             </li>
         </ul>
     </div><!-- end .footer -->
