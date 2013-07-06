@@ -14,3 +14,10 @@ CREATE  TABLE user (
   `created` DATETIME NOT NULL ,
   `updated` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ,
   PRIMARY KEY (`id`) );
+
+/****************Add column**************/
+alter table user modify dateOfBirth date null;
+alter table user modify address varchar(255) null;
+alter table user add referral int not null;
+alter table user add packageId int not null;
+insert into user values (1,'','BBF','info@beijingbakedfish.com','062815070','',null,null,2013-07-01,2013-07-01,0,0);

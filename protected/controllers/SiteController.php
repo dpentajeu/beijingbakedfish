@@ -17,7 +17,7 @@ class SiteController extends Controller
                 try
                 {
                         if (!$model->validate())
-                                throw new Exception("Please fill in all the forms and proper email.");
+                                throw new Exception("Please fill in all fields in the forms correctly.");
                         $model->createUser();
                         $this->Regmsg = 'Member has been created succesfully.';
                         $model = new User;
@@ -26,7 +26,8 @@ class SiteController extends Controller
                 {
                         $this->Regmsg = $e->getMessage();
                 }
-            }
+            }            
+		
             return true;
         }
          
@@ -53,7 +54,7 @@ class SiteController extends Controller
 	public function actionIndex()
 	{
 		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
+		// using the default layout 'protected/views/layouts/main.php'		
 		$this->render('index');
 	}
 

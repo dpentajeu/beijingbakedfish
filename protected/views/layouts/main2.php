@@ -1,3 +1,7 @@
+<?php
+$packages = array('1'=>'Silver RM500', '2'=>'Gold RM1500', '3'=>'Titanium RM3500');
+?>
+
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
 <head>
@@ -66,13 +70,15 @@
                     <label class="type">Name:</label>
                     <?php echo CHtml::textField('Registration[name]', '', array('class'=>'name required')); ?>
                     <label class="type">Phone:</label>
-                    <?php echo CHtml::textField('Registration[contact]', '', array('class'=>'required')); ?>
+                    <?php echo CHtml::textField('Registration[contact]', '', array('class'=>'required', 'placeholder'=>'Example: 0121235678')); ?>
                     <label class="type">Date of birth:</label>
                     <?php echo CHtml::textField('Registration[dateOfBirth]', '', array('class'=>'date date-end required')); ?><br/><br/><br/><br/><br/>
-                    <label class="type">Address:</label>
-                    <?php echo CHtml::textField('Registration[address]', '', array('class'=>'name required')); ?>
+                    <label class="type">Referral phone:</label>
+                    <?php echo CHtml::textField('Registration[referral]', '', array('class'=>'name required', 'placeholder'=>'Phone number of referral (Example: 0121235678)')); ?>
+                    <label class="type">Package:</label>
+                    <?php echo CHtml::dropDownList('Registration[packageId]', '', $packages, array('prompt'=>'Select a package', 'class' =>'package required')); ?>
                     <label class="type">Email:</label>
-                    <?php echo CHtml::textField('Registration[email]', '', array('class'=>'name required')); ?>
+                    <?php echo CHtml::textField('Registration[email]', '', array('class'=>'email required')); ?>
 
                     <?php echo CHtml::submitButton('Register', array('class'=>'submit')); ?> 	
                 <?php $this->endWidget(); ?>

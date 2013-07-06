@@ -14,6 +14,8 @@
  * @property integer $country
  * @property string $created
  * @property string $updated
+ * @property integer $referral
+ * @property integer $packageId
  */
 class User extends CActiveRecord
 {
@@ -43,15 +45,15 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, email, contact, address, dateOfBirth', 'required'),
-                        array('email','email'),
-			array('country', 'numerical', 'integerOnly'=>true),
+			array('name, email, contact, packageId', 'required'),
+            array('email','email'),
+			array('country, referral, packageId', 'numerical', 'integerOnly'=>true),
 			array('acc_num, name, email, contact', 'length', 'max'=>45),
 			array('address', 'length', 'max'=>255),
-                        array('created, updated','safe'),
+            array('created, updated, dateOfBirth','safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, acc_num, name, email, contact, address, dateOfBirth, country, created, updated', 'safe', 'on'=>'search'),
+			array('id, acc_num, name, email, contact, address, dateOfBirth, country, created, updated, referral, packageId', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -82,6 +84,8 @@ class User extends CActiveRecord
 			'country' => 'Country',
 			'created' => 'Created',
 			'updated' => 'Updated',
+			'referral' => 'Referral',
+			'packageId' => 'Package',
 		);
 	}
 
@@ -106,32 +110,45 @@ class User extends CActiveRecord
 		$criteria->compare('country',$this->country);
 		$criteria->compare('created',$this->created,true);
 		$criteria->compare('updated',$this->updated,true);
+		$criteria->compare('referral',$this->referral);
+		$criteria->compare('packageId',$this->packageId);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
         
-        public static function findEmail($email, $throw = true)
+    public static function findEmail($email, $throw = true)
 	{
 		$model = User::model()->findByAttributes(array('email'=>$email));
 		if ($throw && is_null($model))
-			throw new Exception("E-mail {$email} not found");
+			throw new Exception("E-mail {$email} not found.");
 		return $model;
 	}
+
+	public static function findReferral($referral)
+	{
+		$user = User::model()->findByAttributes(array('contact'=>$referral));
+		if(is_null($user))
+			throw new Exception("Referral is not valid.");
+		return $user->id;
+	}
         
-        public function createUser()
+    public function createUser()
 	{
 		if (!is_null(User::findEmail($this->email, false)))
 			throw new Exception("This e-mail {$this->email} is registered.");
+
+		$this->referral = User::findReferral($this->referral);
 
 		$user = new User;
 		$user->attributes = array(
 			'name'=>$this->name,
 			'email'=>$this->email,
 			'contact'=>$this->contact,
-                        'address'=>$this->address,
-                        'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
+			'packageId'=>$this->packageId,
+			'referral'=>$this->referral,
+            'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
 			'created'=>date('Y-m-d H:i:s'),
 			);
 

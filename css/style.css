@@ -201,7 +201,7 @@ strong {
 }
 
 .header .showcase .form form .date {
-	width: 120px;
+	width: 150px;
 	margin: 0 0 5px 0;
 	padding: 0 0 0 10px;
 }
@@ -218,6 +218,12 @@ strong {
 
 .header .showcase .form form .name {
 	width: 385px;
+	margin: 0 5px 5px 0;
+	padding: 0 0 0 10px;
+}
+
+.header .showcase .form form .package {
+	width: 395px;
 	margin: 0 5px 5px 0;
 	padding: 0 0 0 10px;
 }
