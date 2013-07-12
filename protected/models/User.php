@@ -46,11 +46,11 @@ class User extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('name, email, contact, packageId', 'required'),
-            array('email','email'),
+                        array('email','email'),
 			array('country, referral, packageId', 'numerical', 'integerOnly'=>true),
 			array('acc_num, name, email, contact', 'length', 'max'=>45),
 			array('address', 'length', 'max'=>255),
-            array('created, updated, dateOfBirth','safe'),
+                        array('created, updated, dateOfBirth','safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, acc_num, name, email, contact, address, dateOfBirth, country, created, updated, referral, packageId', 'safe', 'on'=>'search'),
@@ -134,7 +134,7 @@ class User extends CActiveRecord
 		return $user->id;
 	}
         
-    public function createUser()
+        public function createUser()
 	{
 		if (!is_null(User::findEmail($this->email, false)))
 			throw new Exception("This e-mail {$this->email} is registered.");
@@ -160,6 +160,18 @@ class User extends CActiveRecord
 			}
 			throw new Exception($user->getErrors());
 		}
+	}
+        
+        public function getUser($id)
+	{
+		$user = User::model()->findByAttributes(array('id'=>$id));
+		return $user;
+	}
+        
+        public static function getAllUser()
+	{
+		$user = User::model()->findAll();
+		return $user;
 	}
         
 }

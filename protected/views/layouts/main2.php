@@ -1,5 +1,5 @@
 <?php
-$packages = array('1'=>'Silver RM500', '2'=>'Gold RM1500', '3'=>'Titanium RM3500');
+$packages = array('1'=>'Alpha package RM500', '2'=>'Beta pacakage RM1500', '3'=>'Gamma package RM3500');
 ?>
 
 <!DOCTYPE html>
@@ -71,7 +71,7 @@ $packages = array('1'=>'Silver RM500', '2'=>'Gold RM1500', '3'=>'Titanium RM3500
         </div><!-- end .stripe -->
         
         <div class="showcase">
-           <div class="form">
+           <div class="form" style="padding-top: 40px;">
                 <?php $form=$this->beginWidget('CActiveForm', array(
                     'id'=>'registration-form',
                     'enableClientValidation'=>true,
@@ -82,18 +82,18 @@ $packages = array('1'=>'Silver RM500', '2'=>'Gold RM1500', '3'=>'Titanium RM3500
                     <?php if (!empty($this->Regmsg)): ?>
                             <a href="#" style="font-size: 14px; color:red;"><?php echo $this->Regmsg; ?></a><br/><br/>
                     <?php endif; ?>                    
-                    <label class="type">Name:</label>
-                    <?php echo CHtml::textField('Registration[name]', '', array('class'=>'name required')); ?>
-                    <label class="type">Phone:</label>
+                    <label class="type" style="padding-right: 15px;"><span style="color: red;">*</span>Name:</label>
+                    <?php echo CHtml::textField('Registration[name]', '', array('class'=>'name required','style'=>"width:360px;")); ?>
+                    <label class="type" style="padding-right: 15px;"><span style="color: red;">*</span>Phone:</label>
                     <?php echo CHtml::textField('Registration[contact]', '', array('class'=>'required', 'placeholder'=>'Example: 0121235678')); ?>
-                    <label class="type">Date of birth:</label>
+                    <label class="type" style="padding:5px 5px 2px 10px;">Date of birth:</label>
                     <?php echo CHtml::textField('Registration[dateOfBirth]', '', array('class'=>'date date-end required')); ?><br/><br/><br/><br/><br/>
-                    <label class="type">Referral phone:</label>
-                    <?php echo CHtml::textField('Registration[referral]', '', array('class'=>'name required', 'placeholder'=>'Phone number of referral (Example: 0121235678)')); ?>
-                    <label class="type">Package:</label>
-                    <?php echo CHtml::dropDownList('Registration[packageId]', '', $packages, array('prompt'=>'Select a package', 'class' =>'package required')); ?>
-                    <label class="type">Email:</label>
-                    <?php echo CHtml::textField('Registration[email]', '', array('class'=>'email required')); ?>
+                    <label class="type" style="padding-right: 15px;"><span style="color: red;">*</span>Referral phone:</label>
+                    <?php echo CHtml::textField('Registration[referral]', '', array('class'=>'name required','style'=>"width:360px;", 'placeholder'=>'Phone number of referral (Example: 0121235678)')); ?>
+                    <label class="type" style="padding-right: 15px;"><span style="color: red;">*</span>Package:</label>
+                    <?php echo CHtml::dropDownList('Registration[packageId]', '', $packages, array('prompt'=>'Select a package', 'class' =>'package required','style'=>"width:360px;")); ?>
+                    <label class="type" style="padding-right: 15px;"><span style="color: red;">*</span>Email:</label>
+                    <?php echo CHtml::textField('Registration[email]', '', array('class'=>'email name required','style'=>"width:360px;")); ?>
 
                     <?php echo CHtml::submitButton('Register', array('class'=>'submit')); ?> 	
                 <?php $this->endWidget(); ?>
