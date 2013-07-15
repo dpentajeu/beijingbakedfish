@@ -59,3 +59,6 @@ CREATE TABLE `transaction` (
   KEY `fk_transaction_wallet_idx` (`walletId`),
   CONSTRAINT `fk_transaction_wallet_idx` FOREIGN KEY (`walletId`) REFERENCES `wallet` (`id`)
 );
+
+/************add password column**********/
+alter table user add password varchar(512) not null;

@@ -204,7 +204,7 @@ class User extends CActiveRecord
         
         public static function getAllUser()
 	{
-                if (Yii::app()->user->checkAccess('admin'))
+                if (Yii::app()->user->id==1)
                 {
                     $user = User::model()->findAll();
                 

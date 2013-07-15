@@ -22,7 +22,7 @@
 
                 <tbody>
                     
-                    <?php   if (Yii::app()->user->checkAccess('admin')){
+                    <?php if (Yii::app()->user->id==1){
                                 foreach ($model as $key=>$item) { ?>
                                 <tr>
                                         <td class="align-center"><?= $item['id'] ?></td>

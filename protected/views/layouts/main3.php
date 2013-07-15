@@ -5,6 +5,7 @@
     <title>Beijing Baked Fish</title>
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/member-style.css" type="text/css" media="all" />
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/member-navi.css" type="text/css" media="all" />
+    <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/favicon.ico" />
     <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery-1.8.2.min.js" type="text/javascript"></script>
     <script type="text/javascript">
     $(function(){
@@ -20,7 +21,7 @@
 	<div id="header">
 		<div id="top">
 			<div class="left">
-				<p>Welcome, <strong>Admin</strong> [ <a href="">logout</a> ]</p>
+				<p>Welcome, <strong><?= $this->name ?></strong> [ <a href="<?php echo Yii::app()->request->baseUrl; ?>/member/logout">logout</a> ]</p>
 			</div>
 			<div class="right">
 				<div class="align-right">
@@ -55,7 +56,7 @@
 	<div id="content">
 		<div id="sidebar">
 			<div class="box">
-                            <?php   if (Yii::app()->user->checkAccess('admin')){ ?>
+                            <?php   if (Yii::app()->user->id==1){ ?>
 				<div class="h_title">&#8250; Main control</div>
 				<ul id="home">
                                         <li class="b2"><a class="icon report" href="">Member</a></li>

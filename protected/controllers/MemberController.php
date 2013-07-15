@@ -6,6 +6,18 @@ class MemberController extends Controller
 	/**
 	 * Declares class-based actions.
 	 */
+        public $name ='';
+        
+        protected final function beforeAction($action)
+        {                      
+            if(!is_null(Yii::app()->user->id))
+            {
+                $model = User::getUser(Yii::app()->user->id);
+                $this->name = $model->name;  
+            }
+		
+            return true;
+        }
                     
 	public function actions()
 	{
@@ -29,7 +41,7 @@ class MemberController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$model = user::getAllUser();
+		$model = User::getAllUser();
                 
 		$this->render('index',array('model'=>$model));
 	}
@@ -107,7 +119,7 @@ class MemberController extends Controller
 	public function actionLogout()
 	{
 		Yii::app()->user->logout();
-		$this->redirect(Yii::app()->homeUrl);
+		$this->redirect('login');
 	}
         
         public function actionEditmember($id = null)
