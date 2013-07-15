@@ -30,35 +30,24 @@
 		</div>
 		<div id="nav">
 			<ul>
+                            <?php   if (Yii::app()->user->checkAccess('admin')){ ?>
 				<li class="upp"><a href="#">Main control</a>
 					<ul>
-						<li>&#8250; <a href="">Visit site</a></li>
+						<li>&#8250; <a href="">Member</a></li>
+						<li>&#8250; <a href="">Network</a></li>
 						<li>&#8250; <a href="">Reports</a></li>
-						<li>&#8250; <a href="">Add new page</a></li>
-						<li>&#8250; <a href="">Site config</a></li>
+						<li>&#8250; <a href="">SMS</a></li>
 					</ul>
 				</li>
-				<li class="upp"><a href="#">Manage content</a>
+                            <?php } else { ?>
+                                <li class="upp"><a href="#">Main control</a>
 					<ul>
-						<li>&#8250; <a href="">Show all pages</a></li>
-						<li>&#8250; <a href="">Add new page</a></li>
-						<li>&#8250; <a href="">Add new gallery</a></li>
-						<li>&#8250; <a href="">Categories</a></li>
+						<li>&#8250; <a href="">Account</a></li>
+						<li>&#8250; <a href="">Network</a></li>
+						<li>&#8250; <a href="">Transaction History</a></li>
 					</ul>
 				</li>
-				<li class="upp"><a href="#">Users</a>
-					<ul>
-						<li>&#8250; <a href="">Show all uses</a></li>
-						<li>&#8250; <a href="">Add new user</a></li>
-						<li>&#8250; <a href="">Lock users</a></li>
-					</ul>
-				</li>
-				<li class="upp"><a href="#">Settings</a>
-					<ul>
-						<li>&#8250; <a href="">Site configuration</a></li>
-						<li>&#8250; <a href="">Contact Form</a></li>
-					</ul>
-				</li>
+                            <?php } ?>
 			</ul>
 		</div>
 	</div>
@@ -66,10 +55,23 @@
 	<div id="content">
 		<div id="sidebar">
 			<div class="box">
+                            <?php   if (Yii::app()->user->checkAccess('admin')){ ?>
 				<div class="h_title">&#8250; Main control</div>
 				<ul id="home">
+                                        <li class="b2"><a class="icon report" href="">Member</a></li>
+                                        <li class="b2"><a class="icon report" href="">Network</a></li>
 					<li class="b2"><a class="icon report" href="">Reports</a></li>
+                                        <li class="b2"><a class="icon report" href="">SMS</a></li>
 				</ul>
+                            <?php } else { ?>
+                                <div class="h_title">&#8250; Main control</div>
+				<ul id="home">
+                                        <li class="b2"><a class="icon report" href="">Account</a></li>
+                                        <li class="b2"><a class="icon report" href="">Network</a></li>
+					<li class="b2"><a class="icon report" href="">Transaction History</a></li>
+				</ul>
+                            <?php } ?>
+				
 			</div>
 		</div>
 		<div id="main">

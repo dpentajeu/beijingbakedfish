@@ -109,4 +109,32 @@ class MemberController extends Controller
 		Yii::app()->user->logout();
 		$this->redirect(Yii::app()->homeUrl);
 	}
+        
+        public function actionEditmember($id = null)
+	{
+		$model = User::getUser($id);
+		$packages = Package::getAllPackages();
+		$CMessage = '';
+
+		if(isset($_POST['User']))
+		{
+                    $model->attributes = $_POST['User'];
+                    
+                    try
+                    {
+                            if (!$model->validate())
+                                    throw new Exception("Please fill in all fields in the forms correctly.");
+                            $model->editUser($id);
+                            $CMessage = 'Member has been updated succesfully.';
+                            
+                            $this->redirect('index');
+                    }
+                    catch (Exception $e)
+                    {
+                            $CMessage = $e->getMessage();
+                    }
+		}
+
+		$this->render('editmember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage));
+	}
 }

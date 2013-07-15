@@ -1,7 +1,3 @@
-<?php
-$packages = array('1'=>'Alpha package RM500', '2'=>'Beta pacakage RM1500', '3'=>'Gamma package RM3500');
-?>
-
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
 <head>
@@ -91,7 +87,7 @@ $packages = array('1'=>'Alpha package RM500', '2'=>'Beta pacakage RM1500', '3'=>
                     <label class="type" style="padding-right: 15px;"><span style="color: red;">*</span>Referral phone:</label>
                     <?php echo CHtml::textField('Registration[referral]', '', array('class'=>'name required','style'=>"width:360px;", 'placeholder'=>'Phone number of referral (Example: 0121235678)')); ?>
                     <label class="type" style="padding-right: 15px;"><span style="color: red;">*</span>Package:</label>
-                    <?php echo CHtml::dropDownList('Registration[packageId]', '', $packages, array('prompt'=>'Select a package', 'class' =>'package required','style'=>"width:360px;")); ?>
+                    <?php echo CHtml::dropDownList('Registration[packageId]', '', $this->packages, array('prompt'=>'Select a package', 'class' =>'package required','style'=>"width:370px;")); ?>
                     <label class="type" style="padding-right: 15px;"><span style="color: red;">*</span>Email:</label>
                     <?php echo CHtml::textField('Registration[email]', '', array('class'=>'email name required','style'=>"width:360px;")); ?>
 

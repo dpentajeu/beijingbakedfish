@@ -24,6 +24,9 @@ class User extends CActiveRecord
 	 * @param string $className active record class name.
 	 * @return User the static model class
 	 */
+         public $packageName ='';
+         public $referralName ='';
+    
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
@@ -118,7 +121,7 @@ class User extends CActiveRecord
 		));
 	}
         
-    public static function findEmail($email, $throw = true)
+        public static function findEmail($email, $throw = true)
 	{
 		$model = User::model()->findByAttributes(array('email'=>$email));
 		if ($throw && is_null($model))
@@ -148,7 +151,7 @@ class User extends CActiveRecord
 			'contact'=>$this->contact,
 			'packageId'=>$this->packageId,
 			'referral'=>$this->referral,
-            'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
+                        'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
 			'created'=>date('Y-m-d H:i:s'),
 			);
 
@@ -162,16 +165,76 @@ class User extends CActiveRecord
 		}
 	}
         
-        public function getUser($id)
+        public function editUser($id)
 	{
 		$user = User::model()->findByAttributes(array('id'=>$id));
+            
+                if($user->email != $this->email)
+                {
+                    if (!is_null(User::findEmail($this->email, false)))
+			throw new Exception("This e-mail {$this->email} is registered.");    
+                }
+                                
+		$user->attributes = array(
+			'name'=>$this->name,
+			'email'=>$this->email,
+			'contact'=>$this->contact,
+                        'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
+			);
+                
+		if (!$user->save())
+		{
+			$error = '';
+			foreach ($user->getErrors() as $key) {
+				$error .= $key[0];
+			}
+			throw new Exception($user->getErrors());
+		}
+	}
+        
+        public static function getUser($id)
+	{
+		$user = User::model()->findByAttributes(array('id'=>$id));
+                
+                $user->packageName = Package::getPackageName($user->packageId);                
+                $user->referralName = User::getReferralName($user->referral);
+                
 		return $user;
 	}
         
         public static function getAllUser()
 	{
-		$user = User::model()->findAll();
+                if (Yii::app()->user->checkAccess('admin'))
+                {
+                    $user = User::model()->findAll();
+                
+                    foreach($user as $u)
+                    {
+                        $u->packageName = Package::getPackageName($u->packageId);                    
+                        $u->referralName = User::getReferralName($u->referral);
+                    }
+                    
+                }
+                else
+                {
+                    $user = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
+                    $user->packageName = Package::getPackageName($user->packageId);                    
+                    $user->referralName = User::getReferralName($user->referral);
+                }
+                
 		return $user;
 	}
         
+        public static function getReferralName($id)
+        {                       
+            if ($id==0)
+            {
+                return '0';
+            }
+            else
+            {
+                $user = User::model()->findByAttributes(array('id'=>$id));
+                return $user->name;
+            }       
+        }
 }
