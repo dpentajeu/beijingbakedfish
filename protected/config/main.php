@@ -36,6 +36,15 @@ return array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
 		),
+                'clientScript'=>array(
+			'packages'=>array(				
+				'jui'=>array(
+					'baseUrl'=>'',
+					'css'=>array('css/smoothness/jquery-ui.css'),
+					'depends'=>array('jquery.ui'),
+				),
+			),
+		),
 		// uncomment the following to enable URLs in path-format
 		
 		'urlManager'=>array(

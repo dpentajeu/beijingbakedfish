@@ -16,6 +16,10 @@
  * @property string $updated
  * @property integer $referral
  * @property integer $packageId
+ * @property string $password
+ *
+ * The followings are the available model relations:
+ * @property Wallet[] $wallets
  */
 class User extends CActiveRecord
 {
@@ -26,6 +30,10 @@ class User extends CActiveRecord
 	 */
          public $packageName ='';
          public $referralName ='';
+         public $foodpoint;
+         
+         public $newPassword;
+         public $oldPassword;
     
 	public static function model($className=__CLASS__)
 	{
@@ -53,10 +61,11 @@ class User extends CActiveRecord
 			array('country, referral, packageId', 'numerical', 'integerOnly'=>true),
 			array('acc_num, name, email, contact', 'length', 'max'=>45),
 			array('address', 'length', 'max'=>255),
-                        array('created, updated, dateOfBirth','safe'),
+                    	array('password', 'length', 'max'=>512),
+                        array('created, updated, dateOfBirth, password, oldPassword, newPassword','safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, acc_num, name, email, contact, address, dateOfBirth, country, created, updated, referral, packageId', 'safe', 'on'=>'search'),
+			array('id, acc_num, name, email, contact, address, dateOfBirth, country, created, updated, referral, packageId, password', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -68,6 +77,7 @@ class User extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+                    'wallet' => array(self::HAS_ONE, 'Wallet', 'userId'),
 		);
 	}
 
@@ -89,6 +99,7 @@ class User extends CActiveRecord
 			'updated' => 'Updated',
 			'referral' => 'Referral',
 			'packageId' => 'Package',
+                        'password' => 'Password',
 		);
 	}
 
@@ -115,6 +126,7 @@ class User extends CActiveRecord
 		$criteria->compare('updated',$this->updated,true);
 		$criteria->compare('referral',$this->referral);
 		$criteria->compare('packageId',$this->packageId);
+                $criteria->compare('password',$this->password,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -153,8 +165,9 @@ class User extends CActiveRecord
 			'referral'=>$this->referral,
                         'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
 			'created'=>date('Y-m-d H:i:s'),
-			);
-
+                        'password' => md5($this->contact),
+			);                                    
+                
 		if (!$user->save())
 		{
 			$error = '';
@@ -163,6 +176,41 @@ class User extends CActiveRecord
 			}
 			throw new Exception($user->getErrors());
 		}
+                
+                if($user->packageId == 1) $foodpoint = 600;
+                if($user->packageId == 2) $foodpoint = 1650;
+                if($user->packageId == 3) $foodpoint = 3850;
+                    
+                $wallet = new Wallet;
+                $wallet->attributes = array(
+                    'foodPoint'=>$foodpoint,
+                    'modifiedDate' => date('Y-m-d H:i:s'),
+                    'userId'=>$user->id,
+                );
+                
+                if (!$wallet->save())
+		{
+			$error = '';
+			foreach ($wallet->getErrors() as $key) {
+				$error .= $key[0];
+			}
+			throw new Exception($wallet->getErrors());
+		}
+	}
+        
+        public function changePassword()
+	{
+		$user = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
+		if($user->password == md5($this->oldPassword))
+		{
+			if(strlen($this->newPassword) >= 6)
+			{
+				$user->password = md5($this->newPassword);
+				if ($user->save())
+					return $user;
+			}
+		}
+		throw new Exception('Old password is incorrect or new password length is less than 6!');
 	}
         
         public function editUser($id)
@@ -198,28 +246,24 @@ class User extends CActiveRecord
                 
                 $user->packageName = Package::getPackageName($user->packageId);                
                 $user->referralName = User::getReferralName($user->referral);
+                                
+                $wallet = Wallet::model()->findByAttributes(array('userId'=>$id));
+                if(!is_null($wallet)) $user->foodpoint = $wallet->foodPoint;
                 
 		return $user;
 	}
         
         public static function getAllUser()
 	{
-                if (Yii::app()->user->id==1)
+                $user = User::model()->findAll();
+
+                foreach($user as $u)
                 {
-                    $user = User::model()->findAll();
-                
-                    foreach($user as $u)
-                    {
-                        $u->packageName = Package::getPackageName($u->packageId);                    
-                        $u->referralName = User::getReferralName($u->referral);
-                    }
-                    
-                }
-                else
-                {
-                    $user = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
-                    $user->packageName = Package::getPackageName($user->packageId);                    
-                    $user->referralName = User::getReferralName($user->referral);
+                    $u->packageName = Package::getPackageName($u->packageId);                    
+                    $u->referralName = User::getReferralName($u->referral);
+
+                    $wallet = Wallet::model()->findByAttributes(array('userId'=>$u->id));
+                    if(!is_null($wallet)) $u->foodpoint = $wallet->foodPoint;
                 }
                 
 		return $user;

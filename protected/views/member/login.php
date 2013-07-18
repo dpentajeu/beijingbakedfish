@@ -8,6 +8,9 @@
 <div class="wrap">
 	<div id="content">
 		<div id="main">
+                        <div style="text-align: center; padding-bottom: 10px;">
+                            <img src="<?php echo Yii::app()->request->baseUrl;?>/images/bbf.jpg" style="width:350px; height:220px;"/>
+                        </div>
 			<div class="full_w">
                             <div class="form">
                                 <?php $form=$this->beginWidget('CActiveForm', array(

@@ -6,8 +6,7 @@
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/member-style.css" type="text/css" media="all" />
     <link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/member-navi.css" type="text/css" media="all" />
     <link rel="shortcut icon" href="<?php echo Yii::app()->request->baseUrl; ?>/images/favicon.ico" />
-    <script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery-1.8.2.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
+     <script type="text/javascript">
     $(function(){
             $(".box .h_title").not(this).next("ul").hide("normal");
             $(".box .h_title").not(this).next("#home").show("normal");
@@ -31,19 +30,19 @@
 		</div>
 		<div id="nav">
 			<ul>
-                            <?php   if (Yii::app()->user->checkAccess('admin')){ ?>
+                            <?php   if (Yii::app()->user->id==1){ ?>
 				<li class="upp"><a href="#">Main control</a>
 					<ul>
-						<li>&#8250; <a href="">Member</a></li>
+						<li>&#8250; <a href="<?php echo Yii::app()->request->baseUrl; ?>/member/index">Member</a></li>
 						<li>&#8250; <a href="">Network</a></li>
-						<li>&#8250; <a href="">Reports</a></li>
+						<li>&#8250; <a href="">Transaction</a></li>
 						<li>&#8250; <a href="">SMS</a></li>
 					</ul>
 				</li>
                             <?php } else { ?>
                                 <li class="upp"><a href="#">Main control</a>
 					<ul>
-						<li>&#8250; <a href="">Account</a></li>
+						<li>&#8250; <a href="<?php echo Yii::app()->request->baseUrl; ?>/member/index">Account</a></li>
 						<li>&#8250; <a href="">Network</a></li>
 						<li>&#8250; <a href="">Transaction History</a></li>
 					</ul>
@@ -59,15 +58,17 @@
                             <?php   if (Yii::app()->user->id==1){ ?>
 				<div class="h_title">&#8250; Main control</div>
 				<ul id="home">
-                                        <li class="b2"><a class="icon report" href="">Member</a></li>
+                                        <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/index">Member</a></li>
+                                        <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/changepassword">Change password</a></li>
                                         <li class="b2"><a class="icon report" href="">Network</a></li>
-					<li class="b2"><a class="icon report" href="">Reports</a></li>
+					<li class="b2"><a class="icon report" href="">Transaction</a></li>
                                         <li class="b2"><a class="icon report" href="">SMS</a></li>
 				</ul>
                             <?php } else { ?>
                                 <div class="h_title">&#8250; Main control</div>
 				<ul id="home">
-                                        <li class="b2"><a class="icon report" href="">Account</a></li>
+                                        <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/index">Account</a></li>
+                                        <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/changepassword">Change password</a></li>
                                         <li class="b2"><a class="icon report" href="">Network</a></li>
 					<li class="b2"><a class="icon report" href="">Transaction History</a></li>
 				</ul>

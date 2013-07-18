@@ -1,3 +1,18 @@
+<?php
+$cs = Yii::app()->getClientScript();
+$cs->registerPackage('jui');
+$cs->registerScript('datepicker',"
+	$(document).ready(function(){
+            var jq = $.noConflict();
+		$( '#datepicker' ).datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: 'yy-mm-dd',
+                    yearRange: '1900:+0'
+                  });
+	});
+	");
+?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
 <head>
@@ -9,15 +24,12 @@
 
 	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/reset.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/style.css" type="text/css" media="all" />
-	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/jquery-ui-1.9.0.custom.css" type="text/css" media="all" />
 	<link rel="stylesheet" href="<?php echo Yii::app()->request->baseUrl; ?>/css/jquery.fancybox-1.3.4.css" type="text/css" media="all" />
 
 	<!--[if lt IE 9]>
 		<script src="http://css3-mediaqueries-js.googlecode.com/svn/trunk/css3-mediaqueries.js"></script>
 	<![endif]-->
 
-	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery-1.8.2.min.js" type="text/javascript"></script>
-	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery-ui-1.9.0.custom.min.js" type="text/javascript"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.fancybox-1.3.4.pack.js" type="text/javascript"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/jquery.validate.min.js" type="text/javascript"></script>
 	<script src="<?php echo Yii::app()->request->baseUrl; ?>/js/bnb.js" type="text/javascript"></script>
@@ -83,7 +95,7 @@
                     <label class="type" style="padding-right: 15px;"><span style="color: red;">*</span>Phone:</label>
                     <?php echo CHtml::textField('Registration[contact]', '', array('class'=>'required', 'placeholder'=>'Example: 0121235678')); ?>
                     <label class="type" style="padding:5px 5px 2px 10px;">Date of birth:</label>
-                    <?php echo CHtml::textField('Registration[dateOfBirth]', '', array('class'=>'date date-end required')); ?><br/><br/><br/><br/><br/>
+                    <?php echo CHtml::textField('Registration[dateOfBirth]', '', array('id'=>'datepicker')); ?><br/><br/><br/><br/><br/>
                     <label class="type" style="padding-right: 15px;"><span style="color: red;">*</span>Referral phone:</label>
                     <?php echo CHtml::textField('Registration[referral]', '', array('class'=>'name required','style'=>"width:360px;", 'placeholder'=>'Phone number of referral (Example: 0121235678)')); ?>
                     <label class="type" style="padding-right: 15px;"><span style="color: red;">*</span>Package:</label>

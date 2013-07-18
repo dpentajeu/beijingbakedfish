@@ -9,7 +9,7 @@ class MemberController extends Controller
         public $name ='';
         
         protected final function beforeAction($action)
-        {                      
+        {              
             if(!is_null(Yii::app()->user->id))
             {
                 $model = User::getUser(Yii::app()->user->id);
@@ -40,10 +40,14 @@ class MemberController extends Controller
 	 * when an action is not explicitly requested by users.
 	 */
 	public function actionIndex()
-	{
-		$model = User::getAllUser();
-                
-		$this->render('index',array('model'=>$model));
+	{            
+            if(Yii::app()->user->isGuest)
+		$this->redirect('login');    
+            
+            if(Yii::app()->user->id == 1) $model = User::getAllUser();
+            else $model = User::getUser(Yii::app()->user->id);
+           
+            $this->render('index',array('model'=>$model));
 	}
 
 	/**
@@ -124,7 +128,17 @@ class MemberController extends Controller
         
         public function actionEditmember($id = null)
 	{
-		$model = User::getUser($id);
+                if(Yii::app()->user->isGuest)
+                    $this->redirect('login');
+                
+                if(Yii::app()->user->id != 1)
+                {
+                    if($id != null) $this->redirect('editmember');
+                    
+                    $id = Yii::app()->user->id;
+                }
+            
+                $model = User::getUser($id);
 		$packages = Package::getAllPackages();
 		$CMessage = '';
 
@@ -149,4 +163,89 @@ class MemberController extends Controller
 
 		$this->render('editmember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage));
 	}
+        
+        public function actionChangepassword()
+        {
+                $model = new User;
+		$CMessage = '';
+                $notice = '';
+
+		if(isset($_POST['User']))
+		{
+			$model->attributes = $_POST['User'];
+			try
+			{
+                                $model->changePassword();
+				$notice = 'Password changed successfully!';
+				$model = new User;
+			}
+			catch (Exception $e)
+			{
+				$CMessage = $e->getMessage();
+			}		
+		}
+
+		$this->render('changepassword',array('model'=>$model, 'CMessage'=>$CMessage,'notice'=>$notice));
+        }
+        
+        public function actionTest()
+        {
+            $user = User::model()->findAll();            
+            
+            foreach($user as $u)
+            {
+                if($u->id != 1)
+                {
+                    if($u->packageId == 1) $foodpoint = 600;
+                    if($u->packageId == 2) $foodpoint = 1650;
+                    if($u->packageId == 3) $foodpoint = 3850;
+                    
+                    $wallet = new Wallet;
+                    $wallet->attributes = array(
+                        'foodPoint'=>$foodpoint,
+                        'modifiedDate' => date('Y-m-d H:i:s'),
+                        'userId'=>$u->id,
+                    );
+                    
+                    if (!$wallet->save())
+                    {
+                            $error = '';
+                            foreach ($user->getErrors() as $key) {
+                                    $error .= $key[0];
+                            }
+                            throw new Exception($user->getErrors());
+                    }
+                }             
+            }         
+                        
+            $this->redirect('login');
+        }
+        
+        public function actionTest2()
+        {
+            $user = User::model()->findAll();
+            
+            foreach($user as $u)
+            {
+                if($u->id != 1)
+                {
+                    $u->password = md5($u->contact);
+                }
+                else
+                {
+                    $u->password = md5('admin321');
+                }
+                
+                if (!$u->save())
+                {
+                        $error = '';
+                        foreach ($user->getErrors() as $key) {
+                                $error .= $key[0];
+                        }
+                        throw new Exception($user->getErrors());
+                }
+            }    
+            
+            $this->redirect('login');
+        }
 }

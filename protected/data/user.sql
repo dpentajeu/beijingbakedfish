@@ -33,7 +33,7 @@ CREATE TABLE `package` (
 );
 
 INSERT INTO `bbf`.`package` (`packageName`, `value`) VALUES ('Alpha package', '500');
-INSERT INTO `bbf`.`package` (`packageName`, `value`) VALUES ('Beta pacakage', '1500');
+INSERT INTO `bbf`.`package` (`packageName`, `value`) VALUES ('Beta package', '1500');
 INSERT INTO `bbf`.`package` (`packageName`, `value`) VALUES ('Gamma package', '3500');
 
 CREATE TABLE `wallet` (
