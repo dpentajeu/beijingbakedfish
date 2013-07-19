@@ -1,5 +1,5 @@
 <div class="full_w">
-        <div class="h_title">Edit Member</div>
+        <div class="h_title">Set PIN</div>
         <div class="form">
             <?php if(!empty($CMessage)) { ?>
 		<div class="n_error"><p><?= $CMessage; ?></p></div>
@@ -15,17 +15,17 @@
                         ),
                 )); ?>
                 <div class="element">
-                        <label for="oldPassword"><span style="color: red;">*</span>Old password:</label>
-                        <?php echo $form->passwordField($model, 'oldPassword'); ?>
+                        <label for="password"><span style="color: red;">*</span>Password:</label>
+                        <?php echo $form->passwordField($model, 'password'); ?>
                         <br/><br/>
-                        <label for="newPassword"><span style="color: red;">*</span>New password:</label>
-                        <?php echo $form->passwordField($model, 'newPassword'); ?>
+                        <label for="newPin"><span style="color: red;">*</span>New PIN:</label>
+                        <?php echo $form->textField($model, 'newPin'); ?>
                         <br/><br/>
-                        <label for="newPassword"><span style="color: red;">*</span>Confirm new password:</label>
-                        <?php echo $form->passwordField($model, 'newPassword2'); ?>
+                        <label for="newPin2"><span style="color: red;">*</span>Confirm new PIN:</label>
+                        <?php echo $form->textField($model, 'newPin2'); ?>
                 </div>
                 <div class="sep"></div>
-                <button type="submit">Change</button>
+                <button type="submit">Submit</button>
             <?php $this->endWidget(); ?>
         </div>
 </div>

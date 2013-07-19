@@ -14,13 +14,13 @@
         <table>
                 <thead>
                         <tr>
-                                <th scope="col">ID</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Contact</th>
                                 <th scope="col">Referral</th>
                                 <th scope="col">Package</th>
                                 <th scope="col" style="width: 65px;">Food Point</th>
+                                <th scope="col">Bonus Amount</th>
                                 <th scope="col" style="width: 35px;">Action</th>
                         </tr>
                 </thead>
@@ -30,28 +30,29 @@
                     <?php if (Yii::app()->user->id==1){
                                 foreach ($model as $key=>$item) { ?>
                                 <tr>
-                                        <td class="align-center"><?= $item['id'] ?></td>
                                         <td><?= $item['name'] ?></td>
                                         <td><?= $item['email'] ?></td>
                                         <td><?= $item['contact'] ?></td>
                                         <td><?= $item['referralName'] ?></td>
                                         <td><?= $item['packageName'] ?></td>
-                                        <td><?= $item['foodpoint'] ?></td>
-                                        <td>
+                                        <td class="align-center"><?= $item['foodpoint'] ?></td>
+                                        <td><?= $item['bonusAmount'] ?></td>
+                                        <td class="align-center">
                                             <a href="<?php echo Yii::app()->request->baseUrl.'/member/editmember?id='.$item['id'] ?>" class="table-icon edit" title="Edit"></a>
                                         </td>
                                 </tr>
                     <?php  }} else {?>                                        
                                 <tr>
-                                        <td class="align-center"><?= $model['id'] ?></td>
                                         <td><?= $model['name'] ?></td>
                                         <td><?= $model['email'] ?></td>
                                         <td><?= $model['contact'] ?></td>
                                         <td><?= $model['referralName'] ?></td>
                                         <td><?= $model['packageName'] ?></td>
-                                        <td><?= $model['foodpoint'] ?></td>
-                                        <td>
-                                            <a href="<?php echo Yii::app()->request->baseUrl ?>/member/editmember" class="table-icon edit" title="Edit"></a>                                        </td>
+                                        <td class="align-center"><?= $model['foodpoint'] ?></td>
+                                        <td><?= $model['bonusAmount'] ?></td>
+                                        <td class="align-center">
+                                            <a href="<?php echo Yii::app()->request->baseUrl ?>/member/editmember" class="table-icon edit" title="Edit"></a>                                        
+                                        </td>
                                 </tr>
                     <?php } ?>
                 </tbody>

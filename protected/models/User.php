@@ -17,6 +17,9 @@
  * @property integer $referral
  * @property integer $packageId
  * @property string $password
+ * @property string $bankAcc
+ * @property string $bankName
+ * @property integer $pin
  *
  * The followings are the available model relations:
  * @property Wallet[] $wallets
@@ -31,9 +34,15 @@ class User extends CActiveRecord
          public $packageName ='';
          public $referralName ='';
          public $foodpoint;
+         public $bonusAmount;
          
          public $newPassword;
+         public $newPassword2;
          public $oldPassword;
+         
+         public $newPin;
+         public $newPin2;
+         public $oldPin;
     
 	public static function model($className=__CLASS__)
 	{
@@ -58,11 +67,14 @@ class User extends CActiveRecord
 		return array(
 			array('name, email, contact, packageId', 'required'),
                         array('email','email'),
-			array('country, referral, packageId', 'numerical', 'integerOnly'=>true),
+			array('country, referral, packageId, pin, newPin, newPin2,oldPin', 'numerical', 'integerOnly'=>true),
 			array('acc_num, name, email, contact', 'length', 'max'=>45),
+                        array('pin, newPin, newPin2,oldPin', 'length', 'max'=>6),
 			array('address', 'length', 'max'=>255),
                     	array('password', 'length', 'max'=>512),
-                        array('created, updated, dateOfBirth, password, oldPassword, newPassword','safe'),
+                        array('bankAcc', 'length', 'max'=>100),
+			array('bankName', 'length', 'max'=>50),
+                        array('created, updated, dateOfBirth, password, oldPassword, newPassword, newPassword2','safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, acc_num, name, email, contact, address, dateOfBirth, country, created, updated, referral, packageId, password', 'safe', 'on'=>'search'),
@@ -100,6 +112,9 @@ class User extends CActiveRecord
 			'referral' => 'Referral',
 			'packageId' => 'Package',
                         'password' => 'Password',
+			'bankAcc' => 'Bank Acc',
+			'bankName' => 'Bank Name',
+			'pin' => 'Pin',
 		);
 	}
 
@@ -127,18 +142,21 @@ class User extends CActiveRecord
 		$criteria->compare('referral',$this->referral);
 		$criteria->compare('packageId',$this->packageId);
                 $criteria->compare('password',$this->password,true);
+		$criteria->compare('bankAcc',$this->bankAcc,true);
+		$criteria->compare('bankName',$this->bankName,true);
+		$criteria->compare('pin',$this->pin);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
         
-        public static function findEmail($email, $throw = true)
+        public static function findEmail($email)
 	{
-		$model = User::model()->findByAttributes(array('email'=>$email));
-		if ($throw && is_null($model))
-			throw new Exception("E-mail {$email} not found.");
-		return $model;
+		$user = User::model()->findByAttributes(array('email'=>$email));
+		if (!is_null($user))
+			throw new Exception("This e-mail {$email} is registered.");
+		return $email;
 	}
 
 	public static function findReferral($referral)
@@ -149,12 +167,19 @@ class User extends CActiveRecord
 		return $user->id;
 	}
         
+        public static function findContact($contact)
+	{
+		$user = User::model()->findByAttributes(array('contact'=>$contact));
+		if(!is_null($user))
+			throw new Exception("This phone number is registered.");
+		return $contact;
+	}
+        
         public function createUser()
 	{
-		if (!is_null(User::findEmail($this->email, false)))
-			throw new Exception("This e-mail {$this->email} is registered.");
-
-		$this->referral = User::findReferral($this->referral);
+		$this->email = User::findEmail($this->email);
+		$this->referral = User::findReferral($this->referral);                
+                $this->contact = User::findContact($this->contact);
 
 		$user = new User;
 		$user->attributes = array(
@@ -184,6 +209,7 @@ class User extends CActiveRecord
                 $wallet = new Wallet;
                 $wallet->attributes = array(
                     'foodPoint'=>$foodpoint,
+                    'bonusAmout'=> 0,
                     'modifiedDate' => date('Y-m-d H:i:s'),
                     'userId'=>$user->id,
                 );
@@ -201,16 +227,65 @@ class User extends CActiveRecord
         public function changePassword()
 	{
 		$user = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
+                
+                if(empty($this->oldPassword)) 
+                    throw new Exception("Please fill in old password.");
+                if(empty($this->newPassword)) 
+                    throw new Exception("Please fill in new password.");
+                if(empty($this->newPassword2)) 
+                    throw new Exception("Please fill in confirm new password.");
+                
 		if($user->password == md5($this->oldPassword))
 		{
 			if(strlen($this->newPassword) >= 6)
 			{
-				$user->password = md5($this->newPassword);
-				if ($user->save())
-					return $user;
+				if($this->newPassword == $this->newPassword2)
+                                {
+                                    $user->password = md5($this->newPassword);
+                                    if ($user->save())
+                                            return $user;
+                                }
+                                else 
+                                {
+                                    throw new Exception('New password does not match!');
+                                }
 			}
 		}
 		throw new Exception('Old password is incorrect or new password length is less than 6!');
+	}
+        
+        public function setPin()
+	{
+		$user = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
+
+                if(empty($this->password)) 
+                    throw new Exception("Please fill in your password.");
+                if(empty($this->newPin)) 
+                    throw new Exception("Please fill in new PIN.");
+                if(empty($this->newPin2)) 
+                    throw new Exception("Please fill in confirm new PIN.");
+                
+		if(md5($this->password)==$user->password)
+                {
+                    if(strlen($this->newPin) == 6)
+                    {
+                            if($this->newPin == $this->newPin2)
+                            {
+                                    $user->pin = $this->newPin;
+                                    if ($user->save())
+                                            return $user;
+                            }
+                            else
+                            {
+                               throw new Exception('New PIN does not match!'); 
+                            }
+                    }
+                    else 
+                    {                        
+                        throw new Exception('New PIN length is less than 6 numbers!');
+                    }
+                }
+                throw new Exception('Wrong password!');
 	}
         
         public function editUser($id)
@@ -219,14 +294,15 @@ class User extends CActiveRecord
             
                 if($user->email != $this->email)
                 {
-                    if (!is_null(User::findEmail($this->email, false)))
-			throw new Exception("This e-mail {$this->email} is registered.");    
+                    $this->email = User::findEmail($this->email);   
                 }
                                 
 		$user->attributes = array(
 			'name'=>$this->name,
 			'email'=>$this->email,
 			'contact'=>$this->contact,
+                        'bankAcc'=> $this->bankAcc,
+                        'bankName'=> $this->bankName,
                         'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
 			);
                 
@@ -248,7 +324,11 @@ class User extends CActiveRecord
                 $user->referralName = User::getReferralName($user->referral);
                                 
                 $wallet = Wallet::model()->findByAttributes(array('userId'=>$id));
-                if(!is_null($wallet)) $user->foodpoint = $wallet->foodPoint;
+                if(!is_null($wallet))
+                    {
+                        $user->foodpoint = $wallet->foodPoint;
+                        $user->bonusAmount = $wallet->bonusAmount;
+                    }
                 
 		return $user;
 	}
@@ -263,7 +343,11 @@ class User extends CActiveRecord
                     $u->referralName = User::getReferralName($u->referral);
 
                     $wallet = Wallet::model()->findByAttributes(array('userId'=>$u->id));
-                    if(!is_null($wallet)) $u->foodpoint = $wallet->foodPoint;
+                    if(!is_null($wallet))
+                    {
+                        $u->foodpoint = $wallet->foodPoint;
+                        $u->bonusAmount = $wallet->bonusAmount;
+                    }
                 }
                 
 		return $user;

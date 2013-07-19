@@ -188,6 +188,35 @@ class MemberController extends Controller
 		$this->render('changepassword',array('model'=>$model, 'CMessage'=>$CMessage,'notice'=>$notice));
         }
         
+        public function actionSetpin()
+        {
+                $model = new User;
+		$CMessage = '';
+                $notice = '';
+
+		if(isset($_POST['User']))
+		{
+			$model->attributes = $_POST['User'];
+			try
+			{
+                                $model->setPin();
+				$notice = 'New PIN is set successfully!';
+				$model = new User;
+			}
+			catch (Exception $e)
+			{
+				$CMessage = $e->getMessage();
+			}		
+		}
+
+		$this->render('setpin',array('model'=>$model, 'CMessage'=>$CMessage,'notice'=>$notice));
+        }
+        
+        public function actionNetwork()
+        {
+            $this->render('network');
+        }
+        
         public function actionTest()
         {
             $user = User::model()->findAll();            

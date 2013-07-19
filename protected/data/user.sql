@@ -60,5 +60,9 @@ CREATE TABLE `transaction` (
   CONSTRAINT `fk_transaction_wallet_idx` FOREIGN KEY (`walletId`) REFERENCES `wallet` (`id`)
 );
 
-/************add password column**********/
+/************add some column**********/
 alter table user add password varchar(512) not null;
+alter table user add bankAcc varchar(100) null;
+alter table user add bankName varchar(50) null;
+alter table user add pin int(6) null;
+alter table wallet add bonusAmount double null;

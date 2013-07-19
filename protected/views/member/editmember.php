@@ -33,20 +33,22 @@ $cs->registerScript('datepicker',"
                         <br/><br/>
                         <label for="name"><span style="color: red;">*</span>Name:</label>
                         <?php echo $form->textField($model, 'name'); ?>
-                </div>
-                <div class="element">
+                        <br/><br/>
                         <label for="contact"><span style="color: red;">*</span>Phone:</label>
                         <?php echo $form->textField($model, 'contact', array('placeholder'=>'Example: 0121235678')); ?>
-                </div>
-                <div class="element">
+                        <br/><br/>
                         <label for="dateOfBirth"><span style="color: red;">*</span>Date of Birth:</label>
                         <?php echo $form->textField($model, 'dateOfBirth', array('id'=>'datepicker')); ?>
-                </div>
-                <div class="element">
+                        <br/><br/>
+                        <label for="dateOfBirth">Bank Account:</label>
+                        <?php echo $form->textField($model, 'bankAcc', array('id'=>'datepicker')); ?>
+                        <br/><br/>
+                        <label for="dateOfBirth">Bank Name:</label>
+                        <?php echo $form->textField($model, 'bankName', array('id'=>'datepicker')); ?>
+                        <br/><br/>
                         <label for="referral">Referral:</label>
                         <?php echo $form->textField($model, 'referralName', array('disabled'=>'disabled')); ?>
-                </div>
-                <div class="element">
+                        <br/><br/>
                         <label for="packageId">Package:</label>
                         <?php echo $form->dropDownList($model, 'packageId', $packages, array('prompt'=>'Select a package','disabled'=>'disabled')); ?>
                 </div>                

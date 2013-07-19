@@ -6,7 +6,7 @@
 </head>
 <body>
 <div class="wrap">
-	<div id="content">
+	<div id="content" style="margin-top: 20px">
 		<div id="main">
                         <div style="text-align: center; padding-bottom: 10px;">
                             <img src="<?php echo Yii::app()->request->baseUrl;?>/images/bbf.jpg" style="width:350px; height:220px;"/>
