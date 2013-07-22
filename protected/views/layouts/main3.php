@@ -69,6 +69,7 @@
 				<ul id="home">
                                         <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/index">Account</a></li>
                                         <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/changepassword">Change password</a></li>
+                                        <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/setpin">Set PIN</a></li>
                                         <li class="b2"><a class="icon report" href="">Network</a></li>
 					<li class="b2"><a class="icon report" href="">Transaction History</a></li>
 				</ul>

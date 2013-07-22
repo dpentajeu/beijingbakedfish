@@ -20,6 +20,8 @@
  * @property string $bankAcc
  * @property string $bankName
  * @property integer $pin
+ * @property integer $tac
+ * @property integer $isApproved
  *
  * The followings are the available model relations:
  * @property Wallet[] $wallets
@@ -67,9 +69,9 @@ class User extends CActiveRecord
 		return array(
 			array('name, email, contact, packageId', 'required'),
                         array('email','email'),
-			array('country, referral, packageId, pin, newPin, newPin2,oldPin', 'numerical', 'integerOnly'=>true),
+			array('country, referral, packageId, pin, tac, isApproved, newPin, newPin2,oldPin', 'numerical', 'integerOnly'=>true),
 			array('acc_num, name, email, contact', 'length', 'max'=>45),
-                        array('pin, newPin, newPin2,oldPin', 'length', 'max'=>6),
+                        array('pin, newPin, newPin2, oldPin, tac', 'length', 'max'=>6),
 			array('address', 'length', 'max'=>255),
                     	array('password', 'length', 'max'=>512),
                         array('bankAcc', 'length', 'max'=>100),
@@ -77,7 +79,7 @@ class User extends CActiveRecord
                         array('created, updated, dateOfBirth, password, oldPassword, newPassword, newPassword2','safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, acc_num, name, email, contact, address, dateOfBirth, country, created, updated, referral, packageId, password', 'safe', 'on'=>'search'),
+			array('id, acc_num, name, email, contact, address, dateOfBirth, country, created, updated, referral, packageId, password, bankAcc, bankName, pin, tac, isApproved', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -115,6 +117,8 @@ class User extends CActiveRecord
 			'bankAcc' => 'Bank Acc',
 			'bankName' => 'Bank Name',
 			'pin' => 'Pin',
+                        'tac' => 'Tac',
+                        'isApproved' => 'Is Approved',
 		);
 	}
 
@@ -145,6 +149,8 @@ class User extends CActiveRecord
 		$criteria->compare('bankAcc',$this->bankAcc,true);
 		$criteria->compare('bankName',$this->bankName,true);
 		$criteria->compare('pin',$this->pin);
+                $criteria->compare('tac',$this->tac);
+                $criteria->compare('isApproved',$this->isApproved);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -191,6 +197,7 @@ class User extends CActiveRecord
                         'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
 			'created'=>date('Y-m-d H:i:s'),
                         'password' => md5($this->contact),
+                        'isApproved' => 0,
 			);                                    
                 
 		if (!$user->save())
@@ -258,14 +265,14 @@ class User extends CActiveRecord
 	{
 		$user = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
 
-                if(empty($this->password)) 
-                    throw new Exception("Please fill in your password.");
+                if(empty($this->tac)) 
+                    throw new Exception("TAC is mandatory.");
                 if(empty($this->newPin)) 
                     throw new Exception("Please fill in new PIN.");
                 if(empty($this->newPin2)) 
                     throw new Exception("Please fill in confirm new PIN.");
                 
-		if(md5($this->password)==$user->password)
+		if($this->tac==$user->tac)
                 {
                     if(strlen($this->newPin) == 6)
                     {
@@ -285,7 +292,7 @@ class User extends CActiveRecord
                         throw new Exception('New PIN length is less than 6 numbers!');
                     }
                 }
-                throw new Exception('Wrong password!');
+                throw new Exception('TAC is empty or invalid!');
 	}
         
         public function editUser($id)
@@ -295,7 +302,9 @@ class User extends CActiveRecord
                 if($user->email != $this->email)
                 {
                     $this->email = User::findEmail($this->email);   
-                }
+                }  
+                
+                $this->contact = User::findContact($this->contact);
                                 
 		$user->attributes = array(
 			'name'=>$this->name,
@@ -315,6 +324,44 @@ class User extends CActiveRecord
 			throw new Exception($user->getErrors());
 		}
 	}
+        
+        public function approveUser($id)
+	{
+		$user = User::model()->findByAttributes(array('id'=>$id));
+                                            
+		$user->isApproved = true;
+                
+		if (!$user->save())
+		{
+			$error = '';
+			foreach ($user->getErrors() as $key) {
+				$error .= $key[0];
+			}
+			throw new Exception($user->getErrors());
+		}
+	}
+        
+        public function setTac()
+        {
+            $user = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
+            
+            $tac = $this->randomWithLength(6);
+                        
+            $user->tac = $tac;
+            
+            if (!$user->save())
+            {
+                    $error = '';
+                    foreach ($user->getErrors() as $key) {
+                            $error .= $key[0];
+                    }
+                    throw new Exception($user->getErrors());
+            }
+            
+            $msg = 'From Beijing Baked Fish Restaurant: Set PIN. TAC requested is '.$tac.'.';
+            
+            User::send_sms('6'.$user->contact, $msg);
+        }
         
         public static function getUser($id)
 	{
@@ -364,5 +411,42 @@ class User extends CActiveRecord
                 $user = User::model()->findByAttributes(array('id'=>$id));
                 return $user->name;
             }       
+        }
+        
+       
+        public static function send_sms($sms_to,$sms_msg)  
+        {           
+                    $query_string = 'api.aspx?apiusername='.'API5Y6NCVIFEQ'.'&apipassword='.'API5Y6NCVIFEQ5Y6NC';
+                    $query_string .= "&senderid=".rawurlencode('INFO')."&mobileno=".rawurlencode($sms_to);
+                    $query_string .= "&message=".rawurlencode(stripslashes($sms_msg)) . "&languagetype=1";        
+                    $url = "http://gateway.onewaysms.com.au:10001/".$query_string;       
+                    $fd = @implode ('', file ($url));      
+                    if ($fd)  
+                    {                       
+                                if ($fd > 0) {
+//                                    Print("MT ID : " . $fd);
+                                    $ok = "success";
+                                }        
+                                else {
+//                                    print("Please refer to API on Error : " . $fd);
+                                    $ok = "fail";
+                                    throw new Exception('Fail to send TAC! Error : ' . $fd);
+                                }
+                    }           
+                    else      
+                    {                        
+                                throw new Exception('Fail to send TAC!');       
+                    }           
+                    return $ok;  
+        }
+        
+        private function randomWithLength($length)
+        {
+            $number = '';
+            for ($i = 0; $i < $length; $i++){
+                $number .= rand(0,9);
+            }
+
+            return (int)$number;
         }
 }

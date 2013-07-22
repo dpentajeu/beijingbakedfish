@@ -1,4 +1,3 @@
-
 <div class="full_w">
         <?php if (Yii::app()->user->id==1){ ?>
             <div class="h_title">Member</div>
@@ -22,6 +21,7 @@
                                 <th scope="col" style="width: 65px;">Food Point</th>
                                 <th scope="col">Bonus Amount</th>
                                 <th scope="col" style="width: 35px;">Action</th>
+                                <?php if (Yii::app()->user->id==1){ echo '<th scope="col">Status</th>'; } ?>
                         </tr>
                 </thead>
 
@@ -39,6 +39,13 @@
                                         <td><?= $item['bonusAmount'] ?></td>
                                         <td class="align-center">
                                             <a href="<?php echo Yii::app()->request->baseUrl.'/member/editmember?id='.$item['id'] ?>" class="table-icon edit" title="Edit"></a>
+                                        </td>
+                                        <td class="align-center">
+                                            <?php if($item['isApproved']==true){?>
+                                                Approved
+                                            <?php } else { ?>
+                                                <a href="<?php echo Yii::app()->request->baseUrl.'/member/approve?id='.$item['id'] ?>">Approve</a>
+                                             <?php }?>
                                         </td>
                                 </tr>
                     <?php  }} else {?>                                        

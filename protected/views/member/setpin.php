@@ -8,24 +8,26 @@
 		<div class="n_ok"><p><?= $notice; ?></p></div>
             <?php } ?>
             <?php $form=$this->beginWidget('CActiveForm', array(
-                'id'=>'edit-form',
+                'id'=>'setpin-form',
                 'enableClientValidation'=>true,
                 'clientOptions'=>array(
                         'validateOnSubmit'=>true,
                         ),
                 )); ?>
                 <div class="element">
-                        <label for="password"><span style="color: red;">*</span>Password:</label>
-                        <?php echo $form->passwordField($model, 'password'); ?>
-                        <br/><br/>
+                        <label for="password"><span style="color: red;">*</span>TAC:</label>
+                        <?php echo $form->textField($model, 'tac'); ?>
+                        <button type="submit" name="setTac">Request TAC on SMS</button>
+                </div>
+                <div class="element">
                         <label for="newPin"><span style="color: red;">*</span>New PIN:</label>
-                        <?php echo $form->textField($model, 'newPin'); ?>
+                        <?php echo $form->passwordField($model, 'newPin'); ?>
                         <br/><br/>
                         <label for="newPin2"><span style="color: red;">*</span>Confirm new PIN:</label>
-                        <?php echo $form->textField($model, 'newPin2'); ?>
+                        <?php echo $form->passwordField($model, 'newPin2'); ?>
                 </div>
                 <div class="sep"></div>
-                <button type="submit">Submit</button>
+                <button type="submit" name="setpin">Submit</button>
             <?php $this->endWidget(); ?>
         </div>
 </div>

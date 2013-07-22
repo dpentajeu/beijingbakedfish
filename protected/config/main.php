@@ -34,6 +34,7 @@ return array(
 	'components'=>array(
 		'user'=>array(
 			// enable cookie-based authentication
+                        'loginUrl'=>array('member/login'),
 			'allowAutoLogin'=>true,
 		),
                 'clientScript'=>array(

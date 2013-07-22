@@ -8,6 +8,34 @@ class MemberController extends Controller
 	 */
         public $name ='';
         
+        public function filters()
+	{
+		return array(
+			'accessControl',
+			);
+	}
+        
+        public function accessRules()
+	{
+		return array(
+			array('allow',
+				'actions'=>array(
+                                        'login','logout'
+					),
+				'users'=>array('*'),
+				),
+                        array('allow',
+				'actions'=>array('index','editmember','changepassword','setpin','approve','test','test2'),
+				'users'=>array('@'),
+				),
+//			array('allow',
+//				'actions'=>array('approve','test','test2'),
+//				'roles'=>array('admin'),
+//				),
+			array('deny'),
+			);
+	}
+        
         protected final function beforeAction($action)
         {              
             if(!is_null(Yii::app()->user->id))
@@ -40,10 +68,7 @@ class MemberController extends Controller
 	 * when an action is not explicitly requested by users.
 	 */
 	public function actionIndex()
-	{            
-            if(Yii::app()->user->isGuest)
-		$this->redirect('login');    
-            
+	{
             if(Yii::app()->user->id == 1) $model = User::getAllUser();
             else $model = User::getUser(Yii::app()->user->id);
            
@@ -164,6 +189,28 @@ class MemberController extends Controller
 		$this->render('editmember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage));
 	}
         
+        public function actionApprove($id = null)
+	{            
+                if (Yii::app()->user->id != 1) $this->redirect('login');
+            
+                $model = User::getUser($id);
+		$CMessage = '';
+
+                try
+                {
+                        $model->approveUser($id);
+                        $CMessage = 'Member has approved.';
+
+                        $this->redirect('index');
+                }
+                catch (Exception $e)
+                {
+                        $CMessage = $e->getMessage();
+                }
+
+		$this->redirect('index');
+	}
+        
         public function actionChangepassword()
         {
                 $model = new User;
@@ -193,8 +240,20 @@ class MemberController extends Controller
                 $model = new User;
 		$CMessage = '';
                 $notice = '';
-
-		if(isset($_POST['User']))
+                
+                if(isset($_POST['setTac']))
+                {
+                    try
+                    {
+                            $model->setTac();
+                            $notice = 'TAC is requested, please wait.';
+                    }
+                    catch (Exception $e)
+                    {
+                            $CMessage = $e->getMessage();
+                    }
+                }                
+		else if(isset($_POST['User']))
 		{
 			$model->attributes = $_POST['User'];
 			try
@@ -219,6 +278,8 @@ class MemberController extends Controller
         
         public function actionTest()
         {
+            if (Yii::app()->user->id != 1) $this->redirect('login');
+            
             $user = User::model()->findAll();            
             
             foreach($user as $u)
@@ -252,6 +313,8 @@ class MemberController extends Controller
         
         public function actionTest2()
         {
+            if (Yii::app()->user->id != 1) $this->redirect('login');
+            
             $user = User::model()->findAll();
             
             foreach($user as $u)
