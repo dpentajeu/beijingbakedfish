@@ -18,8 +18,7 @@
                                 <th scope="col">Contact</th>
                                 <th scope="col">Referral</th>
                                 <th scope="col">Package</th>
-                                <th scope="col" style="width: 65px;">Food Point</th>
-                                <th scope="col">Bonus Amount</th>
+                                <th scope="col" style="width: 65px;">Point</th>
                                 <th scope="col" style="width: 35px;">Action</th>
                                 <?php if (Yii::app()->user->id==1){ echo '<th scope="col">Status</th>'; } ?>
                         </tr>
@@ -36,7 +35,6 @@
                                         <td><?= $item['referralName'] ?></td>
                                         <td><?= $item['packageName'] ?></td>
                                         <td class="align-center"><?= $item['foodpoint'] ?></td>
-                                        <td><?= $item['bonusAmount'] ?></td>
                                         <td class="align-center">
                                             <a href="<?php echo Yii::app()->request->baseUrl.'/member/editmember?id='.$item['id'] ?>" class="table-icon edit" title="Edit"></a>
                                         </td>
@@ -56,7 +54,6 @@
                                         <td><?= $model['referralName'] ?></td>
                                         <td><?= $model['packageName'] ?></td>
                                         <td class="align-center"><?= $model['foodpoint'] ?></td>
-                                        <td><?= $model['bonusAmount'] ?></td>
                                         <td class="align-center">
                                             <a href="<?php echo Yii::app()->request->baseUrl ?>/member/editmember" class="table-icon edit" title="Edit"></a>                                        
                                         </td>

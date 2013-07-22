@@ -278,68 +278,68 @@ class MemberController extends Controller
             $this->render('network');
         }
         
-        public function actionTest()
-        {
-            
-            
-            $user = User::model()->findAll();            
-            
-            foreach($user as $u)
-            {
-                if($u->id != 1)
-                {
-                    if($u->packageId == 1) $foodpoint = 600;
-                    if($u->packageId == 2) $foodpoint = 1650;
-                    if($u->packageId == 3) $foodpoint = 3850;
-                    
-                    $wallet = new Wallet;
-                    $wallet->attributes = array(
-                        'foodPoint'=>$foodpoint,
-                        'modifiedDate' => date('Y-m-d H:i:s'),
-                        'userId'=>$u->id,
-                    );
-                    
-                    if (!$wallet->save())
-                    {
-                            $error = '';
-                            foreach ($user->getErrors() as $key) {
-                                    $error .= $key[0];
-                            }
-                            throw new Exception($user->getErrors());
-                    }
-                }             
-            }         
-                        
-            $this->redirect('login');
-        }
-        
-        public function actionTest2()
-        {
-          
-            
-            $user = User::model()->findAll();
-            
-            foreach($user as $u)
-            {
-                if($u->id != 1)
-                {
-                    $u->password = md5($u->contact);
-                }
-                else
-                {
-                    $u->password = md5('admin321');
-                }
-                
-                if (!$u->save())
-                {
-                        $error = '';
-                        foreach ($user->getErrors() as $key) {
-                                $error .= $key[0];
-                        }
-                        throw new Exception($user->getErrors());
-                }
-            }    
-            
-            $this->redirect('login');
-        }
+//        public function actionTest()
+//        {
+//            
+//            
+//            $user = User::model()->findAll();            
+//            
+//            foreach($user as $u)
+//            {
+//                if($u->id != 1)
+//                {
+//                    if($u->packageId == 1) $foodpoint = 600;
+//                    if($u->packageId == 2) $foodpoint = 1650;
+//                    if($u->packageId == 3) $foodpoint = 3850;
+//                    
+//                    $wallet = new Wallet;
+//                    $wallet->attributes = array(
+//                        'foodPoint'=>$foodpoint,
+//                        'modifiedDate' => date('Y-m-d H:i:s'),
+//                        'userId'=>$u->id,
+//                    );
+//                    
+//                    if (!$wallet->save())
+//                    {
+//                            $error = '';
+//                            foreach ($user->getErrors() as $key) {
+//                                    $error .= $key[0];
+//                            }
+//                            throw new Exception($user->getErrors());
+//                    }
+//                }             
+//            }         
+//                        
+//            $this->redirect('login');
+//        }
+//        
+//        public function actionTest2()
+//        {
+//          
+//            
+//            $user = User::model()->findAll();
+//            
+//            foreach($user as $u)
+//            {
+//                if($u->id != 1)
+//                {
+//                    $u->password = md5($u->contact);
+//                }
+//                else
+//                {
+//                    $u->password = md5('admin321');
+//                }
+//                
+//                if (!$u->save())
+//                {
+//                        $error = '';
+//                        foreach ($user->getErrors() as $key) {
+//                                $error .= $key[0];
+//                        }
+//                        throw new Exception($user->getErrors());
+//                }
+//            }    
+//            
+//            $this->redirect('login');
+//        }
 }

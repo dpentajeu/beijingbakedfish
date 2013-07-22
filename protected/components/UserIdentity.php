@@ -7,7 +7,8 @@
  */
 class UserIdentity extends CUserIdentity
 {
-	protected $_id;
+        const ERROR_ACCOUNT_NOT_APPROVED=67;	
+        protected $_id;
         /**
 	 * Authenticates a user.
 	 * The example implementation makes sure if the username and password
@@ -23,6 +24,8 @@ class UserIdentity extends CUserIdentity
 			$this->errorCode=self::ERROR_USERNAME_INVALID;
 		else if($user->password != md5($this->password))
 			$this->errorCode=self::ERROR_PASSWORD_INVALID;
+                else if($user->isApproved != true)
+			$this->errorCode=self::ERROR_ACCOUNT_NOT_APPROVED;
 		else
                 {
 			$this->errorCode=self::ERROR_NONE;
@@ -39,5 +42,20 @@ class UserIdentity extends CUserIdentity
         public function getId()
         {
             return $this->_id;
+        }
+        
+        public function getErrorMessageX()
+        {
+            switch ($this->errorCode)
+            {
+                case self::ERROR_USERNAME_INVALID:
+                    return 'User does not exists';
+
+                case self::ERROR_PASSWORD_INVALID:
+                    return 'Password does not match';
+
+                case self::ERROR_ACCOUNT_NOT_APPROVED:
+                    return 'This Account has not approved';
+            }
         }
 }

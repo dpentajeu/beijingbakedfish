@@ -363,6 +363,15 @@ class User extends CActiveRecord
             User::send_sms('6'.$user->contact, $msg);
         }
         
+        public function getSponsorNetwork()
+        {
+            $user = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
+            
+            $child = User::model()->findAllByAttributes(array('referrel'=>$user->id));
+            
+            return $child;
+        }
+        
         public static function getUser($id)
 	{
 		$user = User::model()->findByAttributes(array('id'=>$id));
