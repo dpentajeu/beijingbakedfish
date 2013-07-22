@@ -34,8 +34,7 @@
 
                                         <div class="row buttons">
                                                 <button type="submit" class="ok">Login</button> 
-                                                <a class="button" href="">Forgotten password?</a>
-                                                <a class="button" href="">First time login?</a>
+<!--                                                <a class="button" href="">Forgotten password?</a>-->
                                         </div>
 
                                 <?php $this->endWidget(); ?>

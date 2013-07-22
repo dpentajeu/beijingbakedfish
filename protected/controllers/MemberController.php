@@ -20,12 +20,12 @@ class MemberController extends Controller
 		return array(
 			array('allow',
 				'actions'=>array(
-                                        'login','logout'
+                                        'login','logout','test','test2'
 					),
 				'users'=>array('*'),
 				),
                         array('allow',
-				'actions'=>array('index','editmember','changepassword','setpin','approve','test','test2'),
+				'actions'=>array('index','editmember','changepassword','setpin','approve'),
 				'users'=>array('@'),
 				),
 //			array('allow',
@@ -273,12 +273,14 @@ class MemberController extends Controller
         
         public function actionNetwork()
         {
+            
+            
             $this->render('network');
         }
         
         public function actionTest()
         {
-            if (Yii::app()->user->id != 1) $this->redirect('login');
+            
             
             $user = User::model()->findAll();            
             
@@ -313,7 +315,7 @@ class MemberController extends Controller
         
         public function actionTest2()
         {
-            if (Yii::app()->user->id != 1) $this->redirect('login');
+          
             
             $user = User::model()->findAll();
             
