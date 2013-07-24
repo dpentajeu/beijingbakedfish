@@ -1,5 +1,5 @@
 <div class="full_w">
-        <div class="h_title">Set PIN</div>
+        <div class="h_title">Transaction</div>
         <div class="form">
             <?php if(!empty($CMessage)) { ?>
 		<div class="n_error"><p><?= $CMessage; ?></p></div>
@@ -8,23 +8,21 @@
 		<div class="n_ok"><p><?= $notice; ?></p></div>
             <?php } ?>
             <?php $form=$this->beginWidget('CActiveForm', array(
-                'id'=>'setpin-form',
+                'id'=>'transaction-form',
                 'enableClientValidation'=>true,
                 'clientOptions'=>array(
                         'validateOnSubmit'=>true,
                         ),
                 )); ?>
                 <div class="element">
-                        <label for="tac"><span style="color: red;">*</span>TAC:</label>
-                        <?php echo $form->textField($model, 'tac'); ?>
-                        <button type="submit" name="setTac">Request TAC on SMS</button>
-                </div>
-                <div class="element">
-                        <label for="newPin"><span style="color: red;">*</span>New PIN:</label>
-                        <?php echo $form->passwordField($model, 'newPin'); ?>
+                        <label for="userDropDownList"><span style="color: red;">*</span>Customer:</label>
+                        <?php echo $form->dropDownList($model, 'id', $userDropDownList, array('prompt'=>'Select a customer')); ?>
                         <br/><br/>
-                        <label for="newPin2"><span style="color: red;">*</span>Confirm new PIN:</label>
-                        <?php echo $form->passwordField($model, 'newPin2'); ?>
+                        <label for="amound"><span style="color: red;">*</span>Total Bill Amount::</label>
+                        <?php echo Chtml::textField('amount',''); ?>
+                        <br/><br/>
+                        <label for="pin"><span style="color: red;">*</span>Customer PIN:</label>
+                        <?php echo $form->passwordField($model, 'pin'); ?>
                 </div><br/>
                 <button type="submit" name="setpin">Submit</button>
             <?php $this->endWidget(); ?>

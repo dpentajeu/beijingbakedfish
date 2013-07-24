@@ -9,6 +9,10 @@
         <?php  } else {?>                                        
             <div class="h_title">My Account</div>
         <?php } ?>
+            
+        <?php if(!empty($CMessage)) { ?>
+		<div class="n_error"><p><?= $CMessage; ?></p></div>
+            <?php } ?>
         
         <table>
                 <thead>

@@ -60,9 +60,10 @@
 				<ul id="home">
                                         <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/index">Member</a></li>
                                         <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/changepassword">Change password</a></li>
-                                        <li class="b2"><a class="icon report" href="">Network</a></li>
-					<li class="b2"><a class="icon report" href="">Transaction</a></li>
-                                        <li class="b2"><a class="icon report" href="">SMS</a></li>
+                                        <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/network">Network</a></li>
+					<li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/transaction">Transaction</a></li>
+                                        <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/transactionhistory">Transaction History</a></li>
+                                        <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/sms">SMS</a></li>
 				</ul>
                             <?php } else { ?>
                                 <div class="h_title">&#8250; Main control</div>
@@ -70,8 +71,8 @@
                                         <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/index">Account</a></li>
                                         <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/changepassword">Change password</a></li>
                                         <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/setpin">Set PIN</a></li>
-                                        <li class="b2"><a class="icon report" href="">Network</a></li>
-					<li class="b2"><a class="icon report" href="">Transaction History</a></li>
+                                        <li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/network">Network</a></li>
+					<li class="b2"><a class="icon report" href="<?php echo Yii::app()->request->baseUrl; ?>/member/transactionhistory">Transaction History</a></li>
 				</ul>
                             <?php } ?>
 				

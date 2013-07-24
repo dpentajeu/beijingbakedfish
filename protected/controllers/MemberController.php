@@ -20,12 +20,12 @@ class MemberController extends Controller
 		return array(
 			array('allow',
 				'actions'=>array(
-                                        'login','logout','test','test2'
+                                        'login','logout','resetpassword',
 					),
 				'users'=>array('*'),
 				),
                         array('allow',
-				'actions'=>array('index','editmember','changepassword','setpin','approve'),
+				'actions'=>array('index','editmember','changepassword','setpin','approve','network','transaction','transactionhistory','sms'),
 				'users'=>array('@'),
 				),
 //			array('allow',
@@ -69,10 +69,16 @@ class MemberController extends Controller
 	 */
 	public function actionIndex()
 	{
+            $CMessage = '';
+            
             if(Yii::app()->user->id == 1) $model = User::getAllUser();
-            else $model = User::getUser(Yii::app()->user->id);
+            else
+            {
+                $model = User::getUser(Yii::app()->user->id);
+                if (is_null($model->pin)) $CMessage = 'Please remember set up your PIN for Food Point redemption.';
+            }
            
-            $this->render('index',array('model'=>$model));
+            $this->render('index',array('model'=>$model,'CMessage'=> $CMessage));
 	}
 
 	/**
@@ -271,11 +277,109 @@ class MemberController extends Controller
 		$this->render('setpin',array('model'=>$model, 'CMessage'=>$CMessage,'notice'=>$notice));
         }
         
+        public function actionResetpassword()
+        {
+                $this->layout = 'login';
+            
+                $model = new User;
+		$CMessage = '';
+                $notice = '';
+                
+                if(isset($_POST['User']))
+		{
+			$model->attributes = $_POST['User'];
+			try
+			{
+                                $model->resetPassword();
+				$notice = 'New password is send!';
+				$model = new User;
+			}
+			catch (Exception $e)
+			{
+				$CMessage = $e->getMessage();
+			}		
+		}
+
+		$this->render('resetpassword',array('model'=>$model, 'CMessage'=>$CMessage,'notice'=>$notice));
+        }
+        
+        public function actionSms()
+        {
+		if (Yii::app()->user->id != 1) $this->redirect('login');
+            
+                $CMessage = '';
+                $notice = '';
+                
+                if(isset($_POST['message']))
+		{
+			$msg = $_POST['message'];
+                    
+                        try
+			{
+                                User::smsToAll($msg);
+				$notice = 'All messages is send!';
+			}
+			catch (Exception $e)
+			{
+				$CMessage = $e->getMessage();
+			}		
+		}
+
+		$this->render('sms',array('CMessage'=>$CMessage,'notice'=>$notice));
+        }
+        
+        public function actionTransaction()
+        {
+                if (Yii::app()->user->id != 1) $this->redirect('login');
+            
+                $model = new User;
+                $userDropDownList = User::getUserDropDownList();
+		$CMessage = '';
+                $notice = '';
+                               
+		if(isset($_POST['amount']) && isset($_POST['User']))
+		{
+			$amount = $_POST['amount'];
+                        $model->attributes = $_POST['User'];
+
+			try
+			{
+                                if(is_null($model->id) || $model->id == 0)
+                                        throw new Exception('Please select a customer.');    
+                                if(is_null($amount) || $amount == 0)
+                                        throw new Exception('Please enter total bill amount.');                                
+                            
+                                $model->transferFP($amount/2, 'CREDIT');
+                                
+                                $user = User::getUser($model->id);
+                                $wallet = $user->wallet;
+				$notice = 'Transaction is done successfully! Name: '.$user->name.' Balance: '.$wallet->foodPoint;
+				$model = new User;
+			}
+			catch (Exception $e)
+			{
+				$CMessage = $e->getMessage();
+			}		
+		}
+
+		$this->render('transaction',array('model'=>$model, 'userDropDownList'=>$userDropDownList, 'CMessage'=>$CMessage,'notice'=>$notice));
+        }
+        
+        public function actionTransactionhistory()
+        {   
+                $model = Transaction::getTransaction();                
+
+		$this->render('transactionhistory',array('model'=>$model));
+        }
+        
         public function actionNetwork()
         {
+            $user = User::getUser(Yii::app()->user->id);
+            $model = new network;
+            $model->setSponsorNetwork(Yii::app()->user->id, 1);
+            $tree = $model->getSponsorNetwork();
             
-            
-            $this->render('network');
+            $this->render('network',array('model'=>$tree, 'user'=>$user));
         }
         
 //        public function actionTest()

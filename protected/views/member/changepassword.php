@@ -1,5 +1,5 @@
 <div class="full_w">
-        <div class="h_title">Edit Member</div>
+        <div class="h_title">Change Password</div>
         <div class="form">
             <?php if(!empty($CMessage)) { ?>
 		<div class="n_error"><p><?= $CMessage; ?></p></div>
@@ -23,8 +23,7 @@
                         <br/><br/>
                         <label for="newPassword"><span style="color: red;">*</span>Confirm new password:</label>
                         <?php echo $form->passwordField($model, 'newPassword2'); ?>
-                </div>
-                <div class="sep"></div>
+                </div><br/>
                 <button type="submit">Change</button>
             <?php $this->endWidget(); ?>
         </div>

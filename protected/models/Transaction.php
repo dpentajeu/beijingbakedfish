@@ -18,7 +18,12 @@
  */
 class Transaction extends CActiveRecord
 {
-	/**
+	const TRAN_FP = 1;
+
+	private $walletType = Transaction::TRAN_FP;
+	private static $operation = array('DEBIT'=>1, 'CREDIT'=>-1);
+    
+        /**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
 	 * @return Transaction the static model class
@@ -44,11 +49,12 @@ class Transaction extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('walletId, tranType, amount, tranDate', 'required'),
+			array('walletId, tranType, amount', 'required'),
 			array('amount, balance', 'numerical'),
 			array('walletId', 'length', 'max'=>10),
 			array('tranType, promoCode', 'length', 'max'=>6),
-			array('description', 'safe'),
+                        array('tranType', 'match', 'pattern'=>'/^(DEBIT|CREDIT)$/'),
+			array('description, tranDate', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, walletId, tranType, amount, balance, description, promoCode, tranDate', 'safe', 'on'=>'search'),
@@ -108,4 +114,67 @@ class Transaction extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+        
+        public static function transferFP(User $user, array $attributes = array())
+	{
+		list($amount, $type, $description, $date) = array(0.0, 'CREDIT', '', date('Y-m-d H:i:s'));
+		foreach ($attributes as $key => $value) ${$key} = $value;
+		$type = strtoupper($type);
+
+		if (is_null($user))
+			throw new Exception('User cannot be null value.', 1);
+
+		$t = new Transaction;
+		$t->checkOperation($type);
+		$t->setWalletType(Transaction::TRAN_FP);
+		$wallet = $user->wallet;
+		$wallet->foodPoint += $amount * self::$operation[$type];
+		$wallet->modifiedDate = date('Y-m-d H:i:s');
+
+		$t->attributes = array(
+			'walletId'=>$wallet->id,
+			'tranType'=>$type,
+			'amount'=>$amount,
+			'balance'=>$wallet->foodPoint,
+			'description'=>$description,
+			'tranDate'=>$date,
+			);
+ 
+		if (!$t->save())
+			foreach ($t->getErrors() as $e) throw new Exception($e[0]);
+
+		if (!$wallet->save())
+			throw new Exception('Fail to update wallet balance.', 7);
+
+		return $t;
+	}
+        
+        public function checkOperation($type)
+	{
+		if (!preg_match('/^(DEBIT|CREDIT)$/', $type))
+			throw new Exception("No such transaction type: {$type}");
+	}
+        
+        public function setWalletType($w)
+	{
+		$this->walletType = $w;
+	}
+        
+        public static function getTransaction()
+        {     
+            if(Yii::app()->user->id ==1)
+            {
+                $transaction = Transaction::model()->findAll(array('order'=>'tranDate DESC'));
+            }
+            else 
+            {
+                
+                $wallet = Wallet::model()->findByAttributes(array('userId'=>Yii::app()->user->id));
+            
+                $transaction = Transaction::model()->findAllByAttributes(array('walletId'=>$wallet->id),array('order'=>'tranDate DESC'));
+            }
+
+            
+            return $transaction;            
+        }
 }

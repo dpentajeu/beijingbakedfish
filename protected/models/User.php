@@ -76,7 +76,7 @@ class User extends CActiveRecord
                     	array('password', 'length', 'max'=>512),
                         array('bankAcc', 'length', 'max'=>100),
 			array('bankName', 'length', 'max'=>50),
-                        array('created, updated, dateOfBirth, password, oldPassword, newPassword, newPassword2','safe'),
+                        array('id, created, updated, dateOfBirth, password, oldPassword, newPassword, newPassword2','safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, acc_num, name, email, contact, address, dateOfBirth, country, created, updated, referral, packageId, password, bankAcc, bankName, pin, tac, isApproved', 'safe', 'on'=>'search'),
@@ -295,6 +295,33 @@ class User extends CActiveRecord
                 throw new Exception('TAC is empty or invalid!');
 	}
         
+        public function resetPassword()
+	{
+                if(empty($this->contact)) 
+                    throw new Exception("Please fill in phone number.");
+                
+                $user = User::model()->findByAttributes(array('contact'=>$this->contact));
+                
+                $password = $this->random_code(6);
+                
+		$msg = 'From Beijing Baked Fish Restaurant: Reser Password. New password requested is '.$password.'.';
+            
+                $sms = User::send_sms('6'.$this->contact, $msg);
+                
+                if($sms!='success')  { throw new Exception('This phone number is invalid.'); }
+                
+                $user->password = md5($password);
+                
+                if (!$user->save())
+		{
+			$error = '';
+			foreach ($user->getErrors() as $key) {
+				$error .= $key[0];
+			}
+			throw new Exception($user->getErrors());
+		}
+	}
+        
         public function editUser($id)
 	{
 		$user = User::model()->findByAttributes(array('id'=>$id));
@@ -363,6 +390,42 @@ class User extends CActiveRecord
             User::send_sms('6'.$user->contact, $msg);
         }
         
+        public function transferFP($amount,$tranType)
+	{            
+		$user = User::model()->findByAttributes(array('id'=>$this->id));
+            
+                if($this->pin == $user->pin)
+                {
+                    if($tranType=='CREDIT')
+                    {
+                        Transaction::transferFP($user, array(
+                            'amount'=>$amount,
+                            'type'=>'CREDIT', 
+                            'description'=>'Deduct Food Point: '.$user->name.'.',
+                            ));
+                    }
+                    else
+                    {
+                        Transaction::transferFP($user, array(
+                            'amount'=>$amount,
+                            'type'=>'DEBIT',
+                            'description'=>'Received Food Point by '.$user->name.'.',
+                            ));
+                    }
+                }
+                else throw new Exception('This PIN is invalid!');
+	}
+        
+        public static function smsToAll($msg)
+        {
+            $user = User::model()->findAll();
+            
+            foreach($user as $u)
+            {
+                if ($u->id != 1) send_sms('6'.$u->contact,$msg);
+            }
+        }
+        
         public function getSponsorNetwork()
         {
             $user = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
@@ -379,7 +442,7 @@ class User extends CActiveRecord
                 $user->packageName = Package::getPackageName($user->packageId);                
                 $user->referralName = User::getReferralName($user->referral);
                                 
-                $wallet = Wallet::model()->findByAttributes(array('userId'=>$id));
+                $wallet = $user->wallet;
                 if(!is_null($wallet))
                     {
                         $user->foodpoint = $wallet->foodPoint;
@@ -391,14 +454,14 @@ class User extends CActiveRecord
         
         public static function getAllUser()
 	{
-                $user = User::model()->findAll();
+                $user = User::model()->findAll(array('order'=>'name'));
 
                 foreach($user as $u)
                 {
                     $u->packageName = Package::getPackageName($u->packageId);                    
                     $u->referralName = User::getReferralName($u->referral);
 
-                    $wallet = Wallet::model()->findByAttributes(array('userId'=>$u->id));
+                    $wallet = $u->wallet;
                     if(!is_null($wallet))
                     {
                         $u->foodpoint = $wallet->foodPoint;
@@ -407,6 +470,18 @@ class User extends CActiveRecord
                 }
                 
 		return $user;
+	}
+        
+        public static function getUserDropDownList()
+	{
+                $user = User::getAllUser();
+		$result = array();
+
+		foreach ($user as $u) {
+                    if($u->id != 1) $result[$u->id] = $u->name.' ('.$u->packageName.') - '.$u->foodpoint;
+		}
+
+		return $result;
 	}
         
         public static function getReferralName($id)
@@ -439,12 +514,12 @@ class User extends CActiveRecord
                                 else {
 //                                    print("Please refer to API on Error : " . $fd);
                                     $ok = "fail";
-                                    throw new Exception('Fail to send TAC! Error : ' . $fd);
+                                    throw new Exception('Fail to send! Error : ' . $fd);
                                 }
                     }           
                     else      
                     {                        
-                                throw new Exception('Fail to send TAC!');       
+                                throw new Exception('Fail to send!');       
                     }           
                     return $ok;  
         }
@@ -457,5 +532,17 @@ class User extends CActiveRecord
             }
 
             return (int)$number;
+        }
+        
+        public function random_code($length) 
+        {
+            $key = '';
+            $keys = array_merge(range(0, 9), range('a', 'z'));
+
+            for ($i = 0; $i < $length; $i++) {
+                $key .= $keys[array_rand($keys)];
+            }
+
+            return $key;
         }
 }
