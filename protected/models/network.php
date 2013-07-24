@@ -9,9 +9,9 @@ class network{
         $child = User::model()->findAllByAttributes(array('referral'=>$root->id));
         foreach ($child as $node) {
             $this->tree[] = array(
-                'id'=>$node->id,
-                'name'=>$node->name,
                 'level'=>$level,
+                'id'=>$node->id,
+                'name'=>$node->name,                
                 'package'=>Package::getPackageName($node->packageId),
                 'referral'=>User::getReferralName($node->referral),
             );
@@ -22,6 +22,7 @@ class network{
     public function getSponsorNetwork()
     {
 //        var_dump($this->tree);
+        asort($this->tree);
         return $this->tree;
     }
 }
