@@ -302,7 +302,7 @@ class User extends CActiveRecord
                 
                 $user = User::model()->findByAttributes(array('contact'=>$this->contact));
                 
-                if(is_null($user)) { throw new Exception('This phone number is not member.');}
+                if(is_null($user)) { throw new Exception('This phone number is not a member.');}
                 
                 $password = $this->random_code(6);
                 

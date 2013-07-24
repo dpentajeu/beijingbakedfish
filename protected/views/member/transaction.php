@@ -1,6 +1,7 @@
 <div class="full_w">
         <div class="h_title">Transaction</div>
         <div class="form">
+            <div class="n_warning"><p>Note: Bill amount refers to total bill and system will deduct 50% of food point as refer to the total bill amount.</p></div>
             <?php if(!empty($CMessage)) { ?>
 		<div class="n_error"><p><?= $CMessage; ?></p></div>
             <?php } ?>
