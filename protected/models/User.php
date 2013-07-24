@@ -302,6 +302,8 @@ class User extends CActiveRecord
                 
                 $user = User::model()->findByAttributes(array('contact'=>$this->contact));
                 
+                if(is_null($user)) { throw new Exception('This phone number is not member.');}
+                
                 $password = $this->random_code(6);
                 
 		$msg = 'From Beijing Baked Fish Restaurant: Reser Password. New password requested is '.$password.'.';
