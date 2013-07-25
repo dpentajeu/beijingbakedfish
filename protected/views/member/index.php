@@ -3,6 +3,7 @@
             <div class="h_title">Member</div>
             <h2>Member table</h2>
             <p>Add and edit member table</p>
+            <p>Total members: <?=count($model); ?></p>
             <div class="entry">
                 <div class="sep"></div>
             </div>

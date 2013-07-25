@@ -14,6 +14,7 @@ class network{
                 'name'=>$node->name,                
                 'package'=>Package::getPackageName($node->packageId),
                 'referral'=>User::getReferralName($node->referral),
+                'date'=>$node->created,
             );
             self::setSponsorNetwork($node->id, ($level + 1));
         }

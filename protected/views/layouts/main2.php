@@ -75,7 +75,7 @@ $cs->registerScript('datepicker',"
 		<li class="phone">58 & 60,Jalan MR 23,Taman Melaka raya,75000 Melaka. +06-2815070</li>
                 <li class="twitter"><a href="http://twitter.com/">Twitter</a></li>
                 <li class="facebook"><a href="http://facebook.com/">Facebook</a></li>
-                <a href="<?php echo Yii::app()->request->baseUrl; ?>/member/login"><img src="<?php echo Yii::app()->request->baseUrl; ?>/images/member.png" style="width:32px;height:32px; padding-top: 4px;" /></a>
+                <a href="<?php echo Yii::app()->request->baseUrl; ?>/member/login"><img src="<?php echo Yii::app()->request->baseUrl; ?>/images/member.png" style="width:24px;height:24px; padding: 7px 0px 0px 5px" /></a>
             </ul><!-- end .social -->
             
         </div><!-- end .stripe -->

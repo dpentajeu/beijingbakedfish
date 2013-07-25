@@ -13,6 +13,6 @@
                    $count += 1;
                    echo '<br/><div class="sep"></div><h2>Level '.($count+1).'</h2>';
                    }?>
-                   <h3><?php echo $item['referral'].' -> '.$item['name'].' ('.$item['package'].')'; ?></h3>
+                   <h3><?php echo $item['referral'].' -> '.$item['name'].' ('.$item['package'].') <i>'.Date('Y-m-d',strtotime($item['date'])).'</i>'; ?></h3>
         <?php  } ?>        
 </div>
