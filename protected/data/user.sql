@@ -69,3 +69,14 @@ alter table wallet add bonusAmount double null;
 alter table user add tac int(6) null;
 alter table user add isApproved boolean default 0;
 UPDATE `bbf`.`user` SET `isApproved`='1' WHERE `id`='1';
+
+CREATE TABLE `announcement` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL,
+  `message` text NOT NULL,
+  `dateCreated` date NOT NULL,
+  PRIMARY KEY (`id`)
+);
+
+alter table announcement default character set utf8 collate utf8_bin;
+alter table announcement convert to character set utf8 collate utf8_bin;

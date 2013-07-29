@@ -25,7 +25,7 @@ class MemberController extends Controller
 				'users'=>array('*'),
 				),
                         array('allow',
-				'actions'=>array('index','editmember','changepassword','setpin','approve','network','transaction','transactionhistory','sms'),
+				'actions'=>array('index','editmember','changepassword','setpin','approve','network','transaction','transactionhistory','sms','announcement','editannouncement'),
 				'users'=>array('@'),
 				),
 //			array('allow',
@@ -381,6 +381,61 @@ class MemberController extends Controller
             
             $this->render('network',array('model'=>$tree, 'user'=>$user));
         }
+        
+        public function actionAnnouncement()
+        {
+            $CMessage = '';
+            $notice = '';
+
+            if(isset($_POST['title']) && isset($_POST['message']))
+            {
+                    try
+                    {
+                            $a = new Announcement;
+                            $a->attributes = array(
+                                    'title'=>$_POST['title'],
+                                    'message'=>$_POST['message'],
+                                    'dateCreated'=>date('Y-m-d'),
+                            );
+                            $a->save();
+                            $notice = 'New announcement is posted!';
+                    }
+                    catch (Exception $e)
+                    {
+                            $CMessage = $e->getMessage();
+                    }
+            }
+            
+            $model = Announcement::model()->findAll(array('order'=>'dateCreated desc'));
+
+            $this->render('announcement', array('model'=>$model, 'CMessage'=>$CMessage, 'notice'=>$notice ));
+        }
+        
+        public function actionEditannouncement($id = null)
+	{
+		if (Yii::app()->user->id != 1) $this->redirect('login');
+            
+                $CMessage = '';
+                $notice = '';
+		$model = Announcement::model()->findByAttributes(array('id'=>$id));	
+
+		if(isset($_POST['Announcement']))
+		{
+			$model->attributes = $_POST['Announcement'];
+                        
+                        try
+			{
+				$model->save();	
+				$this->redirect(array("member/announcement"));			
+			}
+			catch (Exception $e)
+			{
+				$CMessage = $e->getMessage();
+			}
+		}
+
+		$this->render('editannouncement', array('CMessage'=>$CMessage, 'notice'=>$notice, 'model'=>$model, 'id'=>$id));
+	}
         
 //        public function actionTest()
 //        {
