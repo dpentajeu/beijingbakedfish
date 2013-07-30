@@ -34,7 +34,17 @@ return array(
 	'components'=>array(
 		'user'=>array(
 			// enable cookie-based authentication
+                        'loginUrl'=>array('member/login'),
 			'allowAutoLogin'=>true,
+		),
+                'clientScript'=>array(
+			'packages'=>array(				
+				'jui'=>array(
+					'baseUrl'=>'',
+					'css'=>array('css/smoothness/jquery-ui.css'),
+					'depends'=>array('jquery.ui'),
+				),
+			),
 		),
 		// uncomment the following to enable URLs in path-format
 		

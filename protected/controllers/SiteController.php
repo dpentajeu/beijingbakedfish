@@ -3,12 +3,15 @@
 class SiteController extends Controller
 {
         public $Regmsg='';
+        public $packages;
 	/**
 	 * Declares class-based actions.
 	 */
     
         protected final function beforeAction($action)
-        {
+        {                      
+            $this->packages = Package::getAllPackages();
+            
             if (isset($_POST['Registration']))
             {
                 $model = new User;
