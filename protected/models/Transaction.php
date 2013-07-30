@@ -115,7 +115,7 @@ class Transaction extends CActiveRecord
 		));
 	}
         
-        public static function transferFP(User $user, array $attributes = array())
+    public static function transferFP(User $user, array $attributes = array())
 	{
 		list($amount, $type, $description, $date) = array(0.0, 'CREDIT', '', date('Y-m-d H:i:s'));
 		foreach ($attributes as $key => $value) ${$key} = $value;
@@ -149,32 +149,28 @@ class Transaction extends CActiveRecord
 		return $t;
 	}
         
-        public function checkOperation($type)
+    public function checkOperation($type)
 	{
 		if (!preg_match('/^(DEBIT|CREDIT)$/', $type))
 			throw new Exception("No such transaction type: {$type}");
 	}
         
-        public function setWalletType($w)
+    public function setWalletType($w)
 	{
 		$this->walletType = $w;
 	}
         
-        public static function getTransaction()
-        {     
-            if(Yii::app()->user->id ==1)
-            {
-                $transaction = Transaction::model()->findAll(array('order'=>'tranDate DESC'));
-            }
-            else 
-            {
-                
-                $wallet = Wallet::model()->findByAttributes(array('userId'=>Yii::app()->user->id));
-            
-                $transaction = Transaction::model()->findAllByAttributes(array('walletId'=>$wallet->id),array('order'=>'tranDate DESC'));
-            }
-
-            
-            return $transaction;            
+    public static function getTransaction()
+    {     
+        if(Yii::app()->user->id ==1)
+        {
+            $transaction = Transaction::model()->findAll(array('order'=>'tranDate DESC'));
         }
+        else 
+        {            
+            $wallet = Wallet::model()->findByAttributes(array('userId'=>Yii::app()->user->id));        
+            $transaction = Transaction::model()->findAllByAttributes(array('walletId'=>$wallet->id),array('order'=>'tranDate DESC'));
+        }        
+        return $transaction;            
+    }
 }
