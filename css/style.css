@@ -685,7 +685,7 @@ handheld and (min-width: 300px) and (max-width: 440px),
 screen and (min-device-width: 300px) and (max-device-width: 440px) {
 	body { width: 318px; margin: 0 auto}
 	.content { width: 318px; }
-	.header { height: 540px; }
+	.header { height: 700px; }
 	.header .stripe { width: 318px; height: 120px; background: #000 }
 	.header .stripe .logo {padding: 0 0 0 20px;}
 	.header .stripe .social li.twitter,
@@ -715,6 +715,7 @@ screen and (min-device-width: 300px) and (max-device-width: 440px) {
 	.footer { clear: both; overflow: hidden; height: auto; padding-bottom: 20px;}
 	.footer .columns { width: 288px; }
 	.footer .columns .map, .footer .columns .map iframe { width: 288px !important; }
+	.header .showcase .form form .package { width: 280px;}
 }
 
 
@@ -724,7 +725,7 @@ screen and (min-device-width: 440px) and (max-device-width: 720px) {
 	body { width: 480px; overflow-x: hidden; margin: 0 auto}
 	.content { width: 480px; overflow: hidden; }
 	.content h2 {width: 460px;}
-	.header { height: 540px; }
+	.header { height: 700px; }
 	.header .stripe { width: 480px; height: 120px; background: #000 }
 	.header .stripe .logo {padding: 0 0 0 20px;}
 	.header .stripe .social li.twitter,
@@ -752,6 +753,7 @@ screen and (min-device-width: 440px) and (max-device-width: 720px) {
 	.footer { clear: both; overflow: hidden; height: auto; padding-bottom: 20px;}
 	.footer .columns { width: 460px; }
 	.footer .columns .map, .footer .columns .map iframe { width: 425px !important; float: left !important; }
+	.header .showcase .form form .package { width: 320px;}
 }
 
 @media screen and (min-width: 720px) and (max-width: 980px),

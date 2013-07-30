@@ -336,32 +336,31 @@ class MemberController extends Controller
             
                 $model = new User;
                 $userDropDownList = User::getUserDropDownList();
-		$CMessage = '';
+				$CMessage = '';
                 $notice = '';
                                
-		if(isset($_POST['amount']) && isset($_POST['User']))
-		{
-			$amount = $_POST['amount'];
-                        $model->attributes = $_POST['User'];
+				if(isset($_POST['amount']) && isset($_POST['User']))
+				{
+					$amount = $_POST['amount'];
+		                        $model->attributes = $_POST['User'];
 
-			try
-			{
-                                if(is_null($model->id) || $model->id == 0)
-                                        throw new Exception('Please select a customer.');    
-                                if(is_null($amount) || $amount == 0)
-                                        throw new Exception('Please enter total bill amount.');                                
-                            
-                                $model->transferFP($amount/2, 'CREDIT');
-                                
-                                $user = User::getUser($model->id);
-                                $wallet = $user->wallet;
-				$notice = 'Transaction is done successfully! Name: '.$user->name.' Balance: '.$wallet->foodPoint;
-				$model = new User;
-			}
-			catch (Exception $e)
-			{
-				$CMessage = $e->getMessage();
-			}		
+					try
+					{
+                        if(is_null($model->id) || $model->id == 0)
+                                throw new Exception('Please select a customer.');    
+                        if(is_null($amount) || $amount == 0)
+                                throw new Exception('Please enter total bill amount.');                                
+                    
+                        $model->transferFP($amount/2, 'CREDIT');                        
+                        $user = User::getUser($model->id);
+                        $wallet = $user->wallet;
+						$notice = 'Transaction is done successfully! Name: '.$user->name.' Balance: '.$wallet->foodPoint;
+						$model = new User;
+				}
+				catch (Exception $e)
+				{
+					$CMessage = $e->getMessage();
+				}		
 		}
 
 		$this->render('transaction',array('model'=>$model, 'userDropDownList'=>$userDropDownList, 'CMessage'=>$CMessage,'notice'=>$notice));
