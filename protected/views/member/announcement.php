@@ -1,3 +1,18 @@
+<?php
+$cs = Yii::app()->getClientScript();
+$cs->registerPackage('pagination');
+$cs->registerScript('pagination',"
+	$(document).ready(function(){
+            $('#pagination').smartpaginator({ 
+                totalrecords: $total,
+                recordsperpage: 5, 
+                datacontainer: 'table', 
+                dataelement: 'tr',
+                theme: 'black' 
+            });
+	});
+	");
+?>
 <div class="full_w">
         <div class="h_title">Announcement</div>
         <?php if (Yii::app()->user->id==1){ ?>
@@ -28,7 +43,7 @@
                 <div class="sep"></div>
             </div>
         <?php } ?>
-        <table>
+        <table id="table">
                 <thead>
                         <tr>
                             <th scope="col" style="width: 70px;">Date Posted</th>    
@@ -54,4 +69,5 @@
                     <?php  }?>
                 </tbody>
         </table>
+        <div id='pagination'></div>
 </div>

@@ -77,8 +77,10 @@ class MemberController extends Controller
                 $model = User::getUser(Yii::app()->user->id);
                 if (is_null($model->pin)) $CMessage = 'Please remember set up your PIN for Food Point redemption.';
             }
+            
+            $total = count($model);
            
-            $this->render('index',array('model'=>$model,'CMessage'=> $CMessage));
+            $this->render('index',array('model'=>$model,'CMessage'=> $CMessage,'total'=>$total));
 	}
 
 	/**
@@ -367,9 +369,11 @@ class MemberController extends Controller
         
         public function actionTransactionhistory()
         {   
-                $model = Transaction::getTransaction();                
+                $model = Transaction::getTransaction(); 
+                
+                $total = count($model);
 
-		$this->render('transactionhistory',array('model'=>$model));
+		$this->render('transactionhistory',array('model'=>$model, 'total'=>$total));
         }
         
         public function actionNetwork()
@@ -379,7 +383,9 @@ class MemberController extends Controller
             $model->setSponsorNetwork(Yii::app()->user->id, 1);
             $tree = $model->getSponsorNetwork();
             
-            $this->render('network',array('model'=>$tree, 'user'=>$user));
+            $total = count($tree);
+            
+            $this->render('network',array('model'=>$tree, 'user'=>$user, 'total'=>$total));
         }
         
         public function actionAnnouncement()
@@ -407,8 +413,10 @@ class MemberController extends Controller
             }
             
             $model = Announcement::model()->findAll(array('order'=>'dateCreated desc'));
+            
+            $total = count($model);
 
-            $this->render('announcement', array('model'=>$model, 'CMessage'=>$CMessage, 'notice'=>$notice ));
+            $this->render('announcement', array('model'=>$model, 'CMessage'=>$CMessage, 'notice'=>$notice,'total'=>$total ));
         }
         
         public function actionEditannouncement($id = null)

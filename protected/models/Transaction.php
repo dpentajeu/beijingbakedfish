@@ -130,6 +130,8 @@ class Transaction extends CActiveRecord
 		$wallet = $user->wallet;
 		$wallet->foodPoint += $amount * self::$operation[$type];
 		$wallet->modifiedDate = date('Y-m-d H:i:s');
+                
+                if($wallet->foodPoint < 0) { throw new Exception("Not enough Food Point!");};
 
 		$t->attributes = array(
 			'walletId'=>$wallet->id,

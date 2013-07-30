@@ -1,3 +1,19 @@
+<?php
+$cs = Yii::app()->getClientScript();
+$cs->registerPackage('pagination');
+$cs->registerScript('pagination',"
+	$(document).ready(function(){
+            $('#pagination').smartpaginator({ 
+                totalrecords: $total,
+                recordsperpage: 10, 
+                datacontainer: 'table', 
+                dataelement: 'tr',
+                theme: 'black' 
+            });
+	});
+	");
+?>
+
 <div class="full_w">
         <div class="h_title">Transaction History</div>
         <h2>Transaction history table</h2>
@@ -10,7 +26,7 @@
 		<div class="n_error"><p><?= $CMessage; ?></p></div>
             <?php } ?>
         
-        <table>
+        <table id="table">
                 <thead>
                         <tr>
                                 <th scope="col">Date</th>
@@ -34,4 +50,5 @@
                     <?php } ?>
                 </tbody>
         </table>
+        <div id='pagination'></div>
 </div>

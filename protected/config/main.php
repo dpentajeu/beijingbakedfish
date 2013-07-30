@@ -44,6 +44,12 @@ return array(
 					'css'=>array('css/smoothness/jquery-ui.css'),
 					'depends'=>array('jquery.ui'),
 				),
+                                'pagination'=>array(
+					'baseUrl'=>'',
+					'css'=>array('css/smartpaginator.css'),
+					'js'=>array('js/smartpaginator.js'),
+                                        'depends'=>array('jquery'),
+				),
 			),
 		),
 		// uncomment the following to enable URLs in path-format
