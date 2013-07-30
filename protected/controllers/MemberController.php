@@ -382,9 +382,7 @@ class MemberController extends Controller
             $model->setSponsorNetwork(Yii::app()->user->id, 1);
             $tree = $model->getSponsorNetwork();
             
-            $total = count($tree);
-            
-            $this->render('network',array('model'=>$tree, 'user'=>$user, 'total'=>$total));
+            $this->render('network',array('model'=>$tree, 'user'=>$user));
         }
         
         public function actionAnnouncement()
