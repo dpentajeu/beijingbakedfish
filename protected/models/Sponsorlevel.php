@@ -1,20 +1,19 @@
 <?php
 
 /**
- * This is the model class for table "package".
+ * This is the model class for table "sponsorlevel".
  *
- * The followings are the available columns in table 'package':
+ * The followings are the available columns in table 'sponsorlevel':
  * @property string $id
- * @property string $packageName
- * @property double $value
  * @property integer $level
+ * @property double $rate
  */
-class Package extends CActiveRecord
+class Sponsorlevel extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return Package the static model class
+	 * @return Sponsorlevel the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -26,7 +25,7 @@ class Package extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'package';
+		return 'sponsorlevel';
 	}
 
 	/**
@@ -37,13 +36,12 @@ class Package extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('packageName, value', 'required'),
-                        array('level', 'numerical', 'integerOnly'=>true),
-			array('value', 'numerical'),
-			array('packageName', 'length', 'max'=>255),
+			array('level, rate', 'required'),
+			array('level', 'numerical', 'integerOnly'=>true),
+			array('rate', 'numerical'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, packageName, value, level', 'safe', 'on'=>'search'),
+			array('id, level, rate', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -65,9 +63,8 @@ class Package extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'packageName' => 'Package Name',
-			'value' => 'Value',
-                        'level' => 'Level',
+			'level' => 'Level',
+			'rate' => 'Rate',
 		);
 	}
 
@@ -83,37 +80,11 @@ class Package extends CActiveRecord
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('id',$this->id,true);
-		$criteria->compare('packageName',$this->packageName,true);
-		$criteria->compare('value',$this->value);
-                $criteria->compare('level',$this->level);
+		$criteria->compare('level',$this->level);
+		$criteria->compare('rate',$this->rate);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
-	}
-        
-        public static function getAllPackages()
-	{
-		$packages = Package::model()->findAll();
-		$result = array();
-
-		foreach ($packages as $p) {
-			$result[$p->id] = $p->packageName.' - RM'.$p->value;
-		}
-
-		return $result;
-	}
-
-	public static function getPackageName($packageId)
-	{		                
-            if ($packageId==0)
-            {
-                return '0';
-            }
-            else
-            {
-                $package = Package::model()->findByAttributes(array('id'=>$packageId));
-		return $package->packageName.' - RM'.$package->value;
-            }
 	}
 }

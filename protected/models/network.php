@@ -27,7 +27,7 @@ class network{
         return $this->tree;
     }
 
-    public function setSponsorBonus($id)
+    public static function setSponsorBonus($id)
     {
         $newMember = User::model()->findByAttributes(array('id'=>$id));
         $package = Package::model()->findByAttributes(array('id'=>$newMember->packageId));
@@ -37,9 +37,9 @@ class network{
             {
                 $referralId = $newMember->referral;                
             }
-
+            
             $referral = User::model()->findByAttributes(array('id'=>$referralId));
-            $sponsorTable = SponsorLevel::model()->findByAttributes(array('level'=>$i));
+            $sponsorTable = Sponsorlevel::model()->findByAttributes(array('level'=>$i));
 
             if($referral->id == 1)
                 break;
@@ -50,7 +50,7 @@ class network{
                 'description'=>'Sponsor bonus from '.$newMember->name.'. (Level '.$i.')',
                 ));
 
-            $referralId = $referral->id;
+            $referralId = $referral->referral;
         }
     }
 }

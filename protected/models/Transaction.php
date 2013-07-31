@@ -18,7 +18,9 @@
  */
 class Transaction extends CActiveRecord
 {
-	const TRAN_FP = 1;
+	public $name;
+    
+        const TRAN_FP = 1;
 
 	private $walletType = Transaction::TRAN_FP;
 	private static $operation = array('DEBIT'=>1, 'CREDIT'=>-1);
@@ -167,6 +169,14 @@ class Transaction extends CActiveRecord
         if(Yii::app()->user->id ==1)
         {
             $transaction = Transaction::model()->findAll(array('order'=>'tranDate DESC'));
+            
+            foreach($transaction as $t)
+            {                
+                $wallet = Wallet::model()->findByAttributes(array('id'=>$t->walletId)); 
+                $user = User::model()->findByAttributes(array('id'=>$wallet->userId));
+                
+                $t->name = $user->name;
+            }
         }
         else 
         {            

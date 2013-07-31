@@ -25,7 +25,7 @@ class MemberController extends Controller
 				'users'=>array('*'),
 				),
                         array('allow',
-				'actions'=>array('index','editmember','changepassword','setpin','approve','network','transaction','transactionhistory','sms','announcement','editannouncement'),
+				'actions'=>array('test3','index','editmember','changepassword','setpin','approve','network','transaction','transactionhistory','sms','announcement','editannouncement'),
 				'users'=>array('@'),
 				),
 //			array('allow',
@@ -207,6 +207,7 @@ class MemberController extends Controller
                 try
                 {
                         $model->approveUser($id);
+                        network::setSponsorBonus($id);
                         $CMessage = 'Member has approved.';
 
                         $this->redirect('index');
@@ -506,4 +507,20 @@ class MemberController extends Controller
 //            
 //            $this->redirect('login');
 //        }
+        
+            public function actionTest3()
+            {
+                $user = User::model()->findAll();
+
+                foreach($user as $u)
+                {
+                    if($u->isApproved == 1 && $u->id != 1)
+                    {
+                        network::setSponsorBonus($u->id);
+                    }
+                    var_dump($u);
+                }    
+
+                Yii::app()->end();
+            }
 }

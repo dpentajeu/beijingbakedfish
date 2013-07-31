@@ -29,7 +29,8 @@ $cs->registerScript('pagination',"
         <table id="table">
                 <thead>
                         <tr>
-                                <th scope="col">Date</th>
+                                <th scope="col">Date</th>                                
+                                <?php if(Yii::app()->user->id ==1 ) {echo "<th scope='col'>Name</th>"; } ?>
                                 <th scope="col">Type</th>
                                 <th scope="col">Amount</th>
                                 <th scope="col">Balance</th>
@@ -42,6 +43,7 @@ $cs->registerScript('pagination',"
                     <?php foreach ($model as $key=>$item) { ?>
                         <tr>
                                 <td><?= $item['tranDate'] ?></td>
+                                <?php if(Yii::app()->user->id ==1 ) {echo "<td>".$item['name']."</td>"; } ?>
                                 <td><?= $item['tranType'] ?></td>
                                 <td><?= $item['amount'] ?></td>
                                 <td><?= $item['balance'] ?></td>

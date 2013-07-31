@@ -80,3 +80,30 @@ CREATE TABLE `announcement` (
 
 alter table announcement default character set utf8 collate utf8_bin;
 alter table announcement convert to character set utf8 collate utf8_bin;
+
+
+/****2013/7/31*******/
+alter table package add column level int null;
+
+UPDATE `bbf`.`package` SET `level`='2' WHERE `id`='1';
+UPDATE `bbf`.`package` SET `level`='5' WHERE `id`='2';
+UPDATE `bbf`.`package` SET `level`='10' WHERE `id`='3';
+
+
+CREATE TABLE `sponsorlevel` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `level` int not null,
+  `rate` double not null,
+  PRIMARY KEY (`id`)
+);
+
+INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('1', '0.075');
+INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('2', '0.05');
+INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('3', '0.04');
+INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('4', '0.035');
+INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('5', '0.03');
+INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('6', '0.025');
+INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('7', '0.015');
+INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('8', '0.01');
+INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('9', '0.01');
+INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('10', '0.01');
