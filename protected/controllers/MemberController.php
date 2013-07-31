@@ -508,19 +508,19 @@ class MemberController extends Controller
 //            $this->redirect('login');
 //        }
         
-            public function actionTest3()
-            {
-                $user = User::model()->findAll();
-
-                foreach($user as $u)
-                {
-                    if($u->isApproved == 1 && $u->id != 1)
-                    {
-                        network::setSponsorBonus($u->id);
-                    }
-                    var_dump($u);
-                }    
-
-                Yii::app()->end();
-            }
+//            public function actionTest3()
+//            {
+//                $user = User::model()->findAll();
+//
+//                foreach($user as $u)
+//                {
+//                    if($u->isApproved == 1 && $u->id != 1)
+//                    {
+//                        network::setSponsorBonus($u->id);
+//                    }
+//                    var_dump($u);
+//                }    
+//
+//                Yii::app()->end();
+//            }
 }
