@@ -382,7 +382,7 @@ class MemberController extends Controller
             $model = new network;
             $model->setSponsorNetwork(Yii::app()->user->id, 1);
             $tree = $model->getSponsorNetwork();
-            
+                       
             $this->render('network',array('model'=>$tree, 'user'=>$user));
         }
         

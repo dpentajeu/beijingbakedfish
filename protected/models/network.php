@@ -8,6 +8,7 @@ class network{
         $root = User::model()->findByAttributes(array('id'=>$id));
         $child = User::model()->findAllByAttributes(array('referral'=>$root->id));
         foreach ($child as $node) {
+            if($node->isApproved == 0)$node->name = "<span style='color: red;'>".$node->name."</span>";
             $this->tree[] = array(
                 'level'=>$level,
                 'id'=>$node->id,
