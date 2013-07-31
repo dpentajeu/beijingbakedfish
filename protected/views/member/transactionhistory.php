@@ -17,7 +17,7 @@ $cs->registerScript('pagination',"
 <div class="full_w">
         <div class="h_title">Transaction History</div>
         <h2>Transaction history table</h2>
-        <p>Show all the transaction</p>
+        <p>Show all the transaction history.</p>
         <div class="entry">
             <div class="sep"></div>
         </div>

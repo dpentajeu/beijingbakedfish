@@ -1,7 +1,7 @@
 <div class="full_w">
-        <div class="h_title">Network</div>
-        <h2>Network Hierarchy</h2>
-        <p>Show the sponsor network level</p>
+        <div class="h_title">Sponsor Network</div>
+        <h2>Sponsor Network Hierarchy</h2>
+        <p>Show the sponsor network level.</p>
         <div class="n_warning"><p>Red color indicated member is not activate.</p></div>
         <div>
                 <div class="h_title" style="text-align: center;">Sponsor Bonus Guidelines</div>
