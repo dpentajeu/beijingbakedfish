@@ -19,6 +19,11 @@ class SiteController extends Controller
                 $model->attributes = $_POST['Registration'];
                 try
                 {
+                        if(!is_numeric($_POST['Registration']['contact'] || $_POST['Registration']['referral']))
+                        {
+                            throw new Exception("Please enter the right format of contact numbers.");
+                        }
+                    
                         if (!$model->validate())
                                 throw new Exception("Please fill in all fields in the forms correctly.");
                         $model->createUser();
