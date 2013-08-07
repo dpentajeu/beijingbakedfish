@@ -19,7 +19,7 @@ class SiteController extends Controller
                 $model->attributes = $_POST['Registration'];
                 try
                 {
-                        if(!is_numeric($_POST['Registration']['contact'] || $_POST['Registration']['referral']))
+                        if(!is_numeric($_POST['Registration']['contact']) || !is_numeric($_POST['Registration']['referral']))
                         {
                             throw new Exception("Please enter the right format of contact numbers.");
                         }
