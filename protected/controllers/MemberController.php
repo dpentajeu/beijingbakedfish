@@ -25,7 +25,7 @@ class MemberController extends Controller
 				'users'=>array('*'),
 				),
                         array('allow',
-				'actions'=>array('test3','index','editmember','changepassword','setpin','approve','network','transaction','transactionhistory','sms','announcement','editannouncement'),
+				'actions'=>array('test3','index','editmember','changepassword','setpin','approve','network','transaction','transactionhistory','sms','announcement','editannouncement','disapprove'),
 				'users'=>array('@'),
 				),
 //			array('allow',
@@ -207,8 +207,34 @@ class MemberController extends Controller
                 try
                 {
                         $model->approveUser($id);
-                        network::setSponsorBonus($id);
+                        //network::setSponsorBonus($id);
+                        
+                        $msg = 'Your account is activated, login via www.beijingbakedfish.com/member, with phone number and default password is abc123, thanks.';
+                        User::send_sms($model->contact,$msg);
+                        
                         $CMessage = 'Member has approved.';
+
+                        $this->redirect('index');
+                }
+                catch (Exception $e)
+                {
+                        $CMessage = $e->getMessage();
+                }
+
+		$this->redirect('index');
+	}
+        
+        public function actionDisapprove($id = null)
+	{            
+                if (Yii::app()->user->id != 1) $this->redirect('login');
+            
+                $model = User::getUser($id);
+		$CMessage = '';
+
+                try
+                {
+                        $model->disapproveUser($id);
+                        $CMessage = 'Member has disapproved.';
 
                         $this->redirect('index');
                 }
@@ -340,28 +366,32 @@ class MemberController extends Controller
 				$CMessage = '';
                 $notice = '';
                                
-				if(isset($_POST['amount']) && isset($_POST['User']))
-				{
-					$amount = $_POST['amount'];
-		                        $model->attributes = $_POST['User'];
+                if(isset($_POST['amount']) && isset($_POST['User']))
+                {
+                        $amount = $_POST['amount'];
+                        $model->attributes = $_POST['User'];
 
-					try
-					{
-                        if(is_null($model->id) || $model->id == 0)
-                                throw new Exception('Please select a customer.');    
-                        if(is_null($amount) || $amount == 0)
-                                throw new Exception('Please enter total bill amount.');                                
-                    
-                        $model->transferFP($amount/2, 'CREDIT');                        
-                        $user = User::getUser($model->id);
-                        $wallet = $user->wallet;
-						$notice = 'Transaction is done successfully! Name: '.$user->name.' Balance: '.$wallet->foodPoint;
-						$model = new User;
-				}
-				catch (Exception $e)
-				{
-					$CMessage = $e->getMessage();
-				}		
+                        try
+                        {
+                                if(is_null($model->id) || $model->id == 0)
+                                    throw new Exception('Please select a customer.');    
+                                if(is_null($amount) || $amount == 0)
+                                    throw new Exception('Please enter total bill amount.');                                
+
+                                $model->transferFP($amount/2, 'CREDIT');                        
+                                $user = User::getUser($model->id);
+                                $wallet = $user->wallet;
+                                $notice = 'Transaction is done successfully! Name: '.$user->name.' Balance: '.$wallet->foodPoint;
+                                
+                                $msg = 'Your beijingbakedfish bill is RM '.$amount.', remaining  Food Point is '.$wallet->foodPoint.', thanks and come again.';
+                                User::send_sms($user->contact,$msg);
+                                
+                                $model = new User;
+                        }
+                        catch (Exception $e)
+                        {
+                                $CMessage = $e->getMessage();
+                        }		
 		}
 
 		$this->render('transaction',array('model'=>$model, 'userDropDownList'=>$userDropDownList, 'CMessage'=>$CMessage,'notice'=>$notice));

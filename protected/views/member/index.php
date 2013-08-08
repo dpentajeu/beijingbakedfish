@@ -61,7 +61,7 @@ $cs->registerScript('pagination',"
                                                 </td>
                                                 <td class="align-center">
                                                     <?php if($item['isApproved']==true){?>
-                                                        Approved
+                                                        <a href="<?php echo Yii::app()->request->baseUrl.'/member/disapprove?id='.$item['id'] ?>">Disapprove</a>
                                                     <?php } else { ?>
                                                         <a href="<?php echo Yii::app()->request->baseUrl.'/member/approve?id='.$item['id'] ?>">Approve</a>
                                                      <?php }?>

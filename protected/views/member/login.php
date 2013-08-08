@@ -21,7 +21,7 @@
                                         ),
                                 )); ?>
                                         <div class="row">
-                                                <label for="login">Email:</label>
+                                                <label for="login">Phone Number:</label>
                                                 <?php echo $form->textField($model,'username',array('class'=>'text')); ?>
                                                 <?php echo $form->error($model,'username'); ?>
                                         </div>

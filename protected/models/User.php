@@ -196,7 +196,7 @@ class User extends CActiveRecord
 			'referral'=>$this->referral,
                         'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
 			'created'=>date('Y-m-d H:i:s'),
-                        'password' => md5($this->contact),
+                        'password' => md5('abc123'),
                         'isApproved' => 0,
 			);                                    
                 
@@ -359,6 +359,22 @@ class User extends CActiveRecord
 		$user = User::model()->findByAttributes(array('id'=>$id));
                                             
 		$user->isApproved = true;
+                
+		if (!$user->save())
+		{
+			$error = '';
+			foreach ($user->getErrors() as $key) {
+				$error .= $key[0];
+			}
+			throw new Exception($user->getErrors());
+		}
+	}
+        
+        public function disapproveUser($id)
+	{
+		$user = User::model()->findByAttributes(array('id'=>$id));
+                                            
+		$user->isApproved = 0;
                 
 		if (!$user->save())
 		{
