@@ -6,6 +6,7 @@
  * The followings are the available columns in table 'wallet':
  * @property string $id
  * @property double $foodPoint
+ * @property double $cashPoint
  * @property string $userId
  * @property string $modifiedDate
  *
@@ -42,12 +43,12 @@ class Wallet extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('foodPoint, userId', 'required'),
-			array('foodPoint', 'numerical'),
+			array('foodPoint, cashPoint', 'numerical'),
 			array('userId', 'length', 'max'=>10),
-                        array('modifiedDate','safe'),
+            array('modifiedDate','safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, foodPoint, userId, modifiedDate', 'safe', 'on'=>'search'),
+			array('id, foodPoint, cashPoint, userId, modifiedDate', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -72,6 +73,7 @@ class Wallet extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'foodPoint' => 'Food Point',
+			'cashPoint'=>'Cash Point',
 			'userId' => 'User',
 			'modifiedDate' => 'Modified Date',
 		);
@@ -90,6 +92,7 @@ class Wallet extends CActiveRecord
 
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('foodPoint',$this->foodPoint);
+		$criteria->compare('cashPoint',$this->cashPoint);
 		$criteria->compare('userId',$this->userId,true);
 		$criteria->compare('modifiedDate',$this->modifiedDate,true);
 

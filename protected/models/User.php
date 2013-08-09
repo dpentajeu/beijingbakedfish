@@ -22,6 +22,7 @@
  * @property integer $pin
  * @property integer $tac
  * @property integer $isApproved
+ * @property integer $isActivated
  *
  * The followings are the available model relations:
  * @property Wallet[] $wallets
@@ -69,7 +70,7 @@ class User extends CActiveRecord
 		return array(
 			array('name, email, contact, packageId', 'required'),
                         array('email','email'),
-			array('country, referral, packageId, pin, tac, isApproved, newPin, newPin2,oldPin', 'numerical', 'integerOnly'=>true),
+			array('country, referral, packageId, pin, tac, isApproved, isActivated, newPin, newPin2,oldPin', 'numerical', 'integerOnly'=>true),
 			array('acc_num, name, email, contact', 'length', 'max'=>45),
                         array('pin, newPin, newPin2, oldPin, tac', 'length', 'max'=>6),
 			array('address', 'length', 'max'=>255),
@@ -79,7 +80,7 @@ class User extends CActiveRecord
                         array('id, created, updated, dateOfBirth, password, oldPassword, newPassword, newPassword2','safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, acc_num, name, email, contact, address, dateOfBirth, country, created, updated, referral, packageId, password, bankAcc, bankName, pin, tac, isApproved', 'safe', 'on'=>'search'),
+			array('id, acc_num, name, email, contact, address, dateOfBirth, country, created, updated, referral, packageId, password, bankAcc, bankName, pin, tac, isApproved, isActivated', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -119,6 +120,7 @@ class User extends CActiveRecord
 			'pin' => 'Pin',
                         'tac' => 'Tac',
                         'isApproved' => 'Is Approved',
+            'isActivated'=>'Is Activated',
 		);
 	}
 
@@ -151,6 +153,7 @@ class User extends CActiveRecord
 		$criteria->compare('pin',$this->pin);
                 $criteria->compare('tac',$this->tac);
                 $criteria->compare('isApproved',$this->isApproved);
+        $criteria->compare('isActivated',$this->isActivated);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -198,6 +201,7 @@ class User extends CActiveRecord
 			'created'=>date('Y-m-d H:i:s'),
                         'password' => md5('abc123'),
                         'isApproved' => 0,
+                        'isActivated'=>0,
 			);                                    
                 
 		if (!$user->save())
@@ -359,6 +363,12 @@ class User extends CActiveRecord
 		$user = User::model()->findByAttributes(array('id'=>$id));
                                             
 		$user->isApproved = true;
+		if(!$user->isActivated)
+		{
+			$user->isActivated = 1;
+			$msg = 'Your account is activated, login via www.beijingbakedfish.com/member, with phone number and default password is abc123, thanks.';
+            $this->send_sms($user->contact,$msg);
+		}
                 
 		if (!$user->save())
 		{
@@ -408,10 +418,10 @@ class User extends CActiveRecord
             User::send_sms('6'.$user->contact, $msg);
         }
         
-        public function transferFP($amount,$tranType)
+    public function transferFP($amount,$tranType)
 	{            
 		$user = User::model()->findByAttributes(array('id'=>$this->id));
-            
+		
                 if($this->pin == $user->pin)
                 {
                     if($tranType=='CREDIT')

@@ -20,7 +20,8 @@ class Transaction extends CActiveRecord
 {
 	public $name;
     
-        const TRAN_FP = 1;
+    const TRAN_FP = 1;
+    const TRAN_CP = 2;
 
 	private $walletType = Transaction::TRAN_FP;
 	private static $operation = array('DEBIT'=>1, 'CREDIT'=>-1);
@@ -119,7 +120,7 @@ class Transaction extends CActiveRecord
         
     public static function transferFP(User $user, array $attributes = array())
 	{
-		list($amount, $type, $description, $date) = array(0.0, 'CREDIT', '', date('Y-m-d H:i:s'));
+		list($amount, $type, $point, $description, $date) = array(0.0, 'CREDIT', 'FP' ,'', date('Y-m-d H:i:s'));
 		foreach ($attributes as $key => $value) ${$key} = $value;
 		$type = strtoupper($type);
 
@@ -130,10 +131,13 @@ class Transaction extends CActiveRecord
 		$t->checkOperation($type);
 		$t->setWalletType(Transaction::TRAN_FP);
 		$wallet = $user->wallet;
-		$wallet->foodPoint += $amount * self::$operation[$type];
+		if($point == 'CP')
+			$wallet->cashPoint += $amount * self::$operation[$type];
+		else
+			$wallet->foodPoint += $amount * self::$operation[$type];
 		$wallet->modifiedDate = date('Y-m-d H:i:s');
                 
-                if($wallet->foodPoint < 0) { throw new Exception("Not enough Food Point!");};
+        if($wallet->foodPoint < 0) { throw new Exception("Not enough Food Point!");};
 
 		$t->attributes = array(
 			'walletId'=>$wallet->id,
@@ -164,23 +168,30 @@ class Transaction extends CActiveRecord
 		$this->walletType = $w;
 	}
         
-    public static function getTransaction()
+    public static function getTransaction($transDesc)
     {     
         if(Yii::app()->user->id ==1)
         {
-            $transaction = Transaction::model()->findAll(array('order'=>'tranDate DESC'));
+        	$criteria = new CDbCriteria;
+			$criteria->order = "tranDate desc";
+			$criteria->addSearchCondition('description', $transDesc);
+            $transaction = Transaction::model()->findAll($criteria);
             
             foreach($transaction as $t)
             {                
                 $wallet = Wallet::model()->findByAttributes(array('id'=>$t->walletId)); 
-                $user = User::model()->findByAttributes(array('id'=>$wallet->userId));
-                
+                $user = User::model()->findByAttributes(array('id'=>$wallet->userId));                
                 $t->name = $user->name;
             }
         }
         else 
-        {            
-            $wallet = Wallet::model()->findByAttributes(array('userId'=>Yii::app()->user->id));        
+        {  
+        	$criteria = new CDbCriteria;
+			$criteria->order = "tranDate desc";
+			$criteria->compare('userId',Yii::app()->user->id);
+			$criteria->addSearchCondition('description', $transDesc);
+            $transaction = Transaction::model()->findAll($criteria);          
+            $wallet = Wallet::model()->findByAttributes($criteria);        
             $transaction = Transaction::model()->findAllByAttributes(array('walletId'=>$wallet->id),array('order'=>'tranDate DESC'));
         }        
         return $transaction;            

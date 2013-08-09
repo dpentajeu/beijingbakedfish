@@ -197,78 +197,75 @@ class MemberController extends Controller
 		$this->render('editmember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage));
 	}
         
-        public function actionApprove($id = null)
+    public function actionApprove($id = null)
 	{            
-                if (Yii::app()->user->id != 1) $this->redirect('login');
+            if (Yii::app()->user->id != 1) $this->redirect('login');
             
-                $model = User::getUser($id);
-		$CMessage = '';
+            $model = User::getUser($id);
+			$CMessage = '';
 
-                try
-                {
-                        $model->approveUser($id);
-                        //network::setSponsorBonus($id);
-                        
-                        $msg = 'Your account is activated, login via www.beijingbakedfish.com/member, with phone number and default password is abc123, thanks.';
-                        User::send_sms($model->contact,$msg);
-                        
-                        $CMessage = 'Member has approved.';
+            try
+            {
+                $model->approveUser($id);
+                //network::setSponsorBonus($id);                      
+                
+                $CMessage = 'Member is approved.';
 
-                        $this->redirect('index');
-                }
-                catch (Exception $e)
-                {
-                        $CMessage = $e->getMessage();
-                }
+                $this->redirect('index');
+            }
+            catch (Exception $e)
+            {
+                    $CMessage = $e->getMessage();
+            }
+
+			$this->redirect('index');
+	}
+        
+    public function actionDisapprove($id = null)
+	{            
+        if (Yii::app()->user->id != 1) $this->redirect('login');
+            
+            $model = User::getUser($id);
+			$CMessage = '';
+
+            try
+            {
+                $model->disapproveUser($id);
+                $CMessage = 'Member is disapproved.';
+
+                $this->redirect('index');
+            }
+            catch (Exception $e)
+            {
+                $CMessage = $e->getMessage();
+            }
 
 		$this->redirect('index');
 	}
         
-        public function actionDisapprove($id = null)
-	{            
-                if (Yii::app()->user->id != 1) $this->redirect('login');
-            
-                $model = User::getUser($id);
-		$CMessage = '';
+    public function actionChangepassword()
+    {
+            $model = new User;
+			$CMessage = '';
+            $notice = '';
 
-                try
-                {
-                        $model->disapproveUser($id);
-                        $CMessage = 'Member has disapproved.';
-
-                        $this->redirect('index');
-                }
-                catch (Exception $e)
-                {
-                        $CMessage = $e->getMessage();
-                }
-
-		$this->redirect('index');
-	}
-        
-        public function actionChangepassword()
-        {
-                $model = new User;
-		$CMessage = '';
-                $notice = '';
-
-		if(isset($_POST['User']))
-		{
-			$model->attributes = $_POST['User'];
-			try
+			if(isset($_POST['User']))
 			{
-                                $model->changePassword();
-				$notice = 'Password changed successfully!';
-				$model = new User;
+				$model->attributes = $_POST['User'];
+				try
+				{
+	                                $model->changePassword();
+					$notice = 'Password changed successfully!';
+					$model = new User;
+				}
+				catch (Exception $e)
+				{
+					$CMessage = $e->getMessage();
+				}		
 			}
-			catch (Exception $e)
-			{
-				$CMessage = $e->getMessage();
-			}		
-		}
 
-		$this->render('changepassword',array('model'=>$model, 'CMessage'=>$CMessage,'notice'=>$notice));
-        }
+			$this->render('changepassword',array('model'=>$model, 'CMessage'=>$CMessage,'notice'=>$notice));
+    }
         
         public function actionSetpin()
         {
@@ -382,7 +379,6 @@ class MemberController extends Controller
                                 $user = User::getUser($model->id);
                                 $wallet = $user->wallet;
                                 $notice = 'Transaction is done successfully! Name: '.$user->name.' Balance: '.$wallet->foodPoint;
-                                
                                 $msg = 'Your beijingbakedfish bill is RM '.$amount.', remaining  Food Point is '.$wallet->foodPoint.', thanks and come again.';
                                 User::send_sms($user->contact,$msg);
                                 
@@ -398,12 +394,15 @@ class MemberController extends Controller
         }
         
         public function actionTransactionhistory()
-        {   
-                $model = Transaction::getTransaction(); 
-                
-                $total = count($model);
-
-		$this->render('transactionhistory',array('model'=>$model, 'total'=>$total));
+        {
+            if($_POST)
+            {
+            	$model = Transaction::getTransaction($_POST['filter']);  
+            }    
+            else
+            	$model = Transaction::getTransaction('Deduct Food Point');           
+            $total = count($model);
+			$this->render('transactionhistory',array('model'=>$model, 'total'=>$total));
         }
         
         public function actionNetwork()
@@ -553,4 +552,20 @@ class MemberController extends Controller
 //
 //                Yii::app()->end();
 //            }
+
+	public function actionTest4()
+	{
+		$criteria = new CDbCriteria;
+		$criteria->order = "tranDate desc";
+		$criteria->addSearchCondition('description', 'Sponsor bonus');
+		$transactions = Transaction::model()->findAll($criteria);
+
+		foreach ($transactions as $item) {
+			# code...
+			$item->wallet->foodPoint -= $item->amount;
+			$item->wallet->cashPoint = $item->amount;
+			if(!$item->wallet->save())
+				var_dump("Error Processing Request");			
+		}
+	}
 }

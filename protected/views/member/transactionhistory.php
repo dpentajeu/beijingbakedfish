@@ -12,12 +12,25 @@ $cs->registerScript('pagination',"
             });
 	});
 	");
+$cs->registerCss('label',"
+        #main form label{
+            display: inline-block !important;
+        }
+    ");
 ?>
 
 <div class="full_w">
+        <?php $form=$this->beginWidget('CActiveForm', array(
+            'action'=>Yii::app()->request->baseUrl.'/member/transactionhistory',
+        )); ?>
         <div class="h_title">Transaction History</div>
         <h2>Transaction history table</h2>
         <p>Show all the transaction history.</p>
+        <p>            
+            <?php echo CHtml::radioButtonList('filter', null, array('Deduct Food Point'=>'Bill', 'Sponsor Bonus'=>'Sponsor bonus', 'Autoplacement Bonus'=>'Autoplacement bonus', 'Transfer'=>'Transfer'), array('separator'=>'&nbsp;&nbsp;')); ?>
+            
+            <?php echo CHtml::submitButton('Find', array('name'=>'btnFilter')); ?>            
+        </p>            
         <div class="entry">
             <div class="sep"></div>
         </div>
@@ -53,4 +66,5 @@ $cs->registerScript('pagination',"
                 </tbody>
         </table>
         <div id='pagination'></div>
+        <?php $this->endWidget(); ?>
 </div>

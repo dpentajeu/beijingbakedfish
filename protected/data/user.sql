@@ -107,3 +107,7 @@ INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('7', '0.015');
 INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('8', '0.01');
 INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('9', '0.01');
 INSERT INTO `bbf`.`sponsorlevel` (`level`, `rate`) VALUES ('10', '0.01');
+
+/*****20130808*****/
+alter table user add column isActivated tinyint(1) default 0;
+alter table wallet add column cashPoint double after foodPoint;

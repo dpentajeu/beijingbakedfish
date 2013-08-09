@@ -48,6 +48,7 @@ class network{
             Transaction::transferFP($referral, array(
                 'amount'=>($package->value * $sponsorTable->rate),
                 'type'=>'DEBIT',
+                'point'=>'CP',
                 'description'=>'Sponsor bonus from '.$newMember->name.'. (Level '.$i.')',
                 ));
 
