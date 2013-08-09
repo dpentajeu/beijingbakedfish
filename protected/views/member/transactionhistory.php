@@ -27,14 +27,14 @@ $cs->registerCss('label',"
         <h2>Transaction history table</h2>
         <p>Show all the transaction history.</p>
         <p>            
-            <?php echo CHtml::radioButtonList('filter', null, array('Deduct Food Point'=>'Bill', 'Sponsor Bonus'=>'Sponsor bonus', 'Autoplacement Bonus'=>'Autoplacement bonus', 'Transfer'=>'Transfer'), array('separator'=>'&nbsp;&nbsp;')); ?>
+            <?php echo CHtml::radioButtonList('filter', null, array('Deduct Food Point'=>'Bill', 'Sponsor bonus'=>'Sponsor bonus', 'Autoplacement bonus'=>'Autoplacement bonus', 'Transfer'=>'Transfer'), array('separator'=>'&nbsp;&nbsp;')); ?>
             
             <?php echo CHtml::submitButton('Find', array('name'=>'btnFilter')); ?>            
         </p>            
         <div class="entry">
             <div class="sep"></div>
         </div>
-            
+        * Balance is referred as your total amount of food point and cash point.
         <?php if(!empty($CMessage)) { ?>
 		<div class="n_error"><p><?= $CMessage; ?></p></div>
             <?php } ?>

@@ -14,6 +14,7 @@
                         'validateOnSubmit'=>true,
                         ),
                 )); ?>
+                * Warning: Messages are subjected to the SMS quota available.
                 <div class="element">
                         <label for="message">Message:</label>
                         <?php echo Chtml::textarea('message','',array('style'=>'resize: none;width:450px;height:250px;')); ?>

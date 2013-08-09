@@ -36,7 +36,8 @@ class User extends CActiveRecord
 	 */
          public $packageName ='';
          public $referralName ='';
-         public $foodpoint;
+         public $foodPoint;
+         public $cashPoint;
          public $bonusAmount;
          
          public $newPassword;
@@ -213,13 +214,13 @@ class User extends CActiveRecord
 			throw new Exception($user->getErrors());
 		}
                 
-                if($user->packageId == 1) $foodpoint = 600;
-                if($user->packageId == 2) $foodpoint = 1650;
-                if($user->packageId == 3) $foodpoint = 3850;
+                if($user->packageId == 1) $foodPoint = 600;
+                if($user->packageId == 2) $foodPoint = 1650;
+                if($user->packageId == 3) $foodPoint = 3850;
                     
                 $wallet = new Wallet;
                 $wallet->attributes = array(
-                    'foodPoint'=>$foodpoint,
+                    'foodPoint'=>$foodPoint,
                     'bonusAmout'=> 0,
                     'modifiedDate' => date('Y-m-d H:i:s'),
                     'userId'=>$user->id,
@@ -328,24 +329,27 @@ class User extends CActiveRecord
 		}
 	}
         
-        public function editUser($id)
+    public function editUser($id)
 	{
 		$user = User::model()->findByAttributes(array('id'=>$id));
             
-                if($user->email != $this->email)
-                {
-                    $this->email = User::findEmail($this->email);   
-                }  
-                
-                $this->contact = User::findContact($this->contact);
+        if($user->email != $this->email)
+        {
+            $this->email = User::findEmail($this->email);   
+        }  
+        
+        if($user->contact != $this->contact)
+        {
+        	$this->contact = User::findContact($this->contact);
+        }
                                 
 		$user->attributes = array(
 			'name'=>$this->name,
 			'email'=>$this->email,
 			'contact'=>$this->contact,
-                        'bankAcc'=> $this->bankAcc,
-                        'bankName'=> $this->bankName,
-                        'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
+            'bankAcc'=> $this->bankAcc,
+            'bankName'=> $this->bankName,
+            'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
 			);
                 
 		if (!$user->save())
@@ -358,7 +362,7 @@ class User extends CActiveRecord
 		}
 	}
         
-        public function approveUser($id)
+    public function approveUser($id)
 	{
 		$user = User::model()->findByAttributes(array('id'=>$id));
                                             
@@ -473,7 +477,8 @@ class User extends CActiveRecord
                 $wallet = $user->wallet;
                 if(!is_null($wallet))
                     {
-                        $user->foodpoint = $wallet->foodPoint;
+                        $user->foodPoint = $wallet->foodPoint;
+                        $user->cashPoint = $wallet->cashPoint;
                         $user->bonusAmount = $wallet->bonusAmount;
                     }
                 
@@ -492,7 +497,8 @@ class User extends CActiveRecord
                     $wallet = $u->wallet;
                     if(!is_null($wallet))
                     {
-                        $u->foodpoint = $wallet->foodPoint;
+                        $u->foodPoint = $wallet->foodPoint;
+                        $u->cashPoint = $wallet->cashPoint;
                         $u->bonusAmount = $wallet->bonusAmount;
                     }
                 }
@@ -506,7 +512,7 @@ class User extends CActiveRecord
 		$result = array();
 
 		foreach ($user as $u) {
-                    if($u->id != 1) $result[$u->id] = $u->name.' ('.$u->packageName.') - '.$u->foodpoint;
+                    if($u->id != 1) $result[$u->id] = $u->name.' ('.$u->packageName.') - [Food Point: '.$u->foodPoint.']';
 		}
 
 		return $result;

@@ -19,6 +19,7 @@
                         <?php echo $form->textField($model, 'tac'); ?>
                         <button type="submit" name="setTac">Request TAC on SMS</button>
                 </div>
+                * You are required to enter your pin upon bill payment for food point redemption.
                 <div class="element">
                         <label for="newPin"><span style="color: red;">*</span>New PIN:</label>
                         <?php echo $form->passwordField($model, 'newPin'); ?>

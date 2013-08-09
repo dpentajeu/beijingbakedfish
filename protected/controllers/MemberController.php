@@ -19,14 +19,14 @@ class MemberController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array(
-                                        'login','logout','resetpassword',
+					'actions'=>array(
+                    'login','logout','resetpassword',
 					),
 				'users'=>array('*'),
 				),
-                        array('allow',
-				'actions'=>array('test3','index','editmember','changepassword','setpin','approve','network','transaction','transactionhistory','sms','announcement','editannouncement','disapprove'),
-				'users'=>array('@'),
+                array('allow',
+					'actions'=>array('test4','index','editmember','changepassword','setpin','approve','network','transaction','transactionhistory','sms','announcement','editannouncement','disapprove'),
+					'users'=>array('@'),
 				),
 //			array('allow',
 //				'actions'=>array('approve','test','test2'),
@@ -159,39 +159,39 @@ class MemberController extends Controller
 		$this->redirect('login');
 	}
         
-        public function actionEditmember($id = null)
+    public function actionEditmember($id = null)
 	{
-                if(Yii::app()->user->isGuest)
-                    $this->redirect('login');
-                
-                if(Yii::app()->user->id != 1)
-                {
-                    if($id != null) $this->redirect('editmember');
-                    
-                    $id = Yii::app()->user->id;
-                }
+        if(Yii::app()->user->isGuest)
+            $this->redirect('login');
+        
+        if(Yii::app()->user->id != 1)
+        {
+            if($id != null) $this->redirect('editmember');
             
-                $model = User::getUser($id);
+            $id = Yii::app()->user->id;
+        }
+            
+        $model = User::getUser($id);
 		$packages = Package::getAllPackages();
 		$CMessage = '';
 
 		if(isset($_POST['User']))
 		{
-                    $model->attributes = $_POST['User'];
+            $model->attributes = $_POST['User'];
+            
+            try
+            {
+                    if (!$model->validate())
+                            throw new Exception("Please fill in all fields in the forms correctly.");
+                    $model->editUser($id);
+                    $CMessage = 'Member has been updated succesfully.';
                     
-                    try
-                    {
-                            if (!$model->validate())
-                                    throw new Exception("Please fill in all fields in the forms correctly.");
-                            $model->editUser($id);
-                            $CMessage = 'Member has been updated succesfully.';
-                            
-                            $this->redirect('index');
-                    }
-                    catch (Exception $e)
-                    {
-                            $CMessage = $e->getMessage();
-                    }
+                    $this->redirect('index');
+            }
+            catch (Exception $e)
+            {
+                    $CMessage = $e->getMessage();
+            }
 		}
 
 		$this->render('editmember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage));
