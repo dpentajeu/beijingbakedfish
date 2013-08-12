@@ -94,6 +94,8 @@ class User extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
             'wallet' => array(self::HAS_ONE, 'Wallet', 'userId'),
+            'package' => array(self::BELONGS_TO, 'Package', 'packageId'),
+            'binaryNodes' => array(self::HAS_MANY, 'Binary', 'userId'),
 		);
 	}
 
