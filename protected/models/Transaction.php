@@ -19,14 +19,14 @@
 class Transaction extends CActiveRecord
 {
 	public $name;
-    
-    const TRAN_FP = 1;
-    const TRAN_CP = 2;
+
+	const TRAN_FP = 1;
+	const TRAN_CP = 2;
 
 	private $walletType = Transaction::TRAN_FP;
 	private static $operation = array('DEBIT'=>1, 'CREDIT'=>-1);
-    
-        /**
+
+	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
 	 * @return Transaction the static model class
@@ -156,15 +156,78 @@ class Transaction extends CActiveRecord
 
 		return $t;
 	}
+
+	/**
+	 * This static method is able to create a new transaction record and update the respective wallet automatically.
+	 * @param User user a valid user object.
+	 * @param array attributes this field is optional.
+	 * @throws Exception Invalid user object, invalid operation, invalid wallet type or enought points.
+	 * @return Transaction the newly created transaction object.
+	 */
+	public static function create(User $user, array $attributes = array())
+	{
+		$default = array(
+			'amount' => 0.0,
+			'type' => 'CREDIT',
+			'point' => self::TRAN_FP,
+			'description' => '',
+			'date' => date('Y-m-d H:i:s'),
+			'force' => false,
+			);
+		$default = array_merge($default, $attributes);
+		$default['type'] = strtoupper($default['type']);
+		$wallet_op = array(
+			self::TRAN_FP => "foodPoint",
+			self::TRAN_CP => "cashPoint",
+			);
+
+		if (is_null($user))
+			throw new Exception('User cannot be null value.', 101);
+
+		$model = new Transaction;
+		$model->checkOperation($default['type']);
+		$model->setWalletType($default['point']);
+		// Following line will change the wallet balance based on which `point` it is.
+		$user->wallet->{$wallet_op[$default['point']]} += $default['amount'] * self::$operation[$default['type']];
+		$user->wallet->modifiedDate = $default['date'];
+
+		// Check if there is enough credit to deduct from cashPoint or foodPoint. A `force` option can be set to true to bypass this condition.
+		if (!$default['force'] && $user->wallet->{$wallet_op[$default['point']]} < 0)
+			throw new Exception("Not enough points!");
+
+		$model->attributes = array(
+			'walletId' => $user->wallet->id,
+			'tranType' => $default['type'],
+			'amount' => $default['amount'],
+			'balance' => $user->wallet->{$wallet_op[$default['point']]},
+			'description' => $default['description'],
+			'tranDate' => $default['date'],
+			);
+
+		if (!$model->save()) {
+			Yii::log("Fail to create transaction for user {$user->name} ({$user->id}). \n" . var_export($model->getErrors(), true), "error", "application.models.Transaction");
+			throw new Exception(var_export($model->getErrors(), true), 102);
+		}
+
+		if (!$user->wallet->update()) {
+			Yii::log("Fail to update user {$user->name} ({$user->id}) for transaction id {$model->id}.", "error", "application.models.Transaction");
+			throw new Exception('Fail to update wallet balance.', 103);
+		}
+
+		return $model;
+	}
         
     public function checkOperation($type)
 	{
 		if (!preg_match('/^(DEBIT|CREDIT)$/', $type))
 			throw new Exception("No such transaction type: {$type}");
 	}
-        
+
     public function setWalletType($w)
 	{
+		if (!in_array($w, array(self::TRAN_FP, self::TRAN_CP)))
+			throw new Exception("Invalid type of wallet.", 111);
+
 		$this->walletType = $w;
 	}
         
