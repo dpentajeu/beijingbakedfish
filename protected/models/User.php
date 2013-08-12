@@ -96,6 +96,8 @@ class User extends CActiveRecord
 			'wallet' => array(self::HAS_ONE, 'Wallet', 'userId'),
 			'package' => array(self::BELONGS_TO, 'Package', 'packageId'),
 			'binaryNodes' => array(self::HAS_MANY, 'Binary', 'userId'),
+			'referredUsers' => array(self::HAS_MANY, 'User', 'referral'),
+			'sponsor' => array(self::BELONGS_TO, 'User', 'referral'),
 		);
 	}
 
@@ -337,14 +339,10 @@ class User extends CActiveRecord
 		$user = User::model()->findByAttributes(array('id'=>$id));
 
 		if($user->email != $this->email)
-		{
 			$this->email = User::findEmail($this->email);   
-		}  
 
 		if($user->contact != $this->contact)
-		{
 			$this->contact = User::findContact($this->contact);
-		}
 
 		$user->attributes = array(
 			'name'=>$this->name,
@@ -355,14 +353,8 @@ class User extends CActiveRecord
 			'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
 			);
 
-		if (!$user->save())
-		{
-			$error = '';
-			foreach ($user->getErrors() as $key) {
-				$error .= $key[0];
-			}
-			throw new Exception($user->getErrors());
-		}
+		if (!$user->update())
+			throw new Exception("Fail to update user info.");
 	}
 
 	public function approveUser($id)

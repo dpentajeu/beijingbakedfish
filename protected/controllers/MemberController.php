@@ -33,11 +33,12 @@ class MemberController extends Controller
 					'transactionhistory',
 					'announcement',
 					'transferCP',
+					'editmember',
 					),
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('editmember', 'approve', 'disapprove', 'sms', 'editannouncement'),
+				'actions'=>array('approve', 'disapprove', 'sms', 'editannouncement'),
 				'roles'=>array('admin'),
 				),
 			array('deny'),
@@ -170,7 +171,9 @@ class MemberController extends Controller
 
 	public function actionEditmember($id = null)
 	{
-		$model = User::getUser($id);
+		if (empty($id))
+			$id = Yii::app()->user->id;
+		$model = User::model()->findByAttributes(array('id'=>$id));
 		$packages = Package::getAllPackages();
 		$CMessage = '';
 
