@@ -34,21 +34,23 @@ return array(
 	'components'=>array(
 		'user'=>array(
 			// enable cookie-based authentication
-                        'loginUrl'=>array('member/login'),
+			'class'=>'application.components.WebUser',
+			'loginUrl'=>array('member/login'),
 			'allowAutoLogin'=>true,
 		),
-                'clientScript'=>array(
+
+		'clientScript'=>array(
 			'packages'=>array(				
 				'jui'=>array(
 					'baseUrl'=>'',
 					'css'=>array('css/smoothness/jquery-ui.css'),
 					'depends'=>array('jquery.ui'),
 				),
-                                'pagination'=>array(
+				'pagination'=>array(
 					'baseUrl'=>'',
 					'css'=>array('css/smartpaginator.css'),
 					'js'=>array('js/smartpaginator.js'),
-                                        'depends'=>array('jquery'),
+					'depends'=>array('jquery'),
 				),
 			),
 		),
@@ -56,7 +58,7 @@ return array(
 		
 		'urlManager'=>array(
 			'urlFormat'=>'path',
-                        'showScriptName'=>false,
+			'showScriptName'=>false,
 			'rules'=>array(
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
