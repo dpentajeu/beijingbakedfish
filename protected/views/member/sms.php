@@ -1,3 +1,25 @@
+<?php
+$cs = Yii::app()->getClientScript();
+$cs->registerCss('label',"
+        #main form label{
+            display: inline-block !important;
+        }
+    ");
+$cs->registerScript('',"
+	$(document).ready(function(){
+                $('input#member_0').attr('checked', true);
+
+		$('input#member_0').click(function(){
+                        $('#id').attr('disabled', false);
+                });
+
+                $('input#member_1').click(function(){
+                        $('#id').attr('disabled', true);
+                });
+            });
+        ");
+?>
+
 <div class="full_w">
         <div class="h_title">SMS to all members</div>
         <div class="form">
@@ -14,9 +36,11 @@
                         'validateOnSubmit'=>true,
                         ),
                 )); ?>
-                * Warning: Messages are subjected to the SMS quota available.
+                * Warning: Messages are subjected to the SMS quota available.<br/><br/>
+                <p><?php echo CHtml::radioButtonList('member', null, array(1=>'To particular member', 2=>'To all members'), array('separator'=>'&nbsp;&nbsp;')); ?></p>
+                <?php echo Chtml::dropDownList('id','', $userDropDownList, array('prompt'=>'Select a customer')); ?>
                 <div class="element">
-                        <label for="message">Message:</label>
+                        <label for="message">Message:</label><br/>
                         <?php echo Chtml::textarea('message','',array('style'=>'resize: none;width:450px;height:250px;')); ?>
                 </div><br/>
                 <button type="submit">Send</button>

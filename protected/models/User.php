@@ -454,8 +454,15 @@ class User extends CActiveRecord
             
             foreach($user as $u)
             {
-                if ($u->id != 1) send_sms('6'.$u->contact,$msg);
+                if ($u->id != 1) User::send_sms('6'.$u->contact,$msg);
             }
+        }
+        
+        public static function smsTo($id,$msg)
+        {
+            $user = User::model()->findByAttributes(array('id'=>$id));
+            
+            if ($user->id != 1) User::send_sms('6'.$user->contact,$msg);
         }
         
         public function getSponsorNetwork()

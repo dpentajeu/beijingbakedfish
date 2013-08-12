@@ -333,17 +333,50 @@ class MemberController extends Controller
         {
 		if (Yii::app()->user->id != 1) $this->redirect('login');
             
+                $userDropDownList = User::getUserDropDownList();
                 $CMessage = '';
                 $notice = '';
                 
-                if(isset($_POST['message']))
+                if(isset($_POST['message'])&& isset($_POST['member']) && isset($_POST['id']))
 		{
 			$msg = $_POST['message'];
                     
                         try
+			{                                                                
+                                if(is_null($msg) || $msg == '')
+                                    throw new Exception('Message cant be empty.');
+                            
+                                if($_POST['member']==1)
+                                {                                                                       
+                                    $id = $_POST['id'];
+                                    
+                                    if(is_null($id) || $id == 0)
+                                        throw new Exception('Please select a customer.');
+                                    
+                                    User::smsTo($id,$msg);
+                                    $notice = 'Message is send!';
+                                } 
+			}
+			catch (Exception $e)
 			{
-                                User::smsToAll($msg);
-				$notice = 'All messages is send!';
+				$CMessage = $e->getMessage();
+			}		
+		}
+                
+                if(isset($_POST['message'])&& isset($_POST['member']))
+		{
+			$msg = $_POST['message'];
+                    
+                        try
+			{                                                                
+                                if(is_null($msg) || $msg == '')
+                                    throw new Exception('Message cant be empty.');
+                                
+                                if($_POST['member']==2)
+                                {
+                                    //User::smsToAll($msg);
+                                    $notice = 'All messages is send!';
+                                }  
 			}
 			catch (Exception $e)
 			{
@@ -351,7 +384,7 @@ class MemberController extends Controller
 			}		
 		}
 
-		$this->render('sms',array('CMessage'=>$CMessage,'notice'=>$notice));
+		$this->render('sms',array('CMessage'=>$CMessage,'notice'=>$notice,'userDropDownList'=>$userDropDownList));
         }
         
         public function actionTransaction()

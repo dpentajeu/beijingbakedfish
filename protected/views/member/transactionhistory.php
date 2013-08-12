@@ -65,6 +65,6 @@ $cs->registerCss('label',"
                     <?php } ?>
                 </tbody>
         </table>
-        <div id='pagination'></div>
         <?php $this->endWidget(); ?>
+        <div id='pagination'></div>        
 </div>
