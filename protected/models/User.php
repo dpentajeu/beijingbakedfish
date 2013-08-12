@@ -447,6 +447,23 @@ class User extends CActiveRecord
                 }
                 else throw new Exception('This PIN is invalid!');
 	}
+                
+        public static function transferCP($member, $curUser, $amount)
+	{            	
+                Transaction::transferFP($curUser, array(
+                    'amount'=>$amount,
+                    'point'=>'CP',
+                    'type'=>'CREDIT', 
+                    'description'=>'Transfer Cash Point to '.$member->name.'.',
+                    ));
+                    
+                Transaction::transferFP($member, array(
+                    'amount'=>$amount,
+                    'point'=>'CP',
+                    'type'=>'DEBIT',
+                    'description'=>'Received Cash Point by '.$curUser->name.'.',
+                    ));
+	}
         
         public static function smsToAll($msg)
         {

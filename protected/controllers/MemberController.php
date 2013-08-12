@@ -25,7 +25,21 @@ class MemberController extends Controller
 				'users'=>array('*'),
 				),
                 array('allow',
-					'actions'=>array('test4','index','editmember','changepassword','setpin','approve','network','transaction','transactionhistory','sms','announcement','editannouncement','disapprove'),
+					'actions'=>array(
+                                            'test4',
+                                            'index',
+                                            'editmember',
+                                            'changepassword',
+                                            'setpin',
+                                            'approve',
+                                            'network',
+                                            'transaction',
+                                            'transactionhistory',
+                                            'sms','announcement',
+                                            'editannouncement',
+                                            'disapprove',
+                                            'transferCP',
+                                        ),
 					'users'=>array('@'),
 				),
 //			array('allow',
@@ -504,6 +518,41 @@ class MemberController extends Controller
 
 		$this->render('editannouncement', array('CMessage'=>$CMessage, 'notice'=>$notice, 'model'=>$model, 'id'=>$id));
 	}
+        
+        public function actionTransferCP()
+        {
+                $userDropDownList = User::getUserDropDownList();
+		$CMessage = '';
+                $notice = '';
+                               
+                if(isset($_POST['amount']) && isset($_POST['id']))
+                {
+                        $amount = $_POST['amount'];
+                        $id = $_POST['id'];
+
+                        try
+                        {
+                                if(is_null($id) || $id == 0)
+                                    throw new Exception('Please select a customer.');    
+                                if(is_null($amount) || $amount == 0)
+                                    throw new Exception('Please enter cash point.');                                
+
+                                $member = User::getUser($id);
+                                $curUser = User::getUser(Yii::app()->user->id);
+                                
+                                User::transferCP($member,$curUser,$amount);                        
+                                
+                                $wallet = $curUser->wallet;
+                                $notice = 'Transaction is done successfully! Name: '.$curUser->name.' Cash Point: '.$wallet->cashPoint;
+                        }
+                        catch (Exception $e)
+                        {
+                                $CMessage = $e->getMessage();
+                        }		
+		}
+
+		$this->render('transferCP',array('userDropDownList'=>$userDropDownList, 'CMessage'=>$CMessage,'notice'=>$notice));
+        }
         
 //        public function actionTest()
 //        {
