@@ -56,7 +56,7 @@ class Transaction extends CActiveRecord
 			array('amount, balance', 'numerical'),
 			array('walletId', 'length', 'max'=>10),
 			array('tranType, promoCode', 'length', 'max'=>6),
-                        array('tranType', 'match', 'pattern'=>'/^(DEBIT|CREDIT)$/'),
+			array('tranType', 'match', 'pattern'=>'/^(DEBIT|CREDIT)$/'),
 			array('description, tranDate', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
@@ -117,8 +117,8 @@ class Transaction extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
-        
-    public static function transferFP(User $user, array $attributes = array())
+		
+	public static function transferFP(User $user, array $attributes = array())
 	{
 		list($amount, $type, $point, $description, $date) = array(0.0, 'CREDIT', 'FP' ,'', date('Y-m-d H:i:s'));
 		foreach ($attributes as $key => $value) ${$key} = $value;
@@ -136,8 +136,8 @@ class Transaction extends CActiveRecord
 		else
 			$wallet->foodPoint += $amount * self::$operation[$type];
 		$wallet->modifiedDate = date('Y-m-d H:i:s');
-                
-        if($wallet->foodPoint < 0) { throw new Exception("Not enough Food Point!");};
+				
+		if($wallet->foodPoint < 0) { throw new Exception("Not enough Food Point!");};
 
 		$t->attributes = array(
 			'walletId'=>$wallet->id,
@@ -216,46 +216,46 @@ class Transaction extends CActiveRecord
 
 		return $model;
 	}
-        
-    public function checkOperation($type)
+		
+	public function checkOperation($type)
 	{
 		if (!preg_match('/^(DEBIT|CREDIT)$/', $type))
 			throw new Exception("No such transaction type: {$type}");
 	}
 
-    public function setWalletType($w)
+	public function setWalletType($w)
 	{
 		if (!in_array($w, array(self::TRAN_FP, self::TRAN_CP)))
 			throw new Exception("Invalid type of wallet.", 111);
 
 		$this->walletType = $w;
 	}
-        
-    public static function getTransaction($transDesc)
-    {     
-        if(Yii::app()->user->id ==1)
-        {
-        	$criteria = new CDbCriteria;
+
+	public static function getTransaction($transDesc)
+	{
+		if(Yii::app()->user->id ==1)
+		{
+			$criteria = new CDbCriteria;
 			$criteria->order = "tranDate desc";
 			$criteria->addSearchCondition('description', $transDesc);
-            $transaction = Transaction::model()->findAll($criteria);
-            
-            foreach($transaction as $t)
-            {                
-                $wallet = Wallet::model()->findByAttributes(array('id'=>$t->walletId)); 
-                $user = User::model()->findByAttributes(array('id'=>$wallet->userId));                
-                $t->name = $user->name;
-            }
-        }
-        else 
-        {  
-        	$model = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
-        	$criteria = new CDbCriteria;
+			$transaction = Transaction::model()->findAll($criteria);
+			
+			foreach($transaction as $t)
+			{
+				$wallet = Wallet::model()->findByAttributes(array('id'=>$t->walletId));
+				$user = User::model()->findByAttributes(array('id'=>$wallet->userId));
+				$t->name = $user->name;
+			}
+		}
+		else 
+		{
+			$model = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
+			$criteria = new CDbCriteria;
 			$criteria->order = "tranDate desc";
 			$criteria->compare('walletId',$model->wallet->id);
 			$criteria->addSearchCondition('description', $transDesc);
-            $transaction = Transaction::model()->findAll($criteria);          
-        }        
-        return $transaction;            
-    }
+			$transaction = Transaction::model()->findAll($criteria);
+		}
+		return $transaction;
+	}
 }

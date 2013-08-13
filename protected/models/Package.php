@@ -38,7 +38,7 @@ class Package extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('packageName, value', 'required'),
-                        array('level', 'numerical', 'integerOnly'=>true),
+			array('level', 'numerical', 'integerOnly'=>true),
 			array('value', 'numerical'),
 			array('packageName', 'length', 'max'=>255),
 			// The following rule is used by search().
@@ -68,7 +68,7 @@ class Package extends CActiveRecord
 			'id' => 'ID',
 			'packageName' => 'Package Name',
 			'value' => 'Value',
-                        'level' => 'Level',
+			'level' => 'Level',
 		);
 	}
 
@@ -86,14 +86,14 @@ class Package extends CActiveRecord
 		$criteria->compare('id',$this->id,true);
 		$criteria->compare('packageName',$this->packageName,true);
 		$criteria->compare('value',$this->value);
-                $criteria->compare('level',$this->level);
+		$criteria->compare('level',$this->level);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
-        
-        public static function getAllPackages()
+
+	public static function getAllPackages()
 	{
 		$packages = Package::model()->findAll();
 		$result = array();
@@ -106,15 +106,11 @@ class Package extends CActiveRecord
 	}
 
 	public static function getPackageName($packageId)
-	{		                
-            if ($packageId==0)
-            {
-                return '0';
-            }
-            else
-            {
-                $package = Package::model()->findByAttributes(array('id'=>$packageId));
+	{
+		if (empty($packageId))
+			return '0';
+
+		$package = Package::model()->findByAttributes(array('id'=>$packageId));
 		return $package->packageName.' - RM'.$package->value;
-            }
 	}
 }

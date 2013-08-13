@@ -24,12 +24,10 @@ class MemberController extends Controller
 				),
 			array('allow',
 				'actions'=>array(
-					'test4',
 					'index',
 					'changepassword',
 					'setpin',
 					'network',
-					'transaction',
 					'transactionhistory',
 					'announcement',
 					'transferCP',
@@ -38,7 +36,7 @@ class MemberController extends Controller
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('approve', 'disapprove', 'sms', 'editannouncement'),
+				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement'),
 				'roles'=>array('admin'),
 				),
 			array('deny'),
@@ -203,7 +201,7 @@ class MemberController extends Controller
 
 		try {
 			$model->approveUser($id);
-			//network::setSponsorBonus($id);
+			network::setSponsorBonus($id);
 			$CMessage = 'Member is approved.';
 		} catch (Exception $e) {
 			$CMessage = $e->getMessage();
@@ -326,8 +324,6 @@ class MemberController extends Controller
 
 	public function actionTransaction()
 	{
-		if (Yii::app()->user->id != 1) $this->redirect('login');
-
 		$model = new User;
 		$userDropDownList = User::getUserDropDownList();
 		$CMessage = '';
@@ -464,21 +460,5 @@ class MemberController extends Controller
 		}
 
 		$this->render('transferCP',array('userDropDownList'=>$userDropDownList, 'CMessage'=>$CMessage,'notice'=>$notice));
-	}
-
-	public function actionTest4()
-	{
-		$criteria = new CDbCriteria;
-		$criteria->order = "tranDate desc";
-		$criteria->addSearchCondition('description', 'Sponsor bonus');
-		$transactions = Transaction::model()->findAll($criteria);
-
-		foreach ($transactions as $item) {
-			# code...
-			$item->wallet->foodPoint -= $item->amount;
-			$item->wallet->cashPoint = $item->amount;
-			if(!$item->wallet->save())
-				var_dump("Error Processing Request");
-		}
 	}
 }
