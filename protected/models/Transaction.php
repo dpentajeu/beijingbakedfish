@@ -186,9 +186,10 @@ class Transaction extends CActiveRecord
         }
         else 
         {  
+        	$model = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
         	$criteria = new CDbCriteria;
 			$criteria->order = "tranDate desc";
-			$criteria->compare('walletId',Yii::app()->user->id);
+			$criteria->compare('walletId',$model->wallet->id);
 			$criteria->addSearchCondition('description', $transDesc);
             $transaction = Transaction::model()->findAll($criteria);          
         }        
