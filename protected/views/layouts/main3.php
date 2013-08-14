@@ -64,6 +64,8 @@ $cs->registerScript('navi-menu', "
 						array('label'=>'SMS', 'url'=>array('member/sms'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						array('label'=>'Set PIN', 'url'=>array('member/setpin'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
 						array('label'=>'Transfer point', 'url'=>array('member/transfercp'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
+						array('label'=>'Purchase credit', 'url'=>array('member/purchase'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
+						array('label'=>'Withdrawal', 'url'=>array('member/withdraw'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
 						)
 					)); ?>
 			</div>

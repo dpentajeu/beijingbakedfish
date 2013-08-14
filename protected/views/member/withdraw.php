@@ -17,6 +17,7 @@ $cs->registerScript('pagination',"
         <div class="h_title">Withdraw Credit</div>
         <?php if (Yii::app()->user->id != 1){ ?>
             <div class="form">
+                <div class="n_warning"><p>Note: Please submit your cash point withdrawal request with a minimum amount of RM100 and the service charge for withdrawal is RM5.</p></div>
                 <?php if(!empty($CMessage)) { ?>
                     <div class="n_error"><p><?= $CMessage; ?></p></div>
                 <?php } ?>
@@ -25,6 +26,7 @@ $cs->registerScript('pagination',"
                 <?php } ?>
                 <?php $form=$this->beginWidget('CActiveForm', array(
                     'id'=>'edit-form',
+                    'action'=>Yii::app()->request->baseUrl.'/member/withdraw',
                     'enableClientValidation'=>true,
                     'clientOptions'=>array(
                             'validateOnSubmit'=>true,
@@ -32,9 +34,9 @@ $cs->registerScript('pagination',"
                     )); ?>
                     <div class="element">
                         <label for="title">CP amount:</label>
-                        <?php echo Chtml::textfield('amount','',array('style'=>'width:450px;')); ?><br/><br/>
+                        <?php echo $form->textfield($model, 'amount',array('style'=>'width:450px;')); ?><br/><br/>
                         <label for="title">Remarks:</label>
-                        <?php echo Chtml::textfield('remark','',array('style'=>'width:450px;')); ?>
+                        <?php echo $form->textfield($model, 'remark',array('style'=>'width:450px;')); ?>
                     </div><br/>
                     <button type="submit">Submit</button>
                 <?php $this->endWidget(); ?>
@@ -60,7 +62,9 @@ $cs->registerScript('pagination',"
                                         <td><?= $item->tranDate; ?></td>
                                         <td><?= $item->amount; ?></td>
                                         <td><?= $item->remark; ?></td>
-                                        <td><?= $item->status; ?></td>
+                                        <td><?php if($item->status == 0) echo 'Pending';
+                                        if($item->status == 1) echo 'Confirmed';
+                                        if($item->status == 2) echo 'Cancelled'; ?></td>
                                 </tr>
                     <?php  }?>
                 </tbody>

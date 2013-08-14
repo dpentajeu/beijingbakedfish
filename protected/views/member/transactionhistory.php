@@ -27,7 +27,7 @@ $cs->registerCss('label',"
         <h2>Transaction history table</h2>
         <p>Show all the transaction history.</p>
         <p>            
-            <?php echo CHtml::radioButtonList('filter', null, array('Deduct Food Point'=>'Bill', 'Sponsor bonus'=>'Sponsor bonus', 'Autoplacement bonus'=>'Autoplacement bonus', 'Transfer'=>'Transfer'), array('separator'=>'&nbsp;&nbsp;')); ?>
+            <?php echo CHtml::radioButtonList('filter', null, array('Deduct Food Point'=>'Bill', 'Sponsor bonus'=>'Sponsor bonus', 'Autoplacement bonus'=>'Autoplacement bonus', 'Transfer'=>'Transfer', 'Purchase'=>'Purchase credit', 'Withdraw'=>'Withdrawal'), array('separator'=>'&nbsp;&nbsp;')); ?>
             
             <?php echo CHtml::submitButton('Find', array('name'=>'btnFilter')); ?>            
         </p>            

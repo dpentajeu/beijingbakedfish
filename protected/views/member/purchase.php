@@ -5,7 +5,7 @@ $cs->registerScript('pagination',"
 	$(document).ready(function(){
             $('#pagination').smartpaginator({ 
                 totalrecords: $total,
-                recordsperpage: 5, 
+                recordsperpage: 10, 
                 datacontainer: 'table', 
                 dataelement: 'tr',
                 theme: 'black' 
@@ -17,6 +17,7 @@ $cs->registerScript('pagination',"
         <div class="h_title">Purchase Credit</div>
         <?php if (Yii::app()->user->id != 1){ ?>
             <div class="form">
+                <div class="n_warning"><p>Note: Please submit your cash point purchase request using the form below.</p></div>
                 <?php if(!empty($CMessage)) { ?>
                     <div class="n_error"><p><?= $CMessage; ?></p></div>
                 <?php } ?>
@@ -61,7 +62,9 @@ $cs->registerScript('pagination',"
                                         <td><?= $item->tranDate; ?></td>
                                         <td><?= $item->amount; ?></td>
                                         <td><?= $item->remark; ?></td>
-                                        <td><?= $item->status; ?></td>
+                                        <td><?php if($item->status == 0) echo 'Pending';
+                                        if($item->status == 1) echo 'Confirmed';
+                                        if($item->status == 2) echo 'Cancelled'; ?></td>
                                 </tr>
                     <?php  }?>
                 </tbody>

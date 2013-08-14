@@ -10,7 +10,7 @@
  * @property double $balance
  * @property string $tranDate
  * @property integer $status
- * @property string remark
+ * @property string $remark
  *
  * The followings are the available model relations:
  * @property Wallet $wallet
@@ -44,9 +44,10 @@ class Purchase extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('amount', 'required'),
-			array('status', 'numerical', 'integerOnly'=>true),
 			array('amount, balance', 'numerical'),
 			array('walletId', 'length', 'max'=>10),
+			array('remark', 'length', 'max'=>500),
+			array('tranDate', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, walletId, amount, balance, tranDate, status, remark', 'safe', 'on'=>'search'),
@@ -111,11 +112,12 @@ class Purchase extends CActiveRecord
 	public function purchaseCredit($user)
 	{
 		$model = new Purchase;
+		$today = date('Y-m-d H:i:s');
 		$model->attributes = array(
 			'walletId' => $user->wallet->id,
 			'amount' => $this->amount,
 			'balance' => $user->wallet->cashPoint,
-			'tranDate' => date('Y-m-d H:i:s'),
+			'tranDate' => $today,
 			'remark' => $this->remark,
 			);
 

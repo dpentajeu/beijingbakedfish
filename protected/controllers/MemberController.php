@@ -466,14 +466,14 @@ class MemberController extends Controller
 
     public function actionPurchase()
     {
-        $model = new Purchase;
-        $list = $model->getAllPurchase();
+        $model = new Purchase;        
         $CMessage = '';
         $notice = '';
 
         if(isset($_POST['Purchase']))
         {
             try{
+            	$model->attributes = $_POST['Purchase'];
                 if (!$model->validate())
                     throw new Exception("Please fill up the form correctly.", 1);
                     
@@ -487,22 +487,25 @@ class MemberController extends Controller
             }
 
         }
-
+        $list = $model->getAllPurchase();
         $total = count($list);
 
-        $this->render('purchase', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total));
+        $this->render('purchase', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total, 'notice'=>$notice));
     }
 
     public function actionWithdraw()
     { 
-        $model = new Withdrawal;
-        $list = $model->getAllWithdrawal();
+        $model = new Withdrawal;        
         $CMessage = '';
         $notice = '';
 
         if(isset($_POST['Withdrawal']))
         {
             try{
+            	$model->attributes = $_POST['Withdrawal'];
+                if (!$model->validate())
+                    throw new Exception("Please fill up the form and amount correctly.", 1);
+
                 $member = User::getUser(Yii::app()->user->id);
                 $model->withdrawCredit($member);
                 $model = new Withdrawal;
@@ -513,9 +516,9 @@ class MemberController extends Controller
             }
 
         }
-
+        $list = $model->getAllWithdrawal();
         $total = count($list);
 
-        $this->render('withdraw', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total));
+        $this->render('withdraw', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total, 'notice'=>$notice));
     }
 }

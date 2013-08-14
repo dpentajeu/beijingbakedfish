@@ -10,6 +10,7 @@
  * @property double $balance
  * @property string $tranDate
  * @property integer $status
+ * @property string $remark
  *
  * The followings are the available model relations:
  * @property Wallet $wallet
@@ -42,13 +43,16 @@ class Withdrawal extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('walletId, amount, balance, tranDate', 'required'),
+			array('amount', 'required'),
 			array('status', 'numerical', 'integerOnly'=>true),
 			array('amount, balance', 'numerical'),
+			array('amount', 'numerical', 'min'=>100),
 			array('walletId', 'length', 'max'=>10),
+			array('remark', 'length', 'max'=>500),
+			array('tranDate', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, walletId, amount, balance, tranDate, status', 'safe', 'on'=>'search'),
+			array('id, walletId, amount, balance, tranDate, status, remark', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -76,6 +80,7 @@ class Withdrawal extends CActiveRecord
 			'balance' => 'Balance',
 			'tranDate' => 'Tran Date',
 			'status' => 'Status',
+			'remark'=>'Remark',
 		);
 	}
 
@@ -96,6 +101,7 @@ class Withdrawal extends CActiveRecord
 		$criteria->compare('balance',$this->balance);
 		$criteria->compare('tranDate',$this->tranDate,true);
 		$criteria->compare('status',$this->status);
+		$criteria->compare('remark',$this->remark);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -111,6 +117,7 @@ class Withdrawal extends CActiveRecord
 		$model->attributes = array(
 			'walletId' => $user->wallet->id,
 			'amount' => $this->amount,
+			'remark'=>$this->remark,
 			'balance' => $user->wallet->cashPoint,
 			'tranDate' => date('Y-m-d H:i:s'),
 			);
