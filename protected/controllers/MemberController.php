@@ -39,7 +39,7 @@ class MemberController extends Controller
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement'),
+				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory'),
 				'roles'=>array('admin'),
 				),
 			array('deny'),
@@ -493,6 +493,29 @@ class MemberController extends Controller
         $total = count($list);
 
         $this->render('purchase', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total, 'notice'=>$notice));
+    }
+
+    public function actionPurchasehistory($id = null, $action = null)
+    {
+    	$model = new Purchase;
+    	$CMessage = '';
+        $notice = '';
+    	
+    	if(!is_null($id))
+    	{
+    		try
+    		{
+    			$model->handlePurchase($id, $action);
+    			$notice = 'The purchase request is confirmed / cancelled.';
+    		}
+    		catch (Exception $e) {
+                $CMessage = $e->getMessage();
+            }
+    	}
+    	
+    	$list = $model->getAllPurchase();
+    	$total = count($list);
+    	$this->render('purchasehistory', array('list'=>$list, 'total'=>$total, 'CMessage'=>$CMessage,'notice'=>$notice));
     }
 
     public function actionWithdraw()

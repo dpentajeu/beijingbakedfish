@@ -154,10 +154,10 @@ class Purchase extends CActiveRecord
 	**/
 	public function handlePurchase($id, $status)
 	{
-		if($status)
+		if($status == "true")
 		{
 			$model = Purchase::model()->findByAttributes(array('id'=>$id));
-			Transaction::create($member, array(
+			Transaction::create($model->wallet->user, array(
 			'amount'=>$model->amount,
 			'point'=>Transaction::TRAN_CP,
 			'type'=>'DEBIT',

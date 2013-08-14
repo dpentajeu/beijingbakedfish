@@ -155,11 +155,11 @@ class Withdrawal extends CActiveRecord
 	**/
 	public function handleWithdraw($id, $status)
 	{
-		if($status)
+		if($status == "true")
 		{
 			$model = Withdrawal::model()->findByAttributes(array('id'=>$id));
-			Transaction::create($member, array(
-			'amount'=>$model->amount,
+			Transaction::create($model->wallet->user, array(
+			'amount'=>($model->amount + 5),
 			'point'=>Transaction::TRAN_CP,
 			'type'=>'CREDIT',
 			'description'=>'Withdraw Cash Point RM'.$model->amount.'.',
