@@ -101,17 +101,16 @@ class Binary extends CActiveRecord
 	 * @param integer level total number of levels to search for. The default is set to 10.
 	 * @return array a 2D array where the 1st dimension represents the level of the tree. The second dimension holds the nodes in that level.
 	 */
-	public function getTree($root_id, $level = 10)
+	public function getTree($level = 10)
 	{
-		$root = $this->findByAttributes(array('userId' => $root_id));
-		if (empty($root))
+		if (empty($this))
 			throw new Exception("Node not found.", 101);
 
 		$result = array();
 		$criteria = new CDbCriteria;
 		// the following condition is extremely important!!! Do not simply change.
 		$criteria->condition = '(id = :root AND level = :level) OR (id > :root AND level BETWEEN (:level + 1) AND :maxlevel AND floor(id / pow(2, level - :level)) = :root)';
-		$criteria->params = array(':root' => $root->id, ':level' => $root->level, ':maxlevel' => $root->level + $level);
+		$criteria->params = array(':root' => $this->id, ':level' => $this->level, ':maxlevel' => $this->level + $level);
 		$criteria->order = 'id';
 
 		$model = $this->findAll($criteria);
@@ -133,33 +132,55 @@ class Binary extends CActiveRecord
 
 	/**
 	 * Auto placing nodes into the global binary tree. Number of nodes to place depends on the package value.
-	 * @param User user valid user object.
+	 * @param mixed user a valid user object or a user id.
+	 * @param array attributes this is to set the optional fields. Currently supports `num_of_nodes`
 	 * @return array the list of nodes placed in the global binary tree.
 	 */
-	public static function create(User $user)
+	public static function create($user, array $attributes = array())
 	{
-		// Determine the number of nodes to create into the global binary tree.
-		$num_of_nodes = 1;
-		if (!empty($user->package))
-			$num_of_nodes = $user->package->value / 500;
+		$default = array('id' => 0, 'num_of_nodes' => null);
+
+		if (!$user instanceof User)
+			$user = User::model()->findByAttributes(array('id'=>$user));
+
+		if (!empty($user)) {
+			$default['id'] = $user->id;
+			$default['num_of_nodes'] = (!empty($user->package)) ? $user->package->value / 500 : 1;
+		}
+
+		if (!empty($attributes['num_of_nodes']))
+			$default['num_of_nodes'] = (int) $attributes['num_of_nodes'] > 0 ? $attributes['num_of_nodes'] : 1;
 
 		$models = array();
-		foreach (range(1, $num_of_nodes) as $i) {
+		foreach (range(1, $default['num_of_nodes']) as $i) {
 			$model = new Binary;
-			$model->attributes = array('userId' => $user->id, 'level' => 0);
-			// The level cannot be determined until the id is known. Hence, default is set to 0 which is invalid.
-			if (!$model->save())
-				throw new Exception("Fail to create binary node.");
-
-			// After successfully insert the record into the table, use the auto incremental id to determine the correct level the node is in with the following formula.
-			$model->level = floor(number_format(log($model->id,2), 8)) + 1;
-
-			if (!$model->update())
-				throw new Exception("Fail to update binary node level.");
-
+			$model->createNode($default['id']);
 			$models[] = $model;
 		}
 
 		return $models;
+	}
+
+	/**
+	 * Create a node into the global binary network
+	 * @param integer user_id a valid user id
+	 * @return Binary the newly created binary model object
+	 */
+	public function createNode($user_id = 0)
+	{
+		$model = new Binary;
+		$model->attributes = array('userId' => $user_id, 'level' => 0);
+
+		// The level cannot be determined until the id is known. Hence, default is set to 0 which is invalid.
+		if (!$model->save())
+			throw new Exception("Fail to create binary node.");
+
+		// After successfully insert the record into the table, use the auto incremental id to determine the correct level the node is in with the following formula.
+		$model->level = floor(number_format(log($model->id, 2), 8)) + 1;
+
+		if (!$model->update())
+			throw new Exception("Fail to update binary node level.");
+
+		return $model;
 	}
 }

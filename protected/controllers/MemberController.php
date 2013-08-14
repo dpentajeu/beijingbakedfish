@@ -31,16 +31,16 @@ class MemberController extends Controller
 					'transactionhistory',
 					'announcement',
 					'transferCP',
-                                        'transferCPtoFP',
+					'transferCPtoFP',
 					'editmember',
-                                        'purchase',
-                                        'withdraw',
-                                        'refermember',
+					'purchase',
+					'withdraw',
+					'refermember',
 					),
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory'),
+				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'binarynetwork', 'purchasehistory','withdrawhistory'),
 				'roles'=>array('admin'),
 				),
 			array('deny'),
@@ -637,4 +637,28 @@ class MemberController extends Controller
 
             $this->render('refermember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage, 'notice'=>$notice));
     }
+
+	public function actionBinarynetwork()
+	{
+		$tree = array();
+		$member_list = User::getUserDropDownList();
+		$total_level = 9;
+
+		try {
+			$root_id = empty($_POST['search_id']) ? Yii::app()->user->id : $_POST['search_id'];
+			$model = User::model()->findByAttributes(array('id'=>$root_id));
+			if (empty($model))
+				throw new Exception("No such customer found.");
+
+			if (!empty($_POST['insert_id']))
+				Binary::create($_POST['insert_id'], array('num_of_nodes' => $_POST['insert_num']));
+
+			if (!empty($model->binary))
+				$tree = $model->binary->getTree($total_level);
+		} catch (Exception $e) {
+			throw new CHttpException(404, $e->getMessage());
+		}
+
+		$this->render('binarynetwork', array('model'=>$model, 'tree'=>$tree, 'member_list'=>$member_list, 'selector'=>$root_id, 'total_level'=>$total_level));
+	}
 }

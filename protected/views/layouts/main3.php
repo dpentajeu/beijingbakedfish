@@ -58,7 +58,7 @@ $cs->registerScript('navi-menu', "
 						array('label'=>'Change password', 'url'=>array('member/changepassword'), 'linkOptions'=>array('class'=>'icon report')),
 						array('label'=>'Announcement', 'url'=>array('member/announcement'), 'linkOptions'=>array('class'=>'icon report')),
 						array('label'=>'Network', 'url'=>array('member/network'), 'linkOptions'=>array('class'=>'icon report')),
-						// array('label'=>'Binary Network', 'url'=>array('member/binarynetwork'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
+						array('label'=>'Binary Network', 'url'=>array('member/binarynetwork'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						array('label'=>'Transaction', 'url'=>array('member/transaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						array('label'=>'Transaction history', 'url'=>array('member/transactionhistory'), 'linkOptions'=>array('class'=>'icon report')),
 						array('label'=>'Purchase history', 'url'=>array('member/purchasehistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),

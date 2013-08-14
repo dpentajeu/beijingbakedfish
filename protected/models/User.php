@@ -95,6 +95,7 @@ class User extends CActiveRecord
 		return array(
 			'wallet' => array(self::HAS_ONE, 'Wallet', 'userId'),
 			'package' => array(self::BELONGS_TO, 'Package', 'packageId'),
+			'binary' => array(self::HAS_ONE, 'Binary', 'userId', 'order'=>'id ASC'),
 			'binaryNodes' => array(self::HAS_MANY, 'Binary', 'userId'),
 			'referredUsers' => array(self::HAS_MANY, 'User', 'referral'),
 			'sponsor' => array(self::BELONGS_TO, 'User', 'referral'),
