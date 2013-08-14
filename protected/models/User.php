@@ -468,6 +468,67 @@ class User extends CActiveRecord
 			if ($u->id != 1) User::send_sms('6'.$u->contact,$msg);
 		}
 	}
+        
+        public function referMember()
+	{
+		$this->email = User::findEmail($this->email);
+		$this->contact = User::findContact($this->contact);
+
+                if($this->packageId == 1) $amount = 500;
+		if($this->packageId == 2) $amount = 1500;
+		if($this->packageId == 3) $amount = 3500;
+                
+                Transaction::create(User::getUser(Yii::app()->user->id), array(
+			'amount'=>$amount,
+			'point'=>Transaction::TRAN_CP,
+			'type'=>'CREDIT',
+			'description'=>'Transfer Cash Point to refer a member : '.$this->name.', Package : '.Package::getPackageName($this->packageId),
+			));
+                
+		$user = new User;
+		$user->attributes = array(
+			'name'=>$this->name,
+			'email'=>$this->email,
+			'contact'=>$this->contact,
+			'packageId'=>$this->packageId,
+			'referral'=>Yii::app()->user->id,
+			'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
+			'created'=>date('Y-m-d H:i:s'),
+			'password' => md5('abc123'),
+			'isApproved' => 0,
+			'isActivated'=>0,
+			);
+
+		if (!$user->save())
+		{
+			$error = '';
+			foreach ($user->getErrors() as $key) {
+				$error .= $key[0];
+			}
+			throw new Exception($user->getErrors());
+		}
+
+		if($user->packageId == 1) $foodPoint = 600;
+		if($user->packageId == 2) $foodPoint = 1650;
+		if($user->packageId == 3) $foodPoint = 3850;
+
+		$wallet = new Wallet;
+		$wallet->attributes = array(
+			'foodPoint'=>$foodPoint,
+			'bonusAmout'=> 0,
+			'modifiedDate' => date('Y-m-d H:i:s'),
+			'userId'=>$user->id,
+			);
+
+		if (!$wallet->save())
+		{
+			$error = '';
+			foreach ($wallet->getErrors() as $key) {
+				$error .= $key[0];
+			}
+			throw new Exception($wallet->getErrors());
+		}
+	}
 
 	public static function smsTo($id,$msg)
 	{

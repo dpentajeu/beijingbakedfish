@@ -32,8 +32,9 @@ class MemberController extends Controller
 					'announcement',
 					'transferCP',
 					'editmember',
-                    'purchase',
-                    'withdraw',
+                                        'purchase',
+                                        'withdraw',
+                                        'refermember',
 					),
 				'users'=>array('@'),
 				),
@@ -176,6 +177,7 @@ class MemberController extends Controller
 		$model = User::model()->findByAttributes(array('id'=>$id));
 		$packages = Package::getAllPackages();
 		$CMessage = '';
+                $notice = '';
 
 		if(isset($_POST['User']))
 		{
@@ -193,7 +195,7 @@ class MemberController extends Controller
 			}
 		}
 
-		$this->render('editmember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage));
+		$this->render('editmember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage,  'notice'=> $notice));
 	}
 
 	public function actionApprove($id = null)
@@ -520,5 +522,39 @@ class MemberController extends Controller
         $total = count($list);
 
         $this->render('withdraw', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total, 'notice'=>$notice));
+    }
+    
+    public function actionRefermember()
+    {
+            $model = new User;
+            $packages = Package::getAllPackages();
+            $CMessage = '';
+            $notice = '';
+
+            if(isset($_POST['User']))
+            {
+                    $model->attributes = $_POST['User'];
+
+                    try {
+                            if(!is_numeric($model->contact) || !is_numeric($model->contact))
+                            {
+                                throw new Exception("Please enter the right format of contact numbers.");
+                            }
+                        
+                            if (!$model->validate())
+                                    throw new Exception("Please fill in all fields in the forms correctly.");
+                            $model->referMember();
+                            $notice = 'Member has been created succesfully.';
+                            
+                            $model = new User;
+                            
+                    }
+                    catch (Exception $e) 
+                    {
+                            $CMessage = $e->getMessage();
+                    }
+            }
+
+            $this->render('refermember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage, 'notice'=>$notice));
     }
 }

@@ -16,6 +16,9 @@ $cs->registerScript('datepicker',"
 		<?php if (!empty($CMessage)) { ?>
 			<div class="n_error"><p><?= $CMessage; ?></p></div>
 		<?php } ?>
+                <?php if (!empty($notice)) { ?>
+			<div class="n_ok"><p><?= $notice; ?></p></div>
+		<?php } ?>
 		<?php $form=$this->beginWidget('CActiveForm', array(
 			'id'=>'edit-form',
 			'enableClientValidation'=>true,
@@ -31,7 +34,7 @@ $cs->registerScript('datepicker',"
 				<?php echo $form->textField($model, 'name'); ?>
 				<br/><br/>
 				<label for="contact"><span style="color: red;">*</span>Phone:</label>
-				<?php echo $form->textField($model, 'contact', array('placeholder'=>'Example: 0121235678')); ?>
+				<?php echo $form->textField($model, 'contact', array('placeholder'=>'Example: 0121235678','disabled'=>'disabled')); ?>
 				<br/><br/>
 				<label for="dateOfBirth"><span style="color: red;">*</span>Date of Birth:</label>
 				<?php echo $form->textField($model, 'dateOfBirth', array('id'=>'datepicker')); ?>
