@@ -30,6 +30,8 @@ $cs->registerScript('pagination',"
                             <th scope="col">Name</th>
                             <th scope="col">Contact</th>
                             <th scope="col">Amount</th>
+                            <th scope="col">Bank Account</th>
+                            <th scope="col">Bank Name</th>
                             <th scope="col">Remark</th> 
                             <th scope="col">Action</th>
                         </tr>
@@ -43,6 +45,8 @@ $cs->registerScript('pagination',"
                                         <td><?= $item->wallet->user->name; ?></td>
                                         <td><?= $item->wallet->user->contact; ?></td>
                                         <td><?= number_format($item->amount, 2);?></td>
+                                        <td><?= $item->wallet->user->bankAcc; ?></td>
+                                        <td><?= $item->wallet->user->bankName; ?></td>
                                         <td><?= $item->remark; ?></td>
                                         <td><?php if($item->status == 0) 
                                             echo "<a href='{$baseUrl}/member/withdrawhistory?id={$item->id}&action=true'>Confirm</a>&nbsp&nbsp<a href='{$baseUrl}/member/withdrawhistory?id={$item->id}&action=false'>Cancel</a>";

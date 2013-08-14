@@ -435,7 +435,7 @@ class User extends CActiveRecord
 				Transaction::transferFP($user, array(
 					'amount'=>$amount,
 					'type'=>'DEBIT',
-					'description'=>'Received Food Point by '.$user->name.'.',
+					'description'=>'Transfer Food Point from '.$user->name.'.',
 					));
 			}
 		}
@@ -456,6 +456,23 @@ class User extends CActiveRecord
 			'point'=>Transaction::TRAN_CP,
 			'type'=>'DEBIT',
 			'description'=>'Transfer Cash Point from '.$curUser->name.'.',
+			));
+	}
+        
+        public static function transferCPtoFP($member, $amount)
+	{
+		Transaction::create($member, array(
+			'amount'=>$amount,
+			'point'=>Transaction::TRAN_CP,
+			'type'=>'CREDIT', 
+			'description'=>'Transfer Cash Point to '.$member->name.'.',
+			));
+
+		Transaction::create($member, array(
+			'amount'=>$amount,
+			'point'=>Transaction::TRAN_FP,
+			'type'=>'DEBIT',
+			'description'=>'Transfer Food Point from '.$member->name.'.',
 			));
 	}
         

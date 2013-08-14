@@ -31,6 +31,7 @@ class MemberController extends Controller
 					'transactionhistory',
 					'announcement',
 					'transferCP',
+                                        'transferCPtoFP',
 					'editmember',
                                         'purchase',
                                         'withdraw',
@@ -470,6 +471,33 @@ class MemberController extends Controller
 		}
 
 		$this->render('transferCP',array('userDropDownList'=>$userDropDownList, 'CMessage'=>$CMessage,'notice'=>$notice));
+	}
+        
+        public function actionTransferCPtoFP()
+	{
+		$CMessage = '';
+		$notice = '';
+
+		if(isset($_POST['amount']))
+		{
+			$amount = $_POST['amount'];
+
+			try {
+				if (empty($amount))
+					throw new Exception('Please enter cash point.');
+                                
+				$member = User::getUser(Yii::app()->user->id);
+
+				User::transferCPtoFP($member,$amount);
+
+				$wallet = $member->wallet;
+				$notice = 'Transaction is done successfully! Name: '.$member->name.' | Cash Point: '.$wallet->cashPoint.' | Food Point: '.$wallet->foodPoint;
+			} catch (Exception $e) {
+				$CMessage = $e->getMessage();
+			}
+		}
+
+		$this->render('transferCPtoFP',array('CMessage'=>$CMessage,'notice'=>$notice));
 	}
 
     public function actionPurchase()
