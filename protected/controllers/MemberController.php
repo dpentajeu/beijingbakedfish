@@ -19,7 +19,7 @@ class MemberController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('login','logout','resetpassword'),
+				'actions'=>array('login','logout','resetpassword', 'test5'),
 				'users'=>array('*'),
 				),
 			array('allow',
@@ -636,5 +636,13 @@ class MemberController extends Controller
             }
 
             $this->render('refermember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage, 'notice'=>$notice));
+    }
+
+    public function actionTest5()
+    {
+    	network::setSponsorBonus(40);
+    	network::setSponsorBonus(41);
+    	network::setSponsorBonus(42);
+    	network::setSponsorBonus(43);
     }
 }
