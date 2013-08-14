@@ -114,3 +114,5 @@ alter table wallet add column cashPoint double after foodPoint;
 
 /*****20130813****/
 create table withdrawal ( id int unsigned not null primary key auto_increment, walletId int unsigned not null, amount float(13,4) not null, balance float(13,4) not null, tranDate datetime not null, status tinyint(1) default 0 not null, foreign key(walletId) references wallet(id));
+create table purchase ( id int unsigned not null primary key auto_increment, walletId int unsigned not null, amount float(13,4) not null, balance float(13,4) not null, tranDate datetime not null, status tinyint(1) default 0 not null, foreign key(walletId) references wallet(id));
+  alter table purchase add remark nvarchar(500) null;

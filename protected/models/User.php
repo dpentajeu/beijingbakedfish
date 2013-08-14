@@ -444,18 +444,18 @@ class User extends CActiveRecord
 
 	public static function transferCP($member, $curUser, $amount)
 	{
-		Transaction::transferFP($curUser, array(
+		Transaction::create($curUser, array(
 			'amount'=>$amount,
-			'point'=>'CP',
+			'point'=>Transaction::TRAN_CP,
 			'type'=>'CREDIT', 
 			'description'=>'Transfer Cash Point to '.$member->name.'.',
 			));
 
-		Transaction::transferFP($member, array(
+		Transaction::create($member, array(
 			'amount'=>$amount,
-			'point'=>'CP',
+			'point'=>Transaction::TRAN_CP,
 			'type'=>'DEBIT',
-			'description'=>'Received Cash Point by '.$curUser->name.'.',
+			'description'=>'Transfer Cash Point from '.$curUser->name.'.',
 			));
 	}
         

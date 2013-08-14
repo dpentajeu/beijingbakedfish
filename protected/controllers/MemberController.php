@@ -32,6 +32,8 @@ class MemberController extends Controller
 					'announcement',
 					'transferCP',
 					'editmember',
+                    'purchase',
+                    'withdraw',
 					),
 				'users'=>array('@'),
 				),
@@ -453,7 +455,7 @@ class MemberController extends Controller
 				User::transferCP($member,$curUser,$amount);
 
 				$wallet = $curUser->wallet;
-				$notice = 'Transaction is done successfully! Name: '.$curUser->name.' Cash Point: '.$wallet->cashPoint;
+				$notice = 'Transaction is done successfully! Name: '.$curUser->name.' | Cash Point: '.$wallet->cashPoint;
 			} catch (Exception $e) {
 				$CMessage = $e->getMessage();
 			}
@@ -461,4 +463,59 @@ class MemberController extends Controller
 
 		$this->render('transferCP',array('userDropDownList'=>$userDropDownList, 'CMessage'=>$CMessage,'notice'=>$notice));
 	}
+
+    public function actionPurchase()
+    {
+        $model = new Purchase;
+        $list = $model->getAllPurchase();
+        $CMessage = '';
+        $notice = '';
+
+        if(isset($_POST['Purchase']))
+        {
+            try{
+                if (!$model->validate())
+                    throw new Exception("Please fill up the form correctly.", 1);
+                    
+                $member = User::getUser(Yii::app()->user->id);
+                $model->purchaseCredit($member);
+                $model = new Purchase;
+                $notice = 'Your purchase is submitted to admin.';
+            }
+            catch (Exception $e) {
+                $CMessage = $e->getMessage();
+            }
+
+        }
+
+        $total = count($list);
+
+        $this->render('purchase', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total));
+    }
+
+    public function actionWithdraw()
+    { 
+        $model = new Withdrawal;
+        $list = $model->getAllWithdrawal();
+        $CMessage = '';
+        $notice = '';
+
+        if(isset($_POST['Withdrawal']))
+        {
+            try{
+                $member = User::getUser(Yii::app()->user->id);
+                $model->withdrawCredit($member);
+                $model = new Withdrawal;
+                $notice = 'Your withdraw request is submitted to admin.';
+            }
+            catch (Exception $e) {
+                $CMessage = $e->getMessage();
+            }
+
+        }
+
+        $total = count($list);
+
+        $this->render('withdraw', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total));
+    }
 }
