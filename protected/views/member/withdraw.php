@@ -60,7 +60,7 @@ $cs->registerScript('pagination',"
                     <?php foreach ($list as $item) { ?>
                                 <tr>
                                         <td><?= $item->tranDate; ?></td>
-                                        <td><?= $item->amount; ?></td>
+                                        <td><?= number_format($item->amount, 2);?></td>
                                         <td><?= $item->remark; ?></td>
                                         <td><?php if($item->status == 0) echo 'Pending';
                                         if($item->status == 1) echo 'Confirmed';

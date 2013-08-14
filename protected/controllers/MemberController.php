@@ -39,7 +39,7 @@ class MemberController extends Controller
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory'),
+				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory'),
 				'roles'=>array('admin'),
 				),
 			array('deny'),
@@ -364,13 +364,19 @@ class MemberController extends Controller
 	public function actionTransactionhistory()
 	{
 		$filter = 'Deduct Food Point';
+                $id = null;
+                
+                $userDropDownList = User::getUserDropDownList();
 
 		if (!empty($_POST['filter']))
 			$filter = $_POST['filter'];
+                
+                if(!empty($_POST['id']))
+                        $id = $_POST['id'];
 
-		$model = Transaction::getTransaction($filter);
+		$model = Transaction::getTransaction($filter,$id);
 		$total = count($model);
-		$this->render('transactionhistory',array('model'=>$model, 'total'=>$total));
+		$this->render('transactionhistory',array('model'=>$model, 'userDropDownList'=>$userDropDownList, 'total'=>$total));
 	}
 
 	public function actionNetwork()
@@ -545,6 +551,29 @@ class MemberController extends Controller
         $total = count($list);
 
         $this->render('withdraw', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total, 'notice'=>$notice));
+    }
+    
+    public function actionWithdrawhistory($id = null, $action = null)
+    {
+    	$model = new Withdrawal;
+    	$CMessage = '';
+        $notice = '';
+    	
+    	if(!is_null($id))
+    	{
+    		try
+    		{
+    			$model->handleWithdraw($id, $action);
+    			$notice = 'The withdraw request is confirmed / cancelled.';
+    		}
+    		catch (Exception $e) {
+                $CMessage = $e->getMessage();
+            }
+    	}
+    	
+    	$list = $model->getAllWithdrawal();
+    	$total = count($list);
+    	$this->render('withdrawhistory', array('list'=>$list, 'total'=>$total, 'CMessage'=>$CMessage,'notice'=>$notice));
     }
     
     public function actionRefermember()

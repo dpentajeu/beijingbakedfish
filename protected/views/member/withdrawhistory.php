@@ -15,8 +15,8 @@ $cs->registerScript('pagination',"
 	");
 ?>
 <div class="full_w">
-        <div class="h_title">Purchase Credit History</div>   
-        <div class="n_warning"><p>Note: Please confirm user purchase request after payment is received.</p></div>     
+        <div class="h_title">Withdraw History</div>   
+        <div class="n_warning"><p>Note: Please confirm user withdraw request after payment is sent.</p></div>     
         <?php if(!empty($CMessage)) { ?>
             <div class="n_error"><p><?= $CMessage; ?></p></div>
         <?php } ?>
@@ -45,7 +45,7 @@ $cs->registerScript('pagination',"
                                         <td><?= number_format($item->amount, 2);?></td>
                                         <td><?= $item->remark; ?></td>
                                         <td><?php if($item->status == 0) 
-                                            echo "<a href='{$baseUrl}/member/purchasehistory?id={$item->id}&action=true'>Confirm</a>&nbsp&nbsp<a href='{$baseUrl}/member/purchasehistory?id={$item->id}&action=false'>Cancel</a>";
+                                            echo "<a href='{$baseUrl}/member/withdrawhistory?id={$item->id}&action=true'>Confirm</a>&nbsp&nbsp<a href='{$baseUrl}/member/withdrawhistory?id={$item->id}&action=false'>Cancel</a>";
                                         if($item->status == 1) echo 'Confirmed';
                                         if($item->status == 2) echo 'Cancelled'; ?></td>
                                 </tr>

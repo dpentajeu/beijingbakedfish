@@ -231,13 +231,20 @@ class Transaction extends CActiveRecord
 		$this->walletType = $w;
 	}
 
-	public static function getTransaction($transDesc)
+	public static function getTransaction($transDesc, $userId)
 	{
 		if(Yii::app()->user->id ==1)
 		{
 			$criteria = new CDbCriteria;
 			$criteria->order = "tranDate desc";
 			$criteria->addSearchCondition('description', $transDesc);
+                        
+                        if(!is_null($userId))
+                        {
+                            $user = User::getUser($userId);
+                            $criteria->compare('walletId',$user->wallet->id);
+                        }
+                        
 			$transaction = Transaction::model()->findAll($criteria);
 			
 			foreach($transaction as $t)

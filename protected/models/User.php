@@ -591,7 +591,7 @@ class User extends CActiveRecord
 		$result = array();
 
 		foreach ($user as $u) {
-			if($u->id != 1) $result[$u->id] = $u->name.' ('.$u->packageName.') - [Food Point: '.$u->foodPoint.']';
+			if($u->id != Yii::app()->user->id && $u->id != 1) $result[$u->id] = $u->name.' ('.$u->packageName.') - [Food Point: '.number_format($u->foodPoint, 2).']';
 		}
 
 		return $result;

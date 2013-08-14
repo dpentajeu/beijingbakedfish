@@ -53,8 +53,8 @@ $cs->registerScript('pagination',"
 						<td><?php echo $item['contact'] ?></td>
 						<td><?php echo $item['referralName'] ?></td>
 						<td><?php echo $item['packageName'] ?></td>
-						<td class="align-center"><?php echo $item['foodPoint'] ?></td>
-						<td class="align-center"><?php echo $item['cashPoint'] ?></td>
+						<td class="align-center"><?= number_format($item['foodPoint'], 2);?></td>
+						<td class="align-center"><?= number_format($item['cashPoint'], 2);?></td>
 						<td class="align-center">
 							<a href="<?php echo $this->createUrl('member/editmember', array('id'=>$item['id'])); ?>" class="table-icon edit" title="Edit"></a>
 						</td>
@@ -75,8 +75,8 @@ $cs->registerScript('pagination',"
 						<td><?php echo $model['contact'] ?></td>
 						<td><?php echo $model['referralName'] ?></td>
 						<td><?php echo $model['packageName'] ?></td>
-						<td class="align-center"><?php echo $model['foodPoint'] ?></td>
-						<td class="align-center"><?php echo $model['cashPoint'] ?></td>
+						<td class="align-center"><?= number_format($model['foodPoint'], 2);?></td>
+						<td class="align-center"><?= number_format($model['cashPoint'], 2);?></td>
 						<td class="align-center">
 							<a href="<?php echo $this->createUrl('member/editmember'); ?>" class="table-icon edit" title="Edit"></a>
 						</td>

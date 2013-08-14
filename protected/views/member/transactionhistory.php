@@ -28,8 +28,9 @@ $cs->registerCss('label',"
         <p>Show all the transaction history.</p>
         <p>            
             <?php echo CHtml::radioButtonList('filter', null, array('Deduct Food Point'=>'Bill', 'Sponsor bonus'=>'Sponsor bonus', 'Autoplacement bonus'=>'Autoplacement bonus', 'Transfer'=>'Transfer', 'Purchase'=>'Purchase credit', 'Withdraw'=>'Withdrawal'), array('separator'=>'&nbsp;&nbsp;')); ?>
-            
-            <?php echo CHtml::submitButton('Find', array('name'=>'btnFilter')); ?>            
+            <?php if(Yii::app()->user->id ==1) echo '<br/><br/>'.Chtml::dropDownList('id','', $userDropDownList, array('prompt'=>'Select a customer')); ?>
+            <br/><br/>
+            <button type="submit" name="btnFilter">Find</button>
         </p>            
         <div class="entry">
             <div class="sep"></div>
@@ -58,8 +59,8 @@ $cs->registerCss('label',"
                                 <td><?= $item['tranDate'] ?></td>
                                 <?php if(Yii::app()->user->id ==1 ) {echo "<td>".$item['name']."</td>"; } ?>
                                 <td><?= $item['tranType'] ?></td>
-                                <td><?= $item['amount'] ?></td>
-                                <td><?= $item['balance'] ?></td>
+                                <td><?= number_format($item['amount'], 2);?></td>
+                                <td><?= number_format($item['balance'], 2);?></td>
                                 <td><?= $item['description'] ?></td>
                         </tr>
                     <?php } ?>
