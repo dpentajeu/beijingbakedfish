@@ -16,7 +16,7 @@ $cs->registerScript('pagination',"
 ?>
 <div class="full_w">
         <div class="h_title">Withdraw History</div>   
-        <div class="n_warning"><p>Note: Please confirm user withdraw request after payment is sent.</p></div>     
+        <div class="n_warning"><p>Note: Please confirm user withdraw request after payment is sent. RM5 will be charge as service charge.</p></div>     
         <?php if(!empty($CMessage)) { ?>
             <div class="n_error"><p><?= $CMessage; ?></p></div>
         <?php } ?>

@@ -173,7 +173,7 @@ class Withdrawal extends CActiveRecord
 			$model = Withdrawal::model()->findByAttributes(array('id'=>$id));
 			$model->status = 2;
 			if(!$model->save())
-				throw new Exception('Fail to cancel this purchase.', 102);
+				throw new Exception('Fail to cancel this withdrawal.', 102);
 		}
 	}
 }

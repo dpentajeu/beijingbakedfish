@@ -1,7 +1,7 @@
 <div class="full_w">
         <div class="h_title">Transaction</div>
         <div class="form">
-            <div class="n_warning"><p>Note: Please select the user to transfer and enter cash point.</p></div>
+            <div class="n_warning"><p>Note: Please enter the amount of your cash point to transfer to food point.</p></div>
             <?php if(!empty($CMessage)) { ?>
 		<div class="n_error"><p><?= $CMessage; ?></p></div>
             <?php } ?>

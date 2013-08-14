@@ -13,6 +13,7 @@ $cs->registerScript('datepicker',"
 <div class="full_w">
 	<div class="h_title">Refer Member</div>
 	<div class="form">
+		<div class="n_warning"><p>Note: Cash Point will be deducted for creating a new member account according to the package value.</p></div>
 		<?php if (!empty($CMessage)) { ?>
 			<div class="n_error"><p><?= $CMessage; ?></p></div>
 		<?php } ?>

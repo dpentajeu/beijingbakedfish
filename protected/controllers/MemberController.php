@@ -540,7 +540,7 @@ class MemberController extends Controller
     		try
     		{
     			$model->handlePurchase($id, $action);
-    			$notice = 'The purchase request is confirmed / cancelled.';
+    			$notice = 'The purchase request is confirmed / cancelled. Please check the transaction from transaction history.';
     		}
     		catch (Exception $e) {
                 $CMessage = $e->getMessage();
@@ -592,7 +592,7 @@ class MemberController extends Controller
     		try
     		{
     			$model->handleWithdraw($id, $action);
-    			$notice = 'The withdraw request is confirmed / cancelled.';
+    			$notice = 'The withdraw request is confirmed / cancelled. Please check the transaction from transaction history.';
     		}
     		catch (Exception $e) {
                 $CMessage = $e->getMessage();
