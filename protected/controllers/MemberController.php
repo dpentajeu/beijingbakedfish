@@ -19,7 +19,7 @@ class MemberController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('login','logout','resetpassword', 'manualsponsorbonus', 'revertsponsorbonus'),
+				'actions'=>array('login','logout','resetpassword', 'manualsponsorbonus', 'revertsponsorbonus', 'revertspbonus'),
 				'users'=>array('*'),
 				),
 			array('allow',
@@ -664,4 +664,14 @@ class MemberController extends Controller
 				var_dump("Transaction id: {$t->id} deleted and amount is deducted from {$wallet->user->name} wallet (CP: {$wallet->cashPoint}).<br/>");
 		}    	
     }
+
+	public function actionRevertspbonus()
+	{
+		$criteria = new CDbCriteria;
+		$criteria->compare('isApproved', 1);
+		$criteria->order = 'id asc';
+		$model = User::model()->findAll($criteria);
+		foreach ($model as $u)
+			network::setSponsorBonus($u->id);
+	}
 }
