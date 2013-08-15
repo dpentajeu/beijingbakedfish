@@ -442,6 +442,19 @@ class User extends CActiveRecord
 		else throw new Exception('This PIN is invalid!');
 	}
 
+	public function manualCreateBill($id, $amount, $date)
+	{
+		$user = User::model()->findByAttributes(array('id'=>$id));
+
+		Transaction::create($user, array(
+			'amount'=>$amount,
+			'point'=>Transaction::TRAN_FP,
+			'type'=>'CREDIT',
+			'date'=>$date,
+			'description'=>'Deduct Food Point: '.$user->name.'.',
+			));
+	}
+
 	public static function transferCP($member, $curUser, $amount)
 	{
 		Transaction::create($curUser, array(
@@ -566,6 +579,27 @@ class User extends CActiveRecord
 	public static function getUser($id)
 	{
 		$user = User::model()->findByAttributes(array('id'=>$id));
+
+		$user->packageName = Package::getPackageName($user->packageId);
+		$user->referralName = User::getReferralName($user->referral);
+
+		$wallet = $user->wallet;
+		if(!is_null($wallet))
+		{
+			$user->foodPoint = $wallet->foodPoint;
+			$user->cashPoint = $wallet->cashPoint;
+			$user->bonusAmount = $wallet->bonusAmount;
+		}
+
+		return $user;
+	}
+
+	public static function getUserByPhone($ph)
+	{
+		$user = User::model()->findByAttributes(array('contact'=>$ph));
+
+		if(is_null($user))
+			throw new Exception("User is not found!", 1);			
 
 		$user->packageName = Package::getPackageName($user->packageId);
 		$user->referralName = User::getReferralName($user->referral);

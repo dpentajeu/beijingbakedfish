@@ -40,7 +40,7 @@ class MemberController extends Controller
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory'),
+				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction'),
 				'roles'=>array('admin'),
 				),
 			array('deny'),
@@ -346,7 +346,7 @@ class MemberController extends Controller
 				if(is_null($amount) || $amount == 0)
 					throw new Exception('Please enter total bill amount.');
 
-				$model->transferFP($amount/2, 'CREDIT');
+				$model->transferFP($amount, 'CREDIT');
 				$user = User::getUser($model->id);
 				$wallet = $user->wallet;
 				$notice = 'Transaction is done successfully! Name: '.$user->name.' Balance: '.$wallet->foodPoint;
@@ -360,6 +360,39 @@ class MemberController extends Controller
 		}
 
 		$this->render('transaction',array('model'=>$model, 'userDropDownList'=>$userDropDownList, 'CMessage'=>$CMessage,'notice'=>$notice));
+	}
+
+	public function actionManualtransaction()
+	{
+		$model = new User;
+		$userDropDownList = User::getUserDropDownList();
+		$CMessage = '';
+		$notice = '';
+
+		if(isset($_POST['amount']) && isset($_POST['User']) && isset($_POST['date']))
+		{
+			$amount = $_POST['amount'];
+			$date = $_POST['date'];
+			$model->attributes = $_POST['User'];
+
+			try {
+				if(empty($model->id))
+					throw new Exception('Please select a customer.');
+
+				if(is_null($amount) || $amount == 0)
+					throw new Exception('Please enter total bill amount.');
+
+				$model->manualCreateBill($model->id, $amount, $date);
+				$user = User::getUser($model->id);
+				$wallet = $user->wallet;
+				$notice = 'Transaction is done successfully! Name: '.$user->name.' Balance: '.$wallet->foodPoint;				
+				$model = new User;
+			} catch (Exception $e) {
+				$CMessage = $e->getMessage();
+			}
+		}
+
+		$this->render('manualtransaction',array('model'=>$model, 'userDropDownList'=>$userDropDownList, 'CMessage'=>$CMessage,'notice'=>$notice));
 	}
 
 	public function actionTransactionhistory()
@@ -442,23 +475,22 @@ class MemberController extends Controller
 
 	public function actionTransferCP()
 	{
-		$userDropDownList = User::getUserDropDownList();
 		$CMessage = '';
 		$notice = '';
 
-		if(isset($_POST['amount']) && isset($_POST['id']))
+		if(isset($_POST['amount']) && isset($_POST['ph']))
 		{
 			$amount = $_POST['amount'];
-			$id = $_POST['id'];
+			$ph = $_POST['ph'];
 
 			try {
-				if (empty($id))
-					throw new Exception('Please select a customer.');
+				if (empty($ph))
+					throw new Exception('Please enter a member contact number.');
 
-				if (empty($amount))
-					throw new Exception('Please enter cash point.');
+				if (empty($amount) || !is_numeric($amount))
+					throw new Exception('Please enter a correct cash point.');
 
-				$member = User::getUser($id);
+				$member = User::getUserByPhone($ph);
 				$curUser = User::getUser(Yii::app()->user->id);
 
 				User::transferCP($member,$curUser,$amount);
@@ -470,7 +502,7 @@ class MemberController extends Controller
 			}
 		}
 
-		$this->render('transferCP',array('userDropDownList'=>$userDropDownList, 'CMessage'=>$CMessage,'notice'=>$notice));
+		$this->render('transferCP',array('CMessage'=>$CMessage,'notice'=>$notice));
 	}
         
         public function actionTransferCPtoFP()
