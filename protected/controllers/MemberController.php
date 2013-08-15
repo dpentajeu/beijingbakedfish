@@ -397,7 +397,7 @@ class MemberController extends Controller
 
 	public function actionTransactionhistory()
 	{
-		list($id, $from, $to) = array(null, null, null);
+		list($id, $from, $to) = array(Yii::app()->user->id, null, null);
 		$criteria = new CDbCriteria;
 		$criteria->alias = 't';
 		$criteria->order = 't.trandate desc, t.id desc';
@@ -414,9 +414,10 @@ class MemberController extends Controller
 			$criteria->addBetweenCondition('tranDate', "{$from} 0:0", "{$to} 23:59:59");
 		}
 
-		if (!empty($_POST['id']))
-			$model->user($id = $_POST['id']);
+		if (!empty($_POST['id']) && Yii::app()->user->roles == 'admin')
+			$id = $_POST['id'];
 
+		$model->user($id);
 		$criteria->addSearchCondition('description', $filter);
 		$model = $model->findAll($criteria);
 		$total = count($model);
