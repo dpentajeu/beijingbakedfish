@@ -671,6 +671,7 @@ class MemberController extends Controller
 		$criteria->compare('isApproved', 1);
 		$criteria->order = 'id asc';
 		$model = User::model()->findAll($criteria);
+		header("content-type: text/plain");
 		foreach ($model as $u)
 			network::setSponsorBonus($u->id);
 	}

@@ -35,14 +35,17 @@ class network{
 		$currentNode = $model;
 		$result = array();
 
+		echo "\nNEW MEMBER : " . $model->name . "(package: {$model->package->packageName}, value: {$model->package->value})\n";
 		foreach (range(1, 10) as $i) {
 			$currentNode = $currentNode->sponsor;
 			if (empty($currentNode))
 				break ;
 
+			echo " * Level {$i} sponsor: {$currentNode->name}; package: {$currentNode->package->packageName}; entitled level: {$currentNode->package->level}\n";
 			if ($currentNode->package->level < $i)
 				continue ;
 
+			echo "   >  Enjoyed {$rates[$i]}% of {$model->package->value} : " . ($model->package->value * $rates[$i]) . "\n";
 			$result[] = Transaction::create($currentNode, array(
 				'amount' => $model->package->value * $rates[$i],
 				'type' => 'DEBIT',
@@ -50,6 +53,7 @@ class network{
 				'description' => 'Sponsor bonus from '.$model->name.'. (Level '.$i.')'
 				));
 		}
+		echo "\n";
 
 		return $result;
 	}
