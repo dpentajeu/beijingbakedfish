@@ -19,15 +19,15 @@ class SiteController extends Controller
                 $model->attributes = $_POST['Registration'];
                 try
                 {
-                        if(!is_numeric($_POST['Registration']['contact']) || !is_numeric($_POST['Registration']['referral']))
-                        {
-                            throw new Exception("Please enter the right format of contact numbers.");
-                        }
+                        // if(!is_numeric($_POST['Registration']['contact']) || !is_numeric($_POST['Registration']['referral']))
+                        // {
+                        //     throw new Exception("Please enter the right format of contact numbers.");
+                        // }
                     
-                        if (!$model->validate())
-                                throw new Exception("Please fill in all fields in the forms correctly.");
-                        $model->createUser();
-                        $this->Regmsg = 'Member has been created succesfully.';
+                        // if (!$model->validate())
+                        //         throw new Exception("Please fill in all fields in the forms correctly.");
+                        // $model->createUser();
+                        $this->Regmsg = 'Registration is closed. Please contact administrator regarding membership.';
                         $model = new User;
                 }
                 catch (Exception $e)

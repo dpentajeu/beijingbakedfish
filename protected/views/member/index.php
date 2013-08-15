@@ -36,8 +36,8 @@ $cs->registerScript('pagination',"
 					<th scope="col">Contact</th>
 					<th scope="col">Referral</th>
 					<th scope="col">Package</th>
-					<th scope="col" style="width: 65px;">Food Point</th>
-					<th scope="col" style="width: 65px;">Cash Point</th>
+					<th scope="col">Redemption Point</th>
+					<th scope="col">Cash Point</th>
 					<th scope="col" style="width: 35px;">Action</th>
 					<?php if (Yii::app()->user->roles == 'admin') echo CHtml::tag('th', array('scope' => 'col'), 'Status'); ?>
 				</tr>

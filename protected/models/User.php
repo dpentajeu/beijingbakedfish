@@ -316,7 +316,7 @@ class User extends CActiveRecord
 
 		$password = $this->random_code(6);
 
-		$msg = 'From Beijing Baked Fish Restaurant: Reser Password. New password requested is '.$password.'.';
+		$msg = 'From Beijing Baked Fish Restaurant: Reset Password. New password requested is '.$password.'.';
 
 		$sms = User::send_sms('6'.$this->contact, $msg);
 
@@ -427,7 +427,7 @@ class User extends CActiveRecord
 				Transaction::transferFP($user, array(
 					'amount'=>$amount,
 					'type'=>'CREDIT', 
-					'description'=>'Deduct Food Point: '.$user->name.'.',
+					'description'=>'Deduct Redemption Point: '.$user->name.'.',
 					));
 			}
 			else
@@ -435,7 +435,7 @@ class User extends CActiveRecord
 				Transaction::transferFP($user, array(
 					'amount'=>$amount,
 					'type'=>'DEBIT',
-					'description'=>'Transfer Food Point from '.$user->name.'.',
+					'description'=>'Transfer Redemption Point from '.$user->name.'.',
 					));
 			}
 		}
@@ -451,7 +451,7 @@ class User extends CActiveRecord
 			'point'=>Transaction::TRAN_FP,
 			'type'=>'CREDIT',
 			'date'=>$date,
-			'description'=>'Deduct Food Point: '.$user->name.'.',
+			'description'=>'Deduct Redemption Point: '.$user->name.'.',
 			));
 	}
 
@@ -503,6 +503,7 @@ class User extends CActiveRecord
 	{
 		$this->email = User::findEmail($this->email);
 		$this->contact = User::findContact($this->contact);
+		$this->referral = User::findReferral($this->referral);
 
                 if($this->packageId == 1) $amount = 500;
 		if($this->packageId == 2) $amount = 1500;
@@ -521,7 +522,7 @@ class User extends CActiveRecord
 			'email'=>$this->email,
 			'contact'=>$this->contact,
 			'packageId'=>$this->packageId,
-			'referral'=>Yii::app()->user->id,
+			'referral'=>$this->referral,
 			'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
 			'created'=>date('Y-m-d H:i:s'),
 			'password' => md5('abc123'),

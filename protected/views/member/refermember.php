@@ -34,6 +34,9 @@ $cs->registerScript('datepicker',"
 				<label for="contact"><span style="color: red;">*</span>Phone:</label>
 				<?php echo $form->textField($model, 'contact', array('placeholder'=>'Example: 0121235678')); ?>
 				<br/><br/>
+				<label for="contact"><span style="color: red;">*</span>Referral Phone:</label>
+				<?php echo $form->textField($model, 'referral', array('placeholder'=>'Example: 0121235678')); ?>
+				<br/><br/>
 				<label for="dateOfBirth">Date of Birth:</label>
 				<?php echo $form->textField($model, 'dateOfBirth', array('id'=>'datepicker')); ?>
 				<br/><br/>

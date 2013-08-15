@@ -34,7 +34,7 @@ $cs->registerCss('label',"
 		<h2>Transaction history table</h2>
 		<p>Show all the transaction history.</p>
 		<p>
-			<?php echo CHtml::radioButtonList('filter', $filter['filter'], array('Deduct Food Point'=>'Bill', 'Sponsor bonus'=>'Sponsor bonus', 'Autoplacement bonus'=>'Autoplacement bonus', 'Transfer'=>'Transfer', 'Purchase'=>'Purchase credit', 'Withdraw'=>'Withdrawal'), array('separator'=>'&nbsp;&nbsp;')); ?>
+			<?php echo CHtml::radioButtonList('filter', $filter['filter'], array('Deduct Redemption Point'=>'Bill', 'Sponsor bonus'=>'Sponsor bonus', 'Autoplacement bonus'=>'Autoplacement bonus', 'Transfer'=>'Transfer', 'Purchase'=>'Purchase credit', 'Withdraw'=>'Withdrawal'), array('separator'=>'&nbsp;&nbsp;')); ?>
 			<?php if(Yii::app()->user->id ==1) echo '<br/><br/>'.Chtml::dropDownList('id',$filter['id'], $userDropDownList, array('prompt'=>'Select a customer')); ?>
 			<div style="margin: 1em 0 1.5em;">
 				<label style="margin: 0 .5em 0;">From</label><?php echo CHtml::textField('DateFilter[from]', $filter['from'], array('class'=>'datepicker')); ?>

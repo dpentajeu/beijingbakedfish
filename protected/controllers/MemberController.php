@@ -401,7 +401,7 @@ class MemberController extends Controller
 		$criteria = new CDbCriteria;
 		$criteria->alias = 't';
 		$criteria->order = 't.trandate desc, t.id desc';
-		$filter = 'Deduct Food Point';
+		$filter = 'Deduct Redemption Point';
 		$model = Transaction::model();
 		$userDropDownList = User::getUserDropDownList();
 
