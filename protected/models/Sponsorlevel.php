@@ -87,4 +87,13 @@ class Sponsorlevel extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+
+	public function getSponsorRates()
+	{
+		$model = $this->findAll();
+		$result = array();
+		foreach ($model as $s)
+			$result[$s->level] = $s->rate;
+		return $result;
+	}
 }
