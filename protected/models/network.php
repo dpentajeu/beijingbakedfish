@@ -28,32 +28,30 @@ class network{
         return $this->tree;
     }
 
-    public static function setSponsorBonus($id)
-    {
-        $newMember = User::model()->findByAttributes(array('id'=>$id));
-        $package = Package::model()->findByAttributes(array('id'=>$newMember->packageId));
-        $referralId = 0;
-        for($i = 1; $i <= $package->level; $i++){
-            if($i == 1)
-            {
-                $referralId = $newMember->referral;                
-            }
-            
-            $referral = User::model()->findByAttributes(array('id'=>$referralId));
-            $sponsorTable = Sponsorlevel::model()->findByAttributes(array('level'=>$i));
+	public static function setSponsorBonus($id)
+	{
+		$model = User::model()->with('package')->findByAttributes(array('id'=>$id));
+		$rates = Sponsorlevel::model()->getSponsorRates();
+		$currentNode = $model;
+		$result = array();
 
-            if($referral->id == 1)
-                break;
+		foreach (range(1, 10) as $i) {
+			$currentNode = $currentNode->sponsor;
+			if (empty($currentNode))
+				break ;
 
-            Transaction::transferFP($referral, array(
-                'amount'=>($package->value * $sponsorTable->rate),
-                'type'=>'DEBIT',
-                'point'=>'CP',
-                'description'=>'Sponsor bonus from '.$newMember->name.'. (Level '.$i.')',
-                ));
+			if ($currentNode->package->level < $i)
+				continue ;
 
-            $referralId = $referral->referral;
-        }
-    }
+			$result[] = Transaction::create($currentNode, array(
+				'amount' => $model->package->value * $rates[$i],
+				'type' => 'DEBIT',
+				'point' => Transaction::TRAN_CP,
+				'description' => 'Sponsor bonus from '.$model->name.'. (Level '.$i.')'
+				));
+		}
+
+		return $result;
+	}
 }
 ?>

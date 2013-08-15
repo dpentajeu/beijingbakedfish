@@ -97,7 +97,7 @@ class User extends CActiveRecord
 			'package' => array(self::BELONGS_TO, 'Package', 'packageId'),
 			'binaryNodes' => array(self::HAS_MANY, 'Binary', 'userId'),
 			'referredUsers' => array(self::HAS_MANY, 'User', 'referral'),
-			'sponsor' => array(self::BELONGS_TO, 'User', 'referral'),
+			'sponsor' => array(self::BELONGS_TO, 'User', 'referral', 'with'=>'package'),
 		);
 	}
 
