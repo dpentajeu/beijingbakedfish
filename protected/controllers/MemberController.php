@@ -19,7 +19,7 @@ class MemberController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('login','logout','resetpassword'),
+				'actions'=>array('login','logout','resetpassword', 'manualsponsorbonus', 'revertsponsorbonus'),
 				'users'=>array('*'),
 				),
 			array('allow',
@@ -661,4 +661,32 @@ class MemberController extends Controller
 
 		$this->render('binarynetwork', array('model'=>$model, 'tree'=>$tree, 'member_list'=>$member_list, 'selector'=>$root_id, 'total_level'=>$total_level));
 	}
+
+    public function actionManualsponsorbonus($id = null)
+    {
+    	network::setSponsorBonus($id);
+    	var_dump("Successfully grant Sponsor bonus of {$id}");
+    }
+
+    public function actionRevertsponsorbonus($id = null)
+    {
+    	$user = User::model()->findByAttributes(array('id'=>$id));
+    	$criteria = new CDbCriteria;
+		$criteria->addSearchCondition('description', "Sponsor bonus from {$user->name}");
+		$transaction = Transaction::model()->findAll($criteria);
+			
+		foreach($transaction as $t)
+		{
+			$wallet = Wallet::model()->findByAttributes(array('id'=>$t->walletId));
+			$wallet->cashPoint -= $t->amount;
+			if(!$wallet->save())
+				var_dump("Transaction id: {$t->id} failed to deduct from wallet.");
+
+			if(!$t->delete())
+				var_dump("Transaction id: {$t->id} failed deleted and amount is deducted from {$wallet->user->name} wallet (CP: {$wallet->cashPoint}).");
+			else
+				var_dump("Transaction id: {$t->id} deleted and amount is deducted from {$wallet->user->name} wallet (CP: {$wallet->cashPoint}).<br/>");
+		}    	
+    }
+>>>>>>> user
 }
