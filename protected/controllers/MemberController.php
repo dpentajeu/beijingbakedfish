@@ -313,7 +313,7 @@ class MemberController extends Controller
 					if (empty($_POST['id']))
 						throw new Exception('Please select a customer.');
 
-					User::smsTo($id, $msg);
+					User::smsTo($_POST['id'], $msg);
 					$notice = 'Message is send!';
 				} else if ($_POST['member'] == 2) {
 					User::smsToAll($msg);
