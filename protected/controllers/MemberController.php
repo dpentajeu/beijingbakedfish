@@ -688,5 +688,4 @@ class MemberController extends Controller
 				var_dump("Transaction id: {$t->id} deleted and amount is deducted from {$wallet->user->name} wallet (CP: {$wallet->cashPoint}).<br/>");
 		}    	
     }
->>>>>>> user
 }
