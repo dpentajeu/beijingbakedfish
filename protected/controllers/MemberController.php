@@ -397,20 +397,30 @@ class MemberController extends Controller
 
 	public function actionTransactionhistory()
 	{
+		list($id, $from, $to) = array(null, null, null);
+		$criteria = new CDbCriteria;
+		$criteria->alias = 't';
+		$criteria->order = 't.trandate desc, t.id desc';
 		$filter = 'Deduct Food Point';
-                $id = null;
-                
-                $userDropDownList = User::getUserDropDownList();
+		$model = Transaction::model();
+		$userDropDownList = User::getUserDropDownList();
 
 		if (!empty($_POST['filter']))
 			$filter = $_POST['filter'];
-                
-                if(!empty($_POST['id']))
-                        $id = $_POST['id'];
 
-		$model = Transaction::getTransaction($filter,$id);
+		if (isset($_POST['DateFilter'])) {
+			list($from, $to) = array($_POST['DateFilter']['from'], $_POST['DateFilter']['to']);
+			if (empty($to)) $to = date("Y-m-d");
+			$criteria->addBetweenCondition('tranDate', "{$from} 0:0", "{$to} 23:59:59");
+		}
+
+		if (!empty($_POST['id']))
+			$model->user($id = $_POST['id']);
+
+		$criteria->addSearchCondition('description', $filter);
+		$model = $model->findAll($criteria);
 		$total = count($model);
-		$this->render('transactionhistory',array('model'=>$model, 'userDropDownList'=>$userDropDownList, 'total'=>$total));
+		$this->render('transactionhistory',array('model'=>$model, 'userDropDownList'=>$userDropDownList, 'total'=>$total, 'filter' => compact('filter', 'from', 'to', 'id')));
 	}
 
 	public function actionNetwork()
