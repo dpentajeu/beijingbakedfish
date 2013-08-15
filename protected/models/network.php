@@ -32,12 +32,16 @@ class network{
 	{
 		$model = User::model()->with('package')->findByAttributes(array('id'=>$id));
 		$rates = Sponsorlevel::model()->getSponsorRates();
-		$currentNode = $model->sponsor;
+		$currentNode = $model;
 		$result = array();
 
-		foreach (range(1, $model->package->level) as $i) {
+		foreach (range(1, 10) as $i) {
+			$currentNode = $currentNode->sponsor;
 			if (empty($currentNode))
-				return $result;
+				break ;
+
+			if ($currentNode->package->level < $i)
+				continue ;
 
 			$result[] = Transaction::create($currentNode, array(
 				'amount' => $model->package->value * $rates[$i],
@@ -45,8 +49,6 @@ class network{
 				'point' => Transaction::TRAN_CP,
 				'description' => 'Sponsor bonus from '.$model->name.'. (Level '.$i.')'
 				));
-
-			$currentNode = $currentNode->sponsor;
 		}
 
 		return $result;
