@@ -138,7 +138,7 @@ class Binary extends CActiveRecord
 	 */
 	public static function create($user, array $attributes = array())
 	{
-		$default = array('id' => 0, 'num_of_nodes' => null);
+		$default = array('id' => 0, 'num_of_nodes' => null, 'created' => false);
 
 		if (!$user instanceof User)
 			$user = User::model()->findByAttributes(array('id'=>$user));
@@ -153,8 +153,12 @@ class Binary extends CActiveRecord
 
 		$models = array();
 		foreach (range(1, $default['num_of_nodes']) as $i) {
-			$model = new Binary;
-			$model->createNode($default['id']);
+			$model = self::createNode($default['id']);
+			if (!empty($attributes['created'])) {
+				$model->created = $attributes['created'];
+				if (!$model->update())
+					throw new Exception("Fail to update created time.");
+			}
 			$models[] = $model;
 		}
 
@@ -166,7 +170,7 @@ class Binary extends CActiveRecord
 	 * @param integer user_id a valid user id
 	 * @return Binary the newly created binary model object
 	 */
-	public function createNode($user_id = 0)
+	protected static function createNode($user_id = 0)
 	{
 		$model = new Binary;
 		$model->attributes = array('userId' => $user_id, 'level' => 0);
