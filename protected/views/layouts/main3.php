@@ -60,6 +60,7 @@ $cs->registerScript('navi-menu', "
 						array('label'=>'Network', 'url'=>array('member/network'), 'linkOptions'=>array('class'=>'icon report')),
 						// array('label'=>'Binary Network', 'url'=>array('member/binarynetwork'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						array('label'=>'Transaction', 'url'=>array('member/transaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
+						array('label'=>'Manual Transaction', 'url'=>array('member/manualtransaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						array('label'=>'Transaction history', 'url'=>array('member/transactionhistory'), 'linkOptions'=>array('class'=>'icon report')),
 						array('label'=>'Purchase history', 'url'=>array('member/purchasehistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
                                                 array('label'=>'Withdraw history', 'url'=>array('member/withdrawhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
