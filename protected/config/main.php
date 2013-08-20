@@ -32,6 +32,14 @@ return array(
 
 	// application components
 	'components'=>array(
+		'imagemod' => array(
+			'class' => 'ext.imagemodifier.CImageModifier',
+		),
+
+		'curl' => array(
+			'class' => 'ext.curl-master.Curl',
+		),
+
 		'user'=>array(
 			// enable cookie-based authentication
 			'class'=>'application.components.WebUser',
@@ -40,7 +48,7 @@ return array(
 		),
 
 		'clientScript'=>array(
-			'packages'=>array(				
+			'packages'=>array(
 				'jui'=>array(
 					'baseUrl'=>'',
 					'css'=>array('css/smoothness/jquery-ui.css'),
