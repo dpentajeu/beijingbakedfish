@@ -543,57 +543,80 @@ class MemberController extends Controller
 		$this->render('transferCPtoFP',array('CMessage'=>$CMessage,'notice'=>$notice));
 	}
 
-    public function actionPurchase()
-    {
-        $model = new Purchase;        
-        $CMessage = '';
-        $notice = '';
+	public function actionPurchase()
+	{
+		$model = new Purchase;        
+		$CMessage = '';
+		$notice = '';
 
-        if(isset($_POST['Purchase']))
-        {
-            try{
-            	$model->attributes = $_POST['Purchase'];
-                if (!$model->validate())
-                    throw new Exception("Please fill up the form correctly.", 1);
-                    
-                $member = User::getUser(Yii::app()->user->id);
-                $model->purchaseCredit($member);
-                $model = new Purchase;
-                $notice = 'Your purchase is submitted to admin.';
-            }
-            catch (Exception $e) {
-                $CMessage = $e->getMessage();
-            }
+		if(isset($_POST['Purchase'])) {
+			try{
+				$model->attributes = $_POST['Purchase'];
+				if (!$model->validate())
+					throw new Exception("Please fill up the form correctly.", 1);
 
-        }
-        $list = $model->getAllPurchase();
-        $total = count($list);
+				$member = User::model()->findByAttributes(array('id' => Yii::app()->user->id));
+				$model->purchaseCredit($member);
+				if (!empty($_FILES)) {
+					ini_set('upload_max_filesize', '10M');
+					$folder = Yii::getPathOfAlias("application") . "/../assets/uploads";
+					Yii::trace($folder, "application.controllers.MemberController");
+					Yii::trace(var_export($_FILES, true), "application.controllers.MemberController");
+					$handle = Yii::app()->imagemod->load($_FILES['statement']['tmp_name']);
+					if (!$handle->uploaded)
+						throw new Exception ("Fail to upload");
 
-        $this->render('purchase', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total, 'notice'=>$notice));
-    }
+					$file = 'purchase_credit_' . md5($model->id);
+					$handle->file_new_name_body = $file;
+					$handle->file_new_name_ext = 'jpg';
+					$handle->image_resize = true;
+					$handle->image_convert = 'jpg';
+					$handle->image_x = 600;
+					$handle->image_ratio_y = true;
+					$handle->Process($folder);
 
-    public function actionPurchasehistory($id = null, $action = null)
-    {
-    	$model = new Purchase;
-    	$CMessage = '';
-        $notice = '';
-    	
-    	if(!is_null($id))
-    	{
-    		try
-    		{
-    			$model->handlePurchase($id, $action);
-    			$notice = 'The purchase request is confirmed / cancelled. Please check the transaction from transaction history.';
-    		}
-    		catch (Exception $e) {
-                $CMessage = $e->getMessage();
-            }
-    	}
-    	
-    	$list = $model->getAllPurchase();
-    	$total = count($list);
-    	$this->render('purchasehistory', array('list'=>$list, 'total'=>$total, 'CMessage'=>$CMessage,'notice'=>$notice));
-    }
+					if (!$handle->processed)
+						throw new Exception($handle->error);
+					$handle->Clean();
+				}
+
+				$model = new Purchase;
+				$notice = 'Your purchase is submitted to admin.';
+
+			} catch (Exception $e) {
+				$model->delete();
+				$CMessage = $e->getMessage();
+			}
+
+		}
+		$list = $model->getAllPurchase();
+		$total = count($list);
+
+		$this->render('purchase', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total, 'notice'=>$notice));
+	}
+
+	public function actionPurchasehistory($id = null, $action = null)
+	{
+		$model = new Purchase;
+		$CMessage = '';
+		$notice = '';
+		
+		if(!is_null($id))
+		{
+			try
+			{
+				$model->handlePurchase($id, $action);
+				$notice = 'The purchase request is confirmed / cancelled. Please check the transaction from transaction history.';
+			}
+			catch (Exception $e) {
+				$CMessage = $e->getMessage();
+			}
+		}
+		
+		$list = $model->getAllPurchase();
+		$total = count($list);
+		$this->render('purchasehistory', array('list'=>$list, 'total'=>$total, 'CMessage'=>$CMessage,'notice'=>$notice));
+	}
 
     public function actionWithdraw()
     { 
