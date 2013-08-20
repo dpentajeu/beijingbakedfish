@@ -509,12 +509,16 @@ class User extends CActiveRecord
 		if($this->packageId == 2) $amount = 1500;
 		if($this->packageId == 3) $amount = 3500;
                 
-                Transaction::create(User::getUser(Yii::app()->user->id), array(
-			'amount'=>$amount,
-			'point'=>Transaction::TRAN_CP,
-			'type'=>'CREDIT',
-			'description'=>'Transfer Cash Point to refer a member : '.$this->name.', Package : '.Package::getPackageName($this->packageId),
-			));
+        
+        if($this->referral != 1)
+        {
+	        Transaction::create(User::getUser($this->referral), array(
+				'amount'=>$amount,
+				'point'=>Transaction::TRAN_CP,
+				'type'=>'CREDIT',
+				'description'=>'Transfer Cash Point to refer a member : '.$this->name.', Package : '.Package::getPackageName($this->packageId),
+				));
+    	}
                 
 		$user = new User;
 		$user->attributes = array(
@@ -686,6 +690,15 @@ class User extends CActiveRecord
 			throw new Exception('Fail to send!');
 		}
 		return $ok;
+	}
+
+	public function checkSMSCredit()
+	{
+		$query_string = 'http://gateway.onewaysms.com.my:10001/bulkcredit.aspx'.'?apiusername='.'API5Y6NCVIFEQ'.'&apipassword='.'API5Y6NCVIFEQ5Y6NC';
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $query_string);
+		curl_setopt($ch, CURLOPT_HTTPGET, true);
+		return $ch;
 	}
 
 	private function randomWithLength($length)

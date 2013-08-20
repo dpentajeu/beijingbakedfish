@@ -1,5 +1,6 @@
 <?php
 $cs = Yii::app()->getClientScript();
+$baseUrl = Yii::app()->request->baseUrl;
 $cs->registerPackage('pagination');
 $cs->registerScript('pagination',"
 	$(document).ready(function(){
@@ -15,9 +16,11 @@ $cs->registerScript('pagination',"
 ?>
 <div class="full_w">
         <div class="h_title">Withdraw Credit</div>
-        <?php if (Yii::app()->user->id != 1){ ?>
             <div class="form">
-                <div class="n_warning"><p>Note: Please submit your cash point withdrawal request with a minimum amount of RM100 and the service charge for withdrawal is RM5.</p></div>
+                <div class="n_warning">
+                    <p>Note: Please submit your cash point withdrawal request with a minimum amount of RM100 and the service charge for withdrawal is RM5.</p>
+                    <p>Please update your bank account profile before submit a withdrawal request. Click <a href="<?= $baseUrl ?>/member/editmember">here</a> to update.</p>
+                </div>
                 <?php if(!empty($CMessage)) { ?>
                     <div class="n_error"><p><?= $CMessage; ?></p></div>
                 <?php } ?>
@@ -44,7 +47,6 @@ $cs->registerScript('pagination',"
             <div class="entry">
                 <div class="sep"></div>
             </div>
-        <?php } ?>
         <table id="table">
                 <thead>
                         <tr>

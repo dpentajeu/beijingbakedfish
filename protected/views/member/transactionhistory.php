@@ -46,6 +46,7 @@ $cs->registerCss('label',"
 	<div class="entry">
 		<div class="sep"></div>
 	</div>
+	<h3><?= $title; ?></h3>
 	<p>* Balance is referred as your total amount of food point / cash point.</p>
 	<?php if(!empty($CMessage)) { ?>
 		<div class="n_error"><p><?php echo $CMessage; ?></p></div>

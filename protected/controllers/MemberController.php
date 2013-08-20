@@ -40,7 +40,7 @@ class MemberController extends Controller
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction'),
+				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember'),
 				'roles'=>array('admin'),
 				),
 			array('deny'),
@@ -297,9 +297,11 @@ class MemberController extends Controller
 
 	public function actionSms()
 	{
-		$userDropDownList = User::getUserDropDownList();
+		$model = new User;
+		$userDropDownList = $model->getUserDropDownList();
 		$CMessage = '';
 		$notice = '';
+		$credit = $model->checkSMSCredit();
 
 		if (isset($_POST['message']) && isset($_POST['member']))
 		{
@@ -324,7 +326,7 @@ class MemberController extends Controller
 			}
 		}
 
-		$this->render('sms', array('CMessage'=>$CMessage, 'notice'=>$notice, 'userDropDownList'=>$userDropDownList));
+		$this->render('sms', array('CMessage'=>$CMessage, 'notice'=>$notice, 'userDropDownList'=>$userDropDownList, 'credit'=>$credit));
 	}
 
 	public function actionTransaction()
@@ -404,24 +406,30 @@ class MemberController extends Controller
 		$filter = 'Deduct Redemption Point';
 		$model = Transaction::model();
 		$userDropDownList = User::getUserDropDownList();
+		$title = 'Report : ';		
 
 		if (!empty($_POST['filter']))
+		{
 			$filter = $_POST['filter'];
+			$title .= $_POST['filter'];
+		}
 
 		if (isset($_POST['DateFilter'])) {
 			list($from, $to) = array($_POST['DateFilter']['from'], $_POST['DateFilter']['to']);
 			if (empty($to)) $to = date("Y-m-d");
 			$criteria->addBetweenCondition('tranDate', "{$from} 0:0", "{$to} 23:59:59");
+			$title .= " [{$from} till {$to}]";
 		}
 
 		if (!empty($_POST['id']) && Yii::app()->user->roles == 'admin')
 			$id = $_POST['id'];
 
 		$model->user($id);
+		$title .= ' (Name : '.User::getReferralName($id).')';
 		$criteria->addSearchCondition('description', $filter);
 		$model = $model->findAll($criteria);
 		$total = count($model);
-		$this->render('transactionhistory',array('model'=>$model, 'userDropDownList'=>$userDropDownList, 'total'=>$total, 'filter' => compact('filter', 'from', 'to', 'id')));
+		$this->render('transactionhistory',array('model'=>$model, 'userDropDownList'=>$userDropDownList, 'total'=>$total, 'title'=>$title, 'filter' => compact('filter', 'from', 'to', 'id')));
 	}
 
 	public function actionNetwork()
@@ -690,7 +698,7 @@ class MemberController extends Controller
                             if (!$model->validate())
                                     throw new Exception("Please fill in all fields in the forms correctly.");
                             $model->referMember();
-                            $notice = 'Member has been created succesfully.';
+                            $notice = 'Member has been created succesfully and await for administrator approval.';
                             
                             $model = new User;
                             
