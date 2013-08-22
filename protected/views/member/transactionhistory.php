@@ -34,7 +34,7 @@ $cs->registerCss('label',"
 		<h2>Transaction history table</h2>
 		<p>Show all the transaction history.</p>
 		<p>
-			<?php echo CHtml::radioButtonList('filter', $filter['filter'], array('Deduct Redemption Point'=>'Bill', 'Sponsor bonus'=>'Sponsor bonus', 'Autoplacement bonus'=>'Autoplacement bonus', 'Transfer'=>'Transfer', 'Purchase'=>'Purchase credit', 'Withdraw'=>'Withdrawal'), array('separator'=>'&nbsp;&nbsp;')); ?>
+			<?php echo CHtml::radioButtonList('filter', $filter['filter'], array('Deduct'=>'Bill', 'Sponsor bonus'=>'Sponsor bonus', 'Autoplacement bonus'=>'Autoplacement bonus', 'Transfer'=>'Transfer', 'Purchase'=>'Purchase credit', 'Withdraw'=>'Withdrawal'), array('separator'=>'&nbsp;&nbsp;')); ?>
 			<?php if(Yii::app()->user->id ==1) echo '<br/><br/>'.Chtml::dropDownList('id',$filter['id'], $userDropDownList, array('prompt'=>'Select a customer')); ?>
 			<div style="margin: 1em 0 1.5em;">
 				<label style="margin: 0 .5em 0;">From</label><?php echo CHtml::textField('DateFilter[from]', $filter['from'], array('class'=>'datepicker')); ?>
@@ -47,7 +47,7 @@ $cs->registerCss('label',"
 		<div class="sep"></div>
 	</div>
 	<h3><?= $title; ?></h3>
-	<p>* Balance is referred as your total amount of food point / cash point.</p>
+	<p>* Balance is referred as your total amount of cash point / redemption point.</p>
 	<?php if(!empty($CMessage)) { ?>
 		<div class="n_error"><p><?php echo $CMessage; ?></p></div>
 	<?php } ?>
@@ -56,7 +56,7 @@ $cs->registerCss('label',"
 		<thead>
 			<tr>
 				<th scope="col">Date</th>
-				<?php if (Yii::app()->user->roles == 'admin') echo "<th scope='col'>Name</th>"; ?>
+				<th scope="col">Name</th>
 				<th scope="col">Type</th>
 				<th scope="col">Amount</th>
 				<th scope="col">Balance</th>
@@ -68,7 +68,7 @@ $cs->registerCss('label',"
 			<?php foreach ($model as $key=>$item) { ?>
 				<tr>
 					<td><?php echo $item['tranDate'] ?></td>
-					<?php if (Yii::app()->user->roles == 'admin') echo "<td>".$item['name']."</td>"; ?>
+					<td><?php echo $item->wallet->user['name']; ?></td>
 					<td><?php echo $item['tranType'] ?></td>
 					<td style="text-align: right;"><?php echo number_format($item['amount'], 2);?></td>
 					<td style="text-align: right;"><?php echo number_format($item['balance'], 2);?></td>

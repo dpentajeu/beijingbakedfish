@@ -31,16 +31,16 @@ class MemberController extends Controller
 					'transactionhistory',
 					'announcement',
 					'transferCP',
-                                        'transferCPtoFP',
+                    'transferCPtoFP',
 					'editmember',
-                                        'purchase',
-                                        'withdraw',
-                                        'refermember',
+                    'purchase',
+                    'withdraw',
+                    'refermember',
 					),
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember'),
+				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember', 'transferCP'),
 				'roles'=>array('admin'),
 				),
 			array('deny'),
@@ -336,23 +336,28 @@ class MemberController extends Controller
 		$CMessage = '';
 		$notice = '';
 
-		if(isset($_POST['amount']) && isset($_POST['User']))
+		if(isset($_POST['amountCP']) && isset($_POST['amountRP']) && isset($_POST['User']))
 		{
-			$amount = $_POST['amount'];
+			$amountCP = $_POST['amountCP'];
+			$amountRP = $_POST['amountRP'];
 			$model->attributes = $_POST['User'];
 
 			try {
 				if(empty($model->id))
 					throw new Exception('Please select a customer.');
 
-				if(is_null($amount) || $amount == 0)
-					throw new Exception('Please enter total bill amount.');
+				if(is_null($amountRP) || $amountRP == 0)
+					throw new Exception('Please enter total RP redepmtion amount.');
 
-				$model->transferFP($amount, 'CREDIT');
+				if(is_null($amountCP) || $amountCP < 0)
+					throw new Exception('Please enter total CP redemption amount.');
+
+				$model->deductFP($amountRP, 'CREDIT');
+				$model->deductCP($amountCP, 'CREDIT');
 				$user = User::getUser($model->id);
 				$wallet = $user->wallet;
-				$notice = 'Transaction is done successfully! Name: '.$user->name.' Balance: '.$wallet->foodPoint;
-				$msg = 'Your beijingbakedfish bill is RM '.$amount.', remaining  Food Point is '.$wallet->foodPoint.', thanks and come again.';
+				$notice = 'Transaction is done successfully! Name: '.$user->name.' Redepmtion Point: '.$wallet->foodPoint.', Cash Point is '.$wallet->cashPoint;
+				$msg = 'Your beijingbakedfish remaining Cash Point is '.$wallet->cashPoint.' & Redepmtion Point is '.$wallet->foodPoint.', thanks and come again.';
 				User::send_sms($user->contact,$msg);
 
 				$model = new User;
@@ -371,9 +376,10 @@ class MemberController extends Controller
 		$CMessage = '';
 		$notice = '';
 
-		if(isset($_POST['amount']) && isset($_POST['User']) && isset($_POST['date']))
+		if(isset($_POST['amountCP']) && isset($_POST['amountRP']) && isset($_POST['User']) && isset($_POST['date']))
 		{
-			$amount = $_POST['amount'];
+			$amountCP = $_POST['amountCP'];
+			$amountRP = $_POST['amountRP'];
 			$date = $_POST['date'];
 			$model->attributes = $_POST['User'];
 
@@ -381,13 +387,16 @@ class MemberController extends Controller
 				if(empty($model->id))
 					throw new Exception('Please select a customer.');
 
-				if(is_null($amount) || $amount == 0)
-					throw new Exception('Please enter total bill amount.');
+				if(is_null($amountRP) || $amountRP == 0)
+					throw new Exception('Please enter total RP redepmtion amount.');
 
-				$model->manualCreateBill($model->id, $amount, $date);
+				if(is_null($amountCP) || $amountCP < 0)
+					throw new Exception('Please enter total CP redemption amount.');
+
+				$model->manualCreateBill($model->id, $amountCP, $amountRP, $date);
 				$user = User::getUser($model->id);
 				$wallet = $user->wallet;
-				$notice = 'Transaction is done successfully! Name: '.$user->name.' Balance: '.$wallet->foodPoint;				
+				$notice = 'Transaction is done successfully! Name: '.$user->name.' Redepmtion Point: '.$wallet->foodPoint.', Cash Point is '.$wallet->cashPoint;				
 				$model = new User;
 			} catch (Exception $e) {
 				$CMessage = $e->getMessage();
@@ -403,10 +412,10 @@ class MemberController extends Controller
 		$criteria = new CDbCriteria;
 		$criteria->alias = 't';
 		$criteria->order = 't.trandate desc, t.id desc';
-		$filter = 'Deduct Redemption Point';
+		$filter = 'Deduct Point';
 		$model = Transaction::model();
 		$userDropDownList = User::getUserDropDownList();
-		$title = 'Report : ';		
+		$title = 'Report : ';
 
 		if (!empty($_POST['filter']))
 		{
@@ -422,9 +431,11 @@ class MemberController extends Controller
 		}
 
 		if (!empty($_POST['id']) && Yii::app()->user->roles == 'admin')
+		{
 			$id = $_POST['id'];
+			$model->user($id);
+		}
 
-		$model->user($id);
 		$title .= ' (Name : '.User::getReferralName($id).')';
 		$criteria->addSearchCondition('description', $filter);
 		$model = $model->findAll($criteria);

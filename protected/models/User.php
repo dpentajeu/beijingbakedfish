@@ -416,11 +416,11 @@ class User extends CActiveRecord
 		User::send_sms('6'.$user->contact, $msg);
 	}
 
-	public function transferFP($amount,$tranType)
+	public function deductFP($amount,$tranType)
 	{
 		$user = User::model()->findByAttributes(array('id'=>$this->id));
 
-		if($this->pin == $user->pin)
+		if(!empty($this->pin) && $this->pin == $user->pin)
 		{
 			if($tranType=='CREDIT')
 			{
@@ -439,20 +439,49 @@ class User extends CActiveRecord
 					));
 			}
 		}
-		else throw new Exception('This PIN is invalid!');
+		else 
+			throw new Exception('This PIN is invalid!');
 	}
 
-	public function manualCreateBill($id, $amount, $date)
+	public function deductCP($amount,$tranType)
+	{
+		$user = User::model()->findByAttributes(array('id'=>$this->id));
+
+		if($this->pin == $user->pin)
+		{
+			if($tranType=='CREDIT')
+			{
+				Transaction::create($user, array(
+					'amount'=>$amount,
+					'point'=>Transaction::TRAN_CP,
+					'type'=>'CREDIT',
+					'description'=>'Deduct Cash Point: '.$user->name.'.',
+					));
+			}
+		}
+		else 
+			throw new Exception('This PIN is invalid!');
+	}
+
+	public function manualCreateBill($id, $amountCP, $amountRP, $date)
 	{
 		$user = User::model()->findByAttributes(array('id'=>$id));
 
 		Transaction::create($user, array(
-			'amount'=>$amount,
+			'amount'=>$amountRP,
 			'point'=>Transaction::TRAN_FP,
 			'type'=>'CREDIT',
 			'date'=>$date,
 			'description'=>'Deduct Redemption Point: '.$user->name.'.',
 			));
+
+		Transaction::create($user, array(
+					'amount'=>$amountCP,
+					'point'=>Transaction::TRAN_CP,
+					'type'=>'CREDIT',
+					'date'=>$date,
+					'description'=>'Deduct Cash Point: '.$user->name.'.',
+					));
 	}
 
 	public static function transferCP($member, $curUser, $amount)
@@ -512,7 +541,7 @@ class User extends CActiveRecord
         
         if($this->referral != 1)
         {
-	        Transaction::create(User::getUser($this->referral), array(
+	        Transaction::create(User::getUser(Yii::app()->user->id), array(
 				'amount'=>$amount,
 				'point'=>Transaction::TRAN_CP,
 				'type'=>'CREDIT',
@@ -647,7 +676,7 @@ class User extends CActiveRecord
 		$result = array();
 
 		foreach ($user as $u) {
-			if($u->id != Yii::app()->user->id && $u->id != 1) $result[$u->id] = $u->name.' ('.$u->contact.') - [Food Point: '.number_format($u->foodPoint, 2).']';
+			if($u->id != Yii::app()->user->id && $u->id != 1) $result[$u->id] = $u->name.' ('.$u->contact.') - [CP: '.number_format($u->cashPoint, 2).' | RP:'.number_format($u->foodPoint, 2).']';
 		}
 
 		return $result;
