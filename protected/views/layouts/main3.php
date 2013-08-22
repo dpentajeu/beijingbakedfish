@@ -33,11 +33,7 @@ $cs->registerScript('navi-menu', "
 				'encodeLabel' => false,
 				'items' => array(
 					array('label' => 'Main control', 'items' => array(
-						array('label' => '&#8250; ' . (Yii::app()->user->roles=='admin' ? 'Member' : 'Account'), 'url'=>array('member/index')),
-						array('label' => '&#8250; Network', 'url'=>'#'),
-						array('label' => '&#8250; Transaction', 'url'=>'#', 'visible'=>Yii::app()->user->roles=='admin'),
-						array('label' => '&#8250; Transaction History', 'url'=>'#', 'visible'=>Yii::app()->user->roles!='admin'),
-						array('label' => '&#8250; SMS', 'url'=>'#', 'visible'=>Yii::app()->user->roles=='admin'),
+						array('label' => '&#8250; ' . (Yii::app()->user->roles=='admin' ? 'Member' : 'Account'), 'url'=>array('member/index'))
 						)),
 					),
 				)); ?>
