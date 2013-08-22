@@ -43,6 +43,10 @@ class MemberController extends Controller
 				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember', 'transferCP'),
 				'roles'=>array('admin'),
 				),
+			array('allow',
+				'actions'=>array('transaction'),
+				'roles'=>array('staff'),
+				),
 			array('deny'),
 		);
 	}
@@ -87,7 +91,7 @@ class MemberController extends Controller
 		else {
 			$model = User::getUser(Yii::app()->user->id);
 			if (is_null($model->pin))
-				$CMessage = 'Please remember set up your PIN for Food Point redemption.';
+				$CMessage = 'Please remember set up your PIN for Redemption Point redemption.';
 		}
 
 		$total = count($model);

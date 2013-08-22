@@ -45,7 +45,7 @@ $cs->registerScript('pagination',"
 
 			<tbody>
 				<?php
-				if (Yii::app()->user->roles == 'admin') {
+				if (Yii::app()->user->roles == 'admin' || Yii::app()->user->roles == 'staff') {
 					foreach ($model as $key=>$item) {
 				?>
 					<tr>
@@ -58,6 +58,7 @@ $cs->registerScript('pagination',"
 						<td class="align-center">
 							<a href="<?php echo $this->createUrl('member/editmember', array('id'=>$item['id'])); ?>" class="table-icon edit" title="Edit"></a>
 						</td>
+						<?php if (Yii::app()->user->roles == 'admin') { ?>
 						<td class="align-center">
 							<?php if($item['isApproved']==true){?>
 								<a href="<?php echo $this->createUrl('member/disapprove', array('id'=>$item['id'])); ?>">Block</a>
@@ -65,6 +66,7 @@ $cs->registerScript('pagination',"
 								<a href="<?php echo $this->createUrl('member/approve', array('id'=>$item['id'])); ?>">Approve</a>
 							 <?php }?>
 						</td>
+						<?php } ?>
 					</tr>
 				<?php
 					}
