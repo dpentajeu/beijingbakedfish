@@ -32,6 +32,17 @@
                                                 <?php echo $form->error($model,'password'); ?>
                                         </div>
 
+                                        <?php if(extension_loaded('gd')): ?>
+                                            <div class="row">           
+                                                <?php echo "Security Check" ?>
+                                                <?php echo $form->textField($model,'verifyCode', array('class'=>'text')); ?>                      
+                                                <div>
+                                                    <?php $this->widget('CCaptcha'); ?>
+                                                </div>
+                                                <?php echo $form->error($model,'verifyCode'); ?>
+                                            </div>
+                                        <?php endif; ?>
+
                                         <div class="row buttons">
                                                 <button type="submit" class="ok">Login</button> 
                                                 <a class="button" href="<?php echo Yii::app()->request->baseUrl; ?>/member/resetpassword" ?>Forgotten password?</a>

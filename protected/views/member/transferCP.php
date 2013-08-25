@@ -19,8 +19,11 @@
                         <label for="userDropDownList"><span style="color: red;">*</span>User contact number:</label>
                         <?php echo Chtml::textField('ph',''); ?>
                         <br/><br/>
-                        <label for="amound"><span style="color: red;">*</span>Cash Point:</label>
+                        <label for="amount"><span style="color: red;">*</span>Cash Point:</label>
                         <?php echo Chtml::textField('amount',''); ?>
+                        <br/><br/>
+                        <label for="ping"><span style="color: red;">*</span>Pin:</label>
+                        <?php echo Chtml::passwordField('pin',''); ?>
                 </div><br/>
                 <button type="submit" name="setpin">Submit</button>
             <?php $this->endWidget(); ?>

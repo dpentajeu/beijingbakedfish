@@ -19,7 +19,7 @@ class MemberController extends Controller
 	{
 		return array(
 			array('allow',
-				'actions'=>array('login','logout','resetpassword', 'manualsponsorbonus', 'revertsponsorbonus'),
+				'actions'=>array('login', 'captcha','logout','resetpassword', 'manualsponsorbonus', 'revertsponsorbonus'),
 				'users'=>array('*'),
 				),
 			array('allow',
@@ -145,7 +145,7 @@ class MemberController extends Controller
 	public function actionLogin()
 	{
 		$this->layout = 'login';
-		$model=new LoginForm;
+		$model = new LoginForm;
 
 		// if it is ajax validation request
 		if(isset($_POST['ajax']) && $_POST['ajax']==='login-form')
@@ -512,10 +512,11 @@ class MemberController extends Controller
 		$CMessage = '';
 		$notice = '';
 
-		if(isset($_POST['amount']) && isset($_POST['ph']))
+		if(isset($_POST['amount']) && isset($_POST['ph']) && isset($_POST['pin']))
 		{
 			$amount = $_POST['amount'];
 			$ph = $_POST['ph'];
+			$pin = $_POST['pin'];
 
 			try {
 				if (empty($ph))
@@ -526,6 +527,9 @@ class MemberController extends Controller
 
 				$member = User::getUserByPhone($ph);
 				$curUser = User::getUser(Yii::app()->user->id);
+
+				if($pin != $curUser->pin)
+					throw new Exception('Please enter a correct pin.');
 
 				User::transferCP($member,$curUser,$amount);
 
