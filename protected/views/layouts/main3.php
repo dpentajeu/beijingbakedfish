@@ -58,15 +58,26 @@ $cs->registerScript('navi-menu', "
 						array('label'=>'Refer a member', 'url'=>array('member/refermember'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
 						array('label'=>'Transaction', 'url'=>array('member/transaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>in_array(Yii::app()->user->roles, array('admin', 'staff'))),
 						array('label'=>'Manual transaction', 'url'=>array('member/manualtransaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
-						array('label'=>'Transaction history', 'url'=>array('member/transactionhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
-						array('label'=>'Purchase history', 'url'=>array('member/purchasehistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
-                        array('label'=>'Withdraw history', 'url'=>array('member/withdrawhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						array('label'=>'SMS', 'url'=>array('member/sms'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						array('label'=>'Set PIN', 'url'=>array('member/setpin'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
 						array('label'=>'Transfer point', 'url'=>array('member/transfercp'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
 						// array('label'=>'Transfer CP to RP', 'url'=>array('member/transfercptofp'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
                         array('label'=>'Purchase credit', 'url'=>array('member/purchase'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
 						array('label'=>'Withdrawal', 'url'=>array('member/withdraw'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
+						)
+					)); ?>
+			</div>
+			<div class="box">
+				<div class="h_title">&#8250; Report</div>
+				<?php $this->widget('zii.widgets.CMenu', array(
+					'id' => 'home',
+					// 'activateItems' => true, // uncomment this line if you need it.
+					// 'activeCssClass' => 'current', // uncomment this line if you need it.
+					'itemCssClass' => 'b2',
+					'items' => array(
+						array('label'=>'Transaction history', 'url'=>array('member/transactionhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
+						array('label'=>'Purchase history', 'url'=>array('member/purchasehistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
+                        array('label'=>'Withdraw history', 'url'=>array('member/withdrawhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						)
 					)); ?>
 			</div>
