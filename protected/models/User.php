@@ -361,23 +361,25 @@ class User extends CActiveRecord
 	public function approveUser($id)
 	{
 		$user = User::model()->findByAttributes(array('id'=>$id));
+		$first_time_activate = $user->isActivated;
 
 		$user->isApproved = true;
-		if(!$user->isActivated)
-		{
+		if (!$first_time_activate)
 			$user->isActivated = 1;
-			$msg = 'Your account is activated, login via www.beijingbakedfish.com/member, with phone number and default password is abc123, thanks.';
-			$this->send_sms($user->contact,$msg);
-		}
 
-		if (!$user->save())
-		{
+		if (!$user->update()) {
 			$error = '';
-			foreach ($user->getErrors() as $key) {
+			foreach ($user->getErrors() as $key)
 				$error .= $key[0];
-			}
 			throw new Exception($user->getErrors());
 		}
+
+		if (!$first_time_activate) {
+			Binary::model($user);
+			$msg = 'Your account is activated, login via www.beijingbakedfish.com/member, with phone number and default password is abc123, thanks.';
+			$this->send_sms($user->contact, $msg);
+		}
+
 	}
 
 	public function disapproveUser($id)

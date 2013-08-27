@@ -20,10 +20,15 @@ $cs->registerCss('binary-tree', "
 		margin: 0 0 0 50%;
 	}
 	");
+$cs->registerScript('binary-tree', "
+	$('#binary-tree').parent().scrollLeft(3773);
+	");
 ?>
 <div class="full_w">
 	<div class="h_title">Search for customer binary network view</div>
 	<?php $form = $this->beginWidget('CActiveForm', array(
+		'action'=>array('member/binarynetwork'),
+		'method'=>'GET',
 		'enableClientValidation'=>true,
 		'clientOptions'=>array(
 			'validateOnSubmit'=>true,
@@ -36,7 +41,7 @@ $cs->registerCss('binary-tree', "
 		<button>Search</button>
 	<?php $this->endWidget(); ?>
 </div>
-
+<!--
 <div class="full_w">
 	<div class="h_title">Create new binary node</div>
 	<?php $form = $this->beginWidget('CActiveForm', array(
@@ -56,9 +61,22 @@ $cs->registerCss('binary-tree', "
 		<button>Create</button>
 	<?php $this->endWidget(); ?>
 </div>
-
+-->
 <div class="full_w">
 <p>You are now viewing <?php echo $model->name; ?>'s binary network: </p>
+<p><?php echo $model->name; ?> owns <?php echo count($model->binaryNodes) . ' ' . Yii::t('plural', 'unit|units', count($model->binaryNodes)); ?>. Click on the following to view his/her binary network.</p>
+<ol>
+	<?php
+	$param = array('search_id'=>$selector);
+	foreach ($model->binaryNodes as $index => $m) {
+		$param['node_index'] = $index;
+		$link = CHtml::link($model->name, array_merge(array(''), $param));
+		if ($node_index == $index)
+			$link .= " (You are now viewing here)";
+		echo CHtml::tag('li', array(), $link);
+	}
+	?>
+</ol>
 <div style="width: 100%; overflow: scroll;">
 <table id="binary-tree">
 <?php

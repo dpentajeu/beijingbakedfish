@@ -542,8 +542,8 @@ class MemberController extends Controller
 
 		$this->render('transferCP',array('CMessage'=>$CMessage,'notice'=>$notice));
 	}
-        
-        public function actionTransferCPtoFP()
+
+	public function actionTransferCPtoFP()
 	{
 		$CMessage = '';
 		$notice = '';
@@ -555,7 +555,7 @@ class MemberController extends Controller
 			try {
 				if (empty($amount))
 					throw new Exception('Please enter cash point.');
-                                
+
 				$member = User::getUser(Yii::app()->user->id);
 
 				User::transferCPtoFP($member,$amount);
@@ -734,25 +734,35 @@ class MemberController extends Controller
 	public function actionBinarynetwork()
 	{
 		$tree = array();
+		$param = array();
+		$total_level = 10;
+
 		$member_list = User::getUserDropDownList();
-		$total_level = 9;
 
 		try {
-			$root_id = empty($_POST['search_id']) ? Yii::app()->user->id : $_POST['search_id'];
-			$model = User::model()->findByAttributes(array('id'=>$root_id));
+			$selector = empty($_GET['search_id']) ? Yii::app()->user->id : $_GET['search_id'];
+			$model = User::model()->with('binaryNodes')->findByAttributes(array('id'=>$selector));
+			$node_index = 0;
+
 			if (empty($model))
 				throw new Exception("No such customer found.");
 
 			if (!empty($_POST['insert_id']))
 				Binary::create($_POST['insert_id'], array('num_of_nodes' => $_POST['insert_num']));
 
-			if (!empty($model->binary))
-				$tree = $model->binary->getTree($total_level);
+			if (!empty($_GET['node_index']))
+				$node_index = intval($_GET['node_index']);
+
+			if (!empty($model->binaryNodes[$node_index]))
+				$tree = $model->binaryNodes[$node_index]->getTree($total_level);
 		} catch (Exception $e) {
 			throw new CHttpException(404, $e->getMessage());
 		}
 
-		$this->render('binarynetwork', array('model'=>$model, 'tree'=>$tree, 'member_list'=>$member_list, 'selector'=>$root_id, 'total_level'=>$total_level));
+		$view = 'binarynetwork';
+		$param = compact('model', 'tree', 'member_list', 'selector', 'total_level', 'node_index');
+
+		$this->render($view, $param);
 	}
 
     public function actionManualsponsorbonus($id = null)
