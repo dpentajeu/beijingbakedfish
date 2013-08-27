@@ -36,8 +36,8 @@ $cs->registerScript('pagination',"
 					<th scope="col">Contact</th>
 					<th scope="col">Referral</th>
 					<th scope="col">Package</th>
-					<th scope="col" style="width: 65px;">Food Point</th>
-					<th scope="col" style="width: 65px;">Cash Point</th>
+					<th scope="col">Redemption Point</th>
+					<th scope="col">Cash Point</th>
 					<th scope="col" style="width: 35px;">Action</th>
 					<?php if (Yii::app()->user->roles == 'admin') echo CHtml::tag('th', array('scope' => 'col'), 'Status'); ?>
 				</tr>
@@ -45,7 +45,7 @@ $cs->registerScript('pagination',"
 
 			<tbody>
 				<?php
-				if (Yii::app()->user->roles == 'admin') {
+				if (Yii::app()->user->roles == 'admin' || Yii::app()->user->roles == 'staff') {
 					foreach ($model as $key=>$item) {
 				?>
 					<tr>
@@ -58,6 +58,7 @@ $cs->registerScript('pagination',"
 						<td class="align-center">
 							<a href="<?php echo $this->createUrl('member/editmember', array('id'=>$item['id'])); ?>" class="table-icon edit" title="Edit"></a>
 						</td>
+						<?php if (Yii::app()->user->roles == 'admin') { ?>
 						<td class="align-center">
 							<?php if($item['isApproved']==true){?>
 								<a href="<?php echo $this->createUrl('member/disapprove', array('id'=>$item['id'])); ?>">Block</a>
@@ -65,6 +66,7 @@ $cs->registerScript('pagination',"
 								<a href="<?php echo $this->createUrl('member/approve', array('id'=>$item['id'])); ?>">Approve</a>
 							 <?php }?>
 						</td>
+						<?php } ?>
 					</tr>
 				<?php
 					}

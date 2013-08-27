@@ -33,11 +33,7 @@ $cs->registerScript('navi-menu', "
 				'encodeLabel' => false,
 				'items' => array(
 					array('label' => 'Main control', 'items' => array(
-						array('label' => '&#8250; ' . (Yii::app()->user->roles=='admin' ? 'Member' : 'Account'), 'url'=>array('member/index')),
-						array('label' => '&#8250; Network', 'url'=>'#'),
-						array('label' => '&#8250; Transaction', 'url'=>'#', 'visible'=>Yii::app()->user->roles=='admin'),
-						array('label' => '&#8250; Transaction History', 'url'=>'#', 'visible'=>Yii::app()->user->roles!='admin'),
-						array('label' => '&#8250; SMS', 'url'=>'#', 'visible'=>Yii::app()->user->roles=='admin'),
+						array('label' => '&#8250; ' . (Yii::app()->user->roles=='admin' ? 'Member' : 'Account'), 'url'=>array('member/index'))
 						)),
 					),
 				)); ?>
@@ -55,21 +51,22 @@ $cs->registerScript('navi-menu', "
 					'itemCssClass' => 'b2',
 					'items' => array(
 						array('label'=>Yii::app()->user->roles == 'admin' ? 'Member' : 'Account', 'url'=>array('member/index'), 'linkOptions'=>array('class'=>'icon report')),
-						array('label'=>'Change password', 'url'=>array('member/changepassword'), 'linkOptions'=>array('class'=>'icon report')),
-						array('label'=>'Announcement', 'url'=>array('member/announcement'), 'linkOptions'=>array('class'=>'icon report')),
-						array('label'=>'Network', 'url'=>array('member/network'), 'linkOptions'=>array('class'=>'icon report')),
+						array('label'=>'Change password', 'url'=>array('member/changepassword'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
+						array('label'=>'Announcement', 'url'=>array('member/announcement'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
+						array('label'=>'Network', 'url'=>array('member/network'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
 						array('label'=>'Binary Network', 'url'=>array('member/binarynetwork'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
-						array('label'=>'Transaction', 'url'=>array('member/transaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
-						array('label'=>'Transaction history', 'url'=>array('member/transactionhistory'), 'linkOptions'=>array('class'=>'icon report')),
+						array('label'=>'Refer a member', 'url'=>array('member/refermember'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
+						array('label'=>'Transaction', 'url'=>array('member/transaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>in_array(Yii::app()->user->roles, array('admin', 'staff'))),
+						array('label'=>'Manual transaction', 'url'=>array('member/manualtransaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
+						array('label'=>'Transaction history', 'url'=>array('member/transactionhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
 						array('label'=>'Purchase history', 'url'=>array('member/purchasehistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
-                                                array('label'=>'Withdraw history', 'url'=>array('member/withdrawhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
+                        array('label'=>'Withdraw history', 'url'=>array('member/withdrawhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						array('label'=>'SMS', 'url'=>array('member/sms'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
-						array('label'=>'Set PIN', 'url'=>array('member/setpin'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
-						array('label'=>'Refer a member', 'url'=>array('member/refermember'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
-						array('label'=>'Transfer point', 'url'=>array('member/transfercp'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
-						array('label'=>'Transfer CP to FP', 'url'=>array('member/transfercptofp'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
-                                                array('label'=>'Purchase credit', 'url'=>array('member/purchase'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
-						array('label'=>'Withdrawal', 'url'=>array('member/withdraw'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
+						array('label'=>'Set PIN', 'url'=>array('member/setpin'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
+						array('label'=>'Transfer point', 'url'=>array('member/transfercp'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
+						// array('label'=>'Transfer CP to RP', 'url'=>array('member/transfercptofp'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
+                        array('label'=>'Purchase credit', 'url'=>array('member/purchase'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
+						array('label'=>'Withdrawal', 'url'=>array('member/withdraw'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
 						)
 					)); ?>
 			</div>

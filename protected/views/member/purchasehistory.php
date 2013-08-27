@@ -32,22 +32,26 @@ $cs->registerScript('pagination',"
                             <th scope="col">Amount</th>
                             <th scope="col">Remark</th> 
                             <th scope="col">Action</th>
+                            <th scope="col">View</th>
                         </tr>
                 </thead>
 
                 <tbody>
                     
-                    <?php foreach ($list as $item) { ?>
+                    <?php foreach ($list as $item) {
+                        $filename = "purchase_credit_" . md5($item->id) . ".jpg";
+                        $folder = Yii::getPathOfAlias('application') . "/../assets/uploads/"; ?>
                                 <tr>
                                         <td><?= $item->tranDate; ?></td>
                                         <td><?= $item->wallet->user->name; ?></td>
                                         <td><?= $item->wallet->user->contact; ?></td>
                                         <td><?= number_format($item->amount, 2);?></td>
                                         <td><?= $item->remark; ?></td>
-                                        <td><?php if($item->status == 0) 
+                                        <td align="center"><?php if($item->status == 0) 
                                             echo "<a href='{$baseUrl}/member/purchasehistory?id={$item->id}&action=true'>Confirm</a>&nbsp&nbsp<a href='{$baseUrl}/member/purchasehistory?id={$item->id}&action=false'>Cancel</a>";
                                         if($item->status == 1) echo 'Confirmed';
                                         if($item->status == 2) echo 'Cancelled'; ?></td>
+                                        <td align="center"><?php echo file_exists($folder . $filename) ? CHtml::link("view", "{$baseUrl}/assets/uploads/{$filename}", array('target'=>'_blank')) : "" ; ?></td>
                                 </tr>
                     <?php  }?>
                 </tbody>

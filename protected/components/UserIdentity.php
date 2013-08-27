@@ -19,6 +19,17 @@ class UserIdentity extends CUserIdentity
 	 */
 	public function authenticate()
 	{
+		//check staff first
+		$staff = Staff::model()->findByAttributes(array('username'=>$this->username, 'password'=>md5($this->password)));
+		if(!is_null($staff))
+		{
+			$this->errorCode=self::ERROR_NONE;
+			$this->_id = 1;
+			$role = 'staff';
+			$this->setState('roles',$role);
+			return !$this->errorCode;
+		}
+
 		$user = User::model()->findByAttributes(array('contact'=>$this->username));
 		if(is_null($user))
 			$this->errorCode=self::ERROR_USERNAME_INVALID;

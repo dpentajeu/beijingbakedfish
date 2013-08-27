@@ -36,7 +36,7 @@ $cs->registerScript('',"
                         'validateOnSubmit'=>true,
                         ),
                 )); ?>
-                * Warning: Messages are subjected to the SMS quota available.<br/><br/>
+                * Warning: Messages are subjected to the SMS quota available. Credit remaining : <?php curl_exec($credit); ?><br/><br/>
                 <p><?php echo CHtml::radioButtonList('member', null, array(1=>'To particular member', 2=>'To all members'), array('separator'=>'&nbsp;&nbsp;')); ?></p>
                 <?php echo Chtml::dropDownList('id','', $userDropDownList, array('prompt'=>'Select a customer')); ?>
                 <div class="element">

@@ -109,22 +109,21 @@ class Purchase extends CActiveRecord
 	/**
 	*	Purchase create
 	**/
-	public function purchaseCredit($user)
+	public function purchaseCredit(User $user)
 	{
-		$model = new Purchase;
-		$today = date('Y-m-d H:i:s');
-		$model->attributes = array(
+		$this->attributes = array(
 			'walletId' => $user->wallet->id,
 			'amount' => $this->amount,
 			'balance' => $user->wallet->cashPoint,
-			'tranDate' => $today,
+			'tranDate' => date('Y-m-d H:i:s'),
 			'remark' => $this->remark,
 			);
 
-		if(!$model->save()){
-			Yii::log("Fail to create purchase for user {$user->name} ({$user->id}). \n" . var_export($model->getErrors(), true), "error", "application.models.Purchase");
-			throw new Exception(var_export($model->getErrors(), true), 100);
-		}			
+		if(!$this->save()){
+			Yii::log("Fail to create purchase for user {$user->name} ({$user->id}). \n" . var_export($this->getErrors(), true), "error", "application.models.Purchase");
+			throw new Exception(var_export($this->getErrors(), true), 100);
+		}
+		return $this;
 	}
 
 	/**

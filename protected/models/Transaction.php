@@ -117,7 +117,17 @@ class Transaction extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
-		
+
+	public function user($id)
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			'with' => 'wallet.user',
+			'condition' => 'user.id = :id',
+			'params' => array(':id' => $id),
+			));
+		return $this;
+	}
+
 	public static function transferFP(User $user, array $attributes = array())
 	{
 		list($amount, $type, $point, $description, $date) = array(0.0, 'CREDIT', 'FP' ,'', date('Y-m-d H:i:s'));

@@ -317,7 +317,7 @@ class User extends CActiveRecord
 
 		$password = $this->random_code(6);
 
-		$msg = 'From Beijing Baked Fish Restaurant: Reser Password. New password requested is '.$password.'.';
+		$msg = 'From Beijing Baked Fish Restaurant: Reset Password. New password requested is '.$password.'.';
 
 		$sms = User::send_sms('6'.$this->contact, $msg);
 
@@ -417,18 +417,18 @@ class User extends CActiveRecord
 		User::send_sms('6'.$user->contact, $msg);
 	}
 
-	public function transferFP($amount,$tranType)
+	public function deductFP($amount,$tranType)
 	{
 		$user = User::model()->findByAttributes(array('id'=>$this->id));
 
-		if($this->pin == $user->pin)
+		if(!empty($this->pin) && $this->pin == $user->pin)
 		{
 			if($tranType=='CREDIT')
 			{
 				Transaction::transferFP($user, array(
 					'amount'=>$amount,
 					'type'=>'CREDIT', 
-					'description'=>'Deduct Food Point: '.$user->name.'.',
+					'description'=>'Deduct Redemption Point: '.$user->name.'.',
 					));
 			}
 			else
@@ -436,11 +436,53 @@ class User extends CActiveRecord
 				Transaction::transferFP($user, array(
 					'amount'=>$amount,
 					'type'=>'DEBIT',
-					'description'=>'Transfer Food Point from '.$user->name.'.',
+					'description'=>'Transfer Redemption Point from '.$user->name.'.',
 					));
 			}
 		}
-		else throw new Exception('This PIN is invalid!');
+		else 
+			throw new Exception('This PIN is invalid!');
+	}
+
+	public function deductCP($amount,$tranType)
+	{
+		$user = User::model()->findByAttributes(array('id'=>$this->id));
+
+		if($this->pin == $user->pin)
+		{
+			if($tranType=='CREDIT')
+			{
+				Transaction::create($user, array(
+					'amount'=>$amount,
+					'point'=>Transaction::TRAN_CP,
+					'type'=>'CREDIT',
+					'description'=>'Deduct Cash Point: '.$user->name.'.',
+					));
+			}
+		}
+		else 
+			throw new Exception('This PIN is invalid!');
+	}
+
+	public function manualCreateBill($id, $amountCP, $amountRP, $date)
+	{
+		$user = User::model()->findByAttributes(array('id'=>$id));
+
+		Transaction::create($user, array(
+			'amount'=>$amountRP,
+			'point'=>Transaction::TRAN_FP,
+			'type'=>'CREDIT',
+			'date'=>$date,
+			'description'=>'Deduct Redemption Point: '.$user->name.'.',
+			));
+
+		Transaction::create($user, array(
+					'amount'=>$amountCP,
+					'point'=>Transaction::TRAN_CP,
+					'type'=>'CREDIT',
+					'date'=>$date,
+					'description'=>'Deduct Cash Point: '.$user->name.'.',
+					));
 	}
 
 	public static function transferCP($member, $curUser, $amount)
@@ -491,17 +533,22 @@ class User extends CActiveRecord
 	{
 		$this->email = User::findEmail($this->email);
 		$this->contact = User::findContact($this->contact);
+		$this->referral = User::findReferral($this->referral);
 
                 if($this->packageId == 1) $amount = 500;
 		if($this->packageId == 2) $amount = 1500;
 		if($this->packageId == 3) $amount = 3500;
                 
-                Transaction::create(User::getUser(Yii::app()->user->id), array(
-			'amount'=>$amount,
-			'point'=>Transaction::TRAN_CP,
-			'type'=>'CREDIT',
-			'description'=>'Transfer Cash Point to refer a member : '.$this->name.', Package : '.Package::getPackageName($this->packageId),
-			));
+        
+        if($this->referral != 1)
+        {
+	        Transaction::create(User::getUser(Yii::app()->user->id), array(
+				'amount'=>$amount,
+				'point'=>Transaction::TRAN_CP,
+				'type'=>'CREDIT',
+				'description'=>'Transfer Cash Point to refer a member : '.$this->name.', Package : '.Package::getPackageName($this->packageId),
+				));
+    	}
                 
 		$user = new User;
 		$user->attributes = array(
@@ -509,7 +556,7 @@ class User extends CActiveRecord
 			'email'=>$this->email,
 			'contact'=>$this->contact,
 			'packageId'=>$this->packageId,
-			'referral'=>Yii::app()->user->id,
+			'referral'=>$this->referral,
 			'dateOfBirth'=>date('Y-m-d', strtotime($this->dateOfBirth)),
 			'created'=>date('Y-m-d H:i:s'),
 			'password' => md5('abc123'),
@@ -582,6 +629,27 @@ class User extends CActiveRecord
 		return $user;
 	}
 
+	public static function getUserByPhone($ph)
+	{
+		$user = User::model()->findByAttributes(array('contact'=>$ph));
+
+		if(is_null($user))
+			throw new Exception("User is not found!", 1);			
+
+		$user->packageName = Package::getPackageName($user->packageId);
+		$user->referralName = User::getReferralName($user->referral);
+
+		$wallet = $user->wallet;
+		if(!is_null($wallet))
+		{
+			$user->foodPoint = $wallet->foodPoint;
+			$user->cashPoint = $wallet->cashPoint;
+			$user->bonusAmount = $wallet->bonusAmount;
+		}
+
+		return $user;
+	}
+
 	public static function getAllUser()
 	{
 		$user = User::model()->findAll(array('order'=>'name'));
@@ -609,7 +677,7 @@ class User extends CActiveRecord
 		$result = array();
 
 		foreach ($user as $u) {
-			if($u->id != Yii::app()->user->id && $u->id != 1) $result[$u->id] = $u->name.' ('.$u->packageName.') - [Food Point: '.number_format($u->foodPoint, 2).']';
+			if($u->id != Yii::app()->user->id && $u->id != 1) $result[$u->id] = $u->name.' ('.$u->contact.') - [CP: '.number_format($u->cashPoint, 2).' | RP:'.number_format($u->foodPoint, 2).']';
 		}
 
 		return $result;
@@ -652,6 +720,15 @@ class User extends CActiveRecord
 			throw new Exception('Fail to send!');
 		}
 		return $ok;
+	}
+
+	public function checkSMSCredit()
+	{
+		$query_string = 'http://gateway.onewaysms.com.my:10001/bulkcredit.aspx'.'?apiusername='.'API5Y6NCVIFEQ'.'&apipassword='.'API5Y6NCVIFEQ5Y6NC';
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $query_string);
+		curl_setopt($ch, CURLOPT_HTTPGET, true);
+		return $ch;
 	}
 
 	private function randomWithLength($length)
