@@ -77,6 +77,11 @@ $cs->registerScript('binary-tree', "
 	}
 	?>
 </ol>
+<p>Legend:</p>
+<ul style="list-style-type: none; margin-left: 15px;">
+	<li><?php echo CHtml::image($baseUrl . "/images/i_ok.png", '', array('style'=>'float: left;')); ?><span style="padding: 2px; float: left;">Taken unit</span></li>
+	<li><?php echo CHtml::image($baseUrl . "/images/i_delete.png", '', array('style'=>'float: left;')); ?><span style="padding: 2px; float: left;">Empty unit</span></li>
+</ul>
 <div style="width: 100%; overflow: scroll;">
 <table id="binary-tree">
 <?php
