@@ -21,7 +21,7 @@ $cs->registerScript('',"
 ?>
 
 <div class="full_w">
-        <div class="h_title">SMS to all members</div>
+        <div class="h_title"><?php echo Yii::t('memberpanel', 'SMS'); ?></div>
         <div class="form">
             <?php if(!empty($CMessage)) { ?>
 		<div class="n_error"><p><?= $CMessage; ?></p></div>
@@ -36,14 +36,14 @@ $cs->registerScript('',"
                         'validateOnSubmit'=>true,
                         ),
                 )); ?>
-                * Warning: Messages are subjected to the SMS quota available. Credit remaining : <?php curl_exec($credit); ?><br/><br/>
-                <p><?php echo CHtml::radioButtonList('member', null, array(1=>'To particular member', 2=>'To all members'), array('separator'=>'&nbsp;&nbsp;')); ?></p>
+                * <?php echo Yii::t('memberpanel', 'sms1'); ?><?php curl_exec($credit); ?><br/><br/>
+                <p><?php echo CHtml::radioButtonList('member', null, array(1=>Yii::t('memberpanel', 'ParticularMember'), 2=>Yii::t('memberpanel', 'AllMember')), array('separator'=>'&nbsp;&nbsp;')); ?></p>
                 <?php echo Chtml::dropDownList('id','', $userDropDownList, array('prompt'=>'Select a customer')); ?>
                 <div class="element">
-                        <label for="message">Message:</label><br/>
+                        <label for="message"><?php echo Yii::t('memberpanel', 'message'); ?>:</label><br/>
                         <?php echo Chtml::textarea('message','',array('style'=>'resize: none;width:450px;height:250px;')); ?>
                 </div><br/>
-                <button type="submit">Send</button>
+                <button type="submit"><?php echo Yii::t('memberpanel', 'Send'); ?></button>
             <?php $this->endWidget(); ?>
         </div>
 </div>

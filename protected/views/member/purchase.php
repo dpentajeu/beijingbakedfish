@@ -14,9 +14,9 @@ $cs->registerScript('pagination',"
 	");
 	?>
 <div class="full_w">
-	<div class="h_title">Purchase Credit</div>
+	<div class="h_title"><?php echo Yii::t('memberpanel', 'PurchaseCredit'); ?></div>
 		<div class="form">
-			<div class="n_warning"><p>Note: Please submit your cash point purchase request using the form below.</p></div>
+			<div class="n_warning"><p><?php echo Yii::t('memberpanel', 'PurchaseCredit1'); ?></p></div>
 			<?php if(!empty($CMessage)) { ?>
 				<div class="n_error"><p><?php echo $CMessage; ?></p></div>
 			<?php } ?>
@@ -33,14 +33,14 @@ $cs->registerScript('pagination',"
 				'htmlOptions'=>array('enctype'=>'multipart/form-data'),
 				)); ?>
 				<div class="element">
-					<label for="Purchase_amount">CP amount:</label>
+					<label for="Purchase_amount"><?php echo Yii::t('memberpanel', 'CashPoint'); ?>:</label>
 					<?php echo $form->textfield($model, 'amount', array('style'=>'width:450px;')); ?><br/><br/>
-					<label for="Purchase_remark">Remarks:</label>
+					<label for="Purchase_remark"><?php echo Yii::t('memberpanel', 'Remark'); ?>:</label>
 					<?php echo $form->textfield($model, 'remark', array('style'=>'width:450px;')); ?><br/><br/>
-					<label for="statement">Upload slip:</label>
+					<label for="statement"><?php echo Yii::t('memberpanel', 'Upload'); ?>:</label>
 					<?php echo CHtml::fileField('statement'); ?>
 				</div><br/>
-				<button type="submit">Submit</button>
+				<button type="submit"><?php echo Yii::t('memberpanel', 'Submit'); ?></button>
 			<?php $this->endWidget(); ?>
 		</div>
 		<div class="entry">
@@ -49,11 +49,11 @@ $cs->registerScript('pagination',"
 	<table id="table">
 		<thead>
 			<tr>
-				<th scope="col" style="width: 70px;">Date</th>
-				<th scope="col" style="width: 150px;">Amount</th>
-				<th scope="col">Remark</th>
-				<th scope="col">Status</th>
-				<th scope="col">View</th>
+				<th scope="col" style="width: 70px;"><?php echo Yii::t('memberpanel', 'Date'); ?></th>
+				<th scope="col" style="width: 150px;"><?php echo Yii::t('memberpanel', 'Amount'); ?></th>
+				<th scope="col"><?php echo Yii::t('memberpanel', 'Remark'); ?></th>
+				<th scope="col"><?php echo Yii::t('memberpanel', 'Status'); ?></th>
+				<th scope="col"><?php echo Yii::t('memberpanel', 'View'); ?></th>
 			</tr>
 		</thead>
 		<tbody>

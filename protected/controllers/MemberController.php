@@ -36,6 +36,7 @@ class MemberController extends Controller
                     'purchase',
                     'withdraw',
                     'refermember',
+                                        'lang',
 					),
 				'users'=>array('@'),
 				),
@@ -61,6 +62,13 @@ class MemberController extends Controller
 
 		return true;
 	}
+        
+        public function init()
+	{
+		parent::init();
+		if (isset(Yii::app()->session['_lang']))
+			Yii::app()->language = Yii::app()->session['_lang'];
+	}
 
 	public function actions()
 	{
@@ -76,6 +84,13 @@ class MemberController extends Controller
 				'class'=>'CViewAction',
 			),
 		);
+	}
+        
+        public function actionLang($_lang)
+	{
+		$app = Yii::app();
+		$app->session['_lang'] = $_lang;
+		$this->redirect(array('member/index'));
 	}
 
 	/**

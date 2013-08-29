@@ -14,15 +14,14 @@ $cs->registerScript('pagination',"
 
 <div class="full_w">
 <?php if (Yii::app()->user->roles == 'admin') { ?>
-	<div class="h_title">Member</div>
-	<h2>Member table</h2>
-	<p>Add and edit member table</p>
-	<p>Total members: <?php echo $total; ?></p>
+	<div class="h_title"><?php echo Yii::t('memberpanel', 'Member'); ?></div>
+	<h2><?php echo Yii::t('memberpanel', 'MemberTable'); ?></h2>
+	<p><?php echo Yii::t('memberpanel', 'TotalMember'); ?>: <?php echo $total; ?></p>
 	<div class="entry">
 		<div class="sep"></div>
 	</div>
 <?php } else { ?>
-	<div class="h_title">My Account</div>
+	<div class="h_title"><?php echo Yii::t('memberpanel', 'Account'); ?></div>
 <?php } ?>
 
 <?php if(!empty($CMessage)) { ?>
@@ -32,14 +31,14 @@ $cs->registerScript('pagination',"
 		<table id="table">
 			<thead>
 				<tr>
-					<th scope="col">Name</th>
-					<th scope="col">Contact</th>
-					<th scope="col">Referral</th>
-					<th scope="col">Package</th>
-					<th scope="col">Redemption Point</th>
-					<th scope="col">Cash Point</th>
-					<th scope="col" style="width: 35px;">Action</th>
-					<?php if (Yii::app()->user->roles == 'admin') echo CHtml::tag('th', array('scope' => 'col'), 'Status'); ?>
+					<th scope="col"><?php echo Yii::t('memberpanel', 'Name'); ?></th>
+					<th scope="col"><?php echo Yii::t('memberpanel', 'Phone'); ?></th>
+					<th scope="col"><?php echo Yii::t('memberpanel', 'Referral'); ?></th>
+					<th scope="col"><?php echo Yii::t('memberpanel', 'Package'); ?></th>
+					<th scope="col"><?php echo Yii::t('memberpanel', 'RedemptionPoint'); ?></th>
+					<th scope="col"><?php echo Yii::t('memberpanel', 'CashPoint'); ?></th>
+					<th scope="col" style="width: 35px;"><?php echo Yii::t('memberpanel', 'Action'); ?></th>
+					<?php if (Yii::app()->user->roles == 'admin') echo CHtml::tag('th', array('scope' => 'col'), Yii::t('memberpanel', 'Status')); ?>
 				</tr>
 			</thead>
 
