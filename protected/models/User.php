@@ -48,6 +48,8 @@ class User extends CActiveRecord
 	public $newPin2;
 	public $oldPin;
 
+	public $total_sales;
+
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
@@ -95,6 +97,7 @@ class User extends CActiveRecord
 		return array(
 			'wallet' => array(self::HAS_ONE, 'Wallet', 'userId'),
 			'package' => array(self::BELONGS_TO, 'Package', 'packageId'),
+			'binary' => array(self::HAS_ONE, 'Binary', 'userId', 'order'=>'id ASC'),
 			'binaryNodes' => array(self::HAS_MANY, 'Binary', 'userId'),
 			'referredUsers' => array(self::HAS_MANY, 'User', 'referral'),
 			'sponsor' => array(self::BELONGS_TO, 'User', 'referral', 'with'=>'package'),
@@ -163,6 +166,33 @@ class User extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	public function scopes()
+	{
+		return array(
+			'approved' => array(
+				'condition' => 'isApproved = 1',
+				),
+			);
+	}
+
+	public function between($start, $end)
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			'condition' => 'created BETWEEN :start AND :end',
+			'params' => array(':start' => $start, ':end' => $end),
+			));
+		return $this;
+	}
+
+	public function sales()
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			'with' => 'package',
+			'select' => 'SUM(package.value) as total_sales'
+			));
+		return $this;
 	}
 
 	public static function findEmail($email)
@@ -360,22 +390,23 @@ class User extends CActiveRecord
 	public function approveUser($id)
 	{
 		$user = User::model()->findByAttributes(array('id'=>$id));
+		$first_time_activate = $user->isActivated;
 
 		$user->isApproved = true;
-		if(!$user->isActivated)
-		{
+		if (!$first_time_activate)
 			$user->isActivated = 1;
-			$msg = 'Your account is activated, login via www.beijingbakedfish.com/member, with phone number and default password is abc123, thanks.';
-			$this->send_sms($user->contact,$msg);
+
+		if (!$user->update()) {
+			$error = '';
+			foreach ($user->getErrors() as $key)
+				$error .= $key[0];
+			throw new Exception($user->getErrors());
 		}
 
-		if (!$user->save())
-		{
-			$error = '';
-			foreach ($user->getErrors() as $key) {
-				$error .= $key[0];
-			}
-			throw new Exception($user->getErrors());
+		if (!$first_time_activate) {
+			Binary::model($user);
+			$msg = 'Your account is activated, login via www.beijingbakedfish.com/member, with phone number and default password is abc123, thanks.';
+			$this->send_sms($user->contact, $msg);
 		}
 	}
 

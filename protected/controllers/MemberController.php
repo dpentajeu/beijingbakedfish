@@ -31,17 +31,17 @@ class MemberController extends Controller
 					'transactionhistory',
 					'announcement',
 					'transferCP',
-                    'transferCPtoFP',
+					'transferCPtoFP',
 					'editmember',
-                    'purchase',
-                    'withdraw',
-                    'refermember',
-                                        'lang',
+					'purchase',
+					'withdraw',
+					'refermember',
+					'lang',
 					),
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember', 'transferCP'),
+				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember', 'binarynetwork', 'transferCP'),
 				'roles'=>array('admin'),
 				),
 			array('allow',
@@ -561,8 +561,8 @@ class MemberController extends Controller
 
 		$this->render('transferCP',array('CMessage'=>$CMessage,'notice'=>$notice));
 	}
-        
-        public function actionTransferCPtoFP()
+
+	public function actionTransferCPtoFP()
 	{
 		$CMessage = '';
 		$notice = '';
@@ -574,7 +574,7 @@ class MemberController extends Controller
 			try {
 				if (empty($amount))
 					throw new Exception('Please enter cash point.');
-                                
+
 				$member = User::getUser(Yii::app()->user->id);
 
 				User::transferCPtoFP($member,$amount);
@@ -749,6 +749,45 @@ class MemberController extends Controller
 
             $this->render('refermember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage, 'notice'=>$notice));
     }
+
+	public function actionBinarynetwork($id = null)
+	{
+		$tree = array();
+		$param = array();
+		$total_level = 5;
+
+		$member_list = User::getUserDropDownList();
+
+		try {
+			$selector = empty($_GET['search_id']) ? Yii::app()->user->id : $_GET['search_id'];
+			// $model = User::model()->with('binaryNodes')->findByAttributes(array('id'=>$selector));
+			$view_model = Binary::model()->with('user')->findByAttributes(array('userId'=>$selector));
+			$node_index = 0;
+
+			if (empty($view_model))
+				throw new Exception("No such customer found.");
+
+			if (!empty($_POST['insert_id']))
+				Binary::create($_POST['insert_id'], array('num_of_nodes' => $_POST['insert_num']));
+
+			if (!empty($_GET['node_index']))
+				$node_index = intval($_GET['node_index']);
+
+			$model = $view_model->user->binaryNodes[$node_index];
+			if (!empty($id))
+				$model = Binary::model()->with('user')->findByAttributes(array('id'=>$id));
+
+			if (!empty($model))
+				$tree = $model->getTree($total_level);
+		} catch (Exception $e) {
+			throw new CHttpException(404, $e->getMessage());
+		}
+
+		$view = 'binarynetwork';
+		$param = compact('view_model', 'model', 'tree', 'member_list', 'selector', 'total_level', 'node_index');
+
+		$this->render($view, $param);
+	}
 
     public function actionManualsponsorbonus($id = null)
     {

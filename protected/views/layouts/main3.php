@@ -55,7 +55,7 @@ $cs->registerScript('navi-menu', "
 						array('label'=>Yii::t('memberpanel', 'ChangePassword'), 'url'=>array('member/changepassword'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
 						array('label'=>Yii::t('memberpanel', 'Announcement'), 'url'=>array('member/announcement'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
 						array('label'=>Yii::t('memberpanel', 'Network'), 'url'=>array('member/network'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
-						// array('label'=>'Binary Network', 'url'=>array('member/binarynetwork'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
+						array('label'=>'Binary Network', 'url'=>array('member/binarynetwork'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						array('label'=>Yii::t('memberpanel', 'ReferMember'), 'url'=>array('member/refermember'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
 						array('label'=>Yii::t('memberpanel', 'Transaction'), 'url'=>array('member/transaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>in_array(Yii::app()->user->roles, array('admin', 'staff'))),
 						array('label'=>Yii::t('memberpanel', 'ManualTransaction'), 'url'=>array('member/manualtransaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
