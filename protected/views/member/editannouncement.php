@@ -1,5 +1,5 @@
 <div class="full_w">
-        <div class="h_title">Edit Announcement</div>
+        <div class="h_title"><?php echo Yii::t('memberpanel', 'EditAnnouncement'); ?></div>
         <div class="form">
             <?php if(!empty($CMessage)) { ?>
 		<div class="n_error"><p><?= $CMessage; ?></p></div>
@@ -15,12 +15,12 @@
                         ),
                 )); ?>
                 <div class="element">
-                    <label for="title">Title:</label>
+                    <label for="title"><?php echo Yii::t('memberpanel', 'Title'); ?>:</label>
                     <?php echo $form->textfield($model,'title',array('style'=>'width:450px;')); ?><br/><br/>
-                    <label for="message">Content:</label>
+                    <label for="message"><?php echo Yii::t('memberpanel', 'Message'); ?>:</label>
                     <?php echo $form->textarea($model,'message',array('style'=>'resize: none;width:450px;height:250px;')); ?>
                 </div><br/>
-                <button type="submit">Edit</button>
+                <button type="submit"><?php echo Yii::t('memberpanel', 'Edit'); ?></button>
             <?php $this->endWidget(); ?>
         </div>
 </div>

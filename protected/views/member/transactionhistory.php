@@ -30,24 +30,22 @@ $cs->registerCss('label',"
 	<?php $form=$this->beginWidget('CActiveForm', array(
 		'action'=>$this->createUrl('member/transactionhistory'),
 		)); ?>
-		<div class="h_title">Transaction History</div>
-		<h2>Transaction history table</h2>
-		<p>Show all the transaction history.</p>
+		<div class="h_title"><?php echo Yii::t('memberpanel', 'TransactionHistory'); ?></div><br/>
 		<p>
-			<?php echo CHtml::radioButtonList('filter', $filter['filter'], array('Deduct'=>'Bill', 'Sponsor bonus'=>'Sponsor bonus', 'Autoplacement bonus'=>'Autoplacement bonus', 'Transfer'=>'Transfer', 'Purchase'=>'Purchase credit', 'Withdraw'=>'Withdrawal'), array('separator'=>'&nbsp;&nbsp;')); ?>
+			<?php echo CHtml::radioButtonList('filter', $filter['filter'], array('Deduct'=>Yii::t('memberpanel', 'bill'), 'Sponsor bonus'=>Yii::t('memberpanel', 'SponsorBonus'), 'Autoplacement bonus'=>Yii::t('memberpanel', 'AutoplacementBonus'), 'Transfer'=>Yii::t('memberpanel', 'Transfer'), 'Purchase'=>Yii::t('memberpanel', 'PurchaseCredit'), 'Withdraw'=>Yii::t('memberpanel', 'Withdrawal')), array('separator'=>'&nbsp;&nbsp;')); ?>
 			<?php if(Yii::app()->user->id ==1) echo '<br/><br/>'.Chtml::dropDownList('id',$filter['id'], $userDropDownList, array('prompt'=>'Select a customer')); ?>
 			<div style="margin: 1em 0 1.5em;">
-				<label style="margin: 0 .5em 0;">From</label><?php echo CHtml::textField('DateFilter[from]', $filter['from'], array('class'=>'datepicker')); ?>
-				<label style="margin: 0 .5em 0;">To</label><?php echo CHtml::textField('DateFilter[to]', $filter['to'], array('class'=>'datepicker')); ?>
+				<label style="margin: 0 .5em 0;"><?php echo Yii::t('memberpanel', 'from'); ?></label><?php echo CHtml::textField('DateFilter[from]', $filter['from'], array('class'=>'datepicker')); ?>
+				<label style="margin: 0 .5em 0;"><?php echo Yii::t('memberpanel', 'to'); ?></label><?php echo CHtml::textField('DateFilter[to]', $filter['to'], array('class'=>'datepicker')); ?>
 			</div>
-			<button type="submit" name="btnFilter">Find</button>
+			<button type="submit" name="btnFilter"><?php echo Yii::t('memberpanel', 'find'); ?></button>
 		</p>
 	<?php $this->endWidget(); ?>
 	<div class="entry">
 		<div class="sep"></div>
 	</div>
 	<h3><?= $title; ?></h3>
-	<p>* Balance is referred as your total amount of cash point / redemption point.</p>
+	<p>* <?php echo Yii::t('memberpanel', 'TransactionHistory1'); ?></p>
 	<?php if(!empty($CMessage)) { ?>
 		<div class="n_error"><p><?php echo $CMessage; ?></p></div>
 	<?php } ?>
@@ -55,12 +53,12 @@ $cs->registerCss('label',"
 	<table id="table">
 		<thead>
 			<tr>
-				<th scope="col">Date</th>
-				<th scope="col">Name</th>
-				<th scope="col">Type</th>
-				<th scope="col">Amount</th>
-				<th scope="col">Balance</th>
-				<th scope="col">Description</th>
+				<th scope="col"><?php echo Yii::t('memberpanel', 'Date'); ?></th>
+				<th scope="col"><?php echo Yii::t('memberpanel', 'Name'); ?></th>
+				<th scope="col"><?php echo Yii::t('memberpanel', 'Type'); ?></th>
+				<th scope="col"><?php echo Yii::t('memberpanel', 'Amount'); ?></th>
+				<th scope="col"><?php echo Yii::t('memberpanel', 'Balance'); ?></th>
+				<th scope="col"><?php echo Yii::t('memberpanel', 'Description'); ?></th>
 			</tr>
 		</thead>
 

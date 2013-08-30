@@ -15,8 +15,8 @@ $cs->registerScript('pagination',"
 	");
 ?>
 <div class="full_w">
-        <div class="h_title">Withdraw History</div>   
-        <div class="n_warning"><p>Note: Please confirm user withdraw request after payment is sent. RM5 will be charge as service charge.</p></div>     
+        <div class="h_title"><?php echo Yii::t('memberpanel', 'WithdrawalHistory'); ?></div>   
+        <div class="n_warning"><p><?php echo Yii::t('memberpanel', 'WithdrawalHistory1'); ?></p></div>     
         <?php if(!empty($CMessage)) { ?>
             <div class="n_error"><p><?= $CMessage; ?></p></div>
         <?php } ?>
@@ -26,14 +26,14 @@ $cs->registerScript('pagination',"
         <table id="table">
                 <thead>
                         <tr>
-                            <th scope="col">Date</th>    
-                            <th scope="col">Name</th>
-                            <th scope="col">Contact</th>
-                            <th scope="col">Amount</th>
-                            <th scope="col">Bank Account</th>
-                            <th scope="col">Bank Name</th>
-                            <th scope="col">Remark</th> 
-                            <th scope="col">Action</th>
+                            <th scope="col"><?php echo Yii::t('memberpanel', 'Date'); ?></th>    
+                            <th scope="col"><?php echo Yii::t('memberpanel', 'Name'); ?></th>
+                            <th scope="col"><?php echo Yii::t('memberpanel', 'Contact'); ?></th>
+                            <th scope="col"><?php echo Yii::t('memberpanel', 'Amount'); ?></th>
+                            <th scope="col"><?php echo Yii::t('memberpanel', 'BankAcc'); ?></th>
+                            <th scope="col"><?php echo Yii::t('memberpanel', 'NameBank'); ?></th>
+                            <th scope="col"><?php echo Yii::t('memberpanel', 'Remark'); ?></th> 
+                            <th scope="col"><?php echo Yii::t('memberpanel', 'Action'); ?></th>
                         </tr>
                 </thead>
 

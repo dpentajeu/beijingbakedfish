@@ -19,11 +19,11 @@ $cs->registerScript('navi-menu', "
 	<div id="header">
 		<div id="top">
 			<div class="left">
-				<p>Welcome, <strong><?php echo $this->name ?></strong> [ <a href="<?php echo $this->createUrl('member/logout'); ?>">logout</a> ]</p>
+				<p><?php echo Yii::t('memberpanel', 'Welcome'); ?>, <strong><?php echo $this->name ?></strong> [ <a href="<?php echo $this->createUrl('member/logout'); ?>"><?php echo Yii::t('memberpanel', 'Logout'); ?></a> ]</p>
 			</div>
 			<div class="right">
 				<div class="align-right">
-					<p>Last login: <strong><?php echo Date('Y-m-d h:m:s') ?></strong></p>
+					<p><?php echo Yii::t('memberpanel', 'LastLogin'); ?> <strong><?php echo Date('Y-m-d h:m:s') ?></strong></p>
 				</div>
 			</div>
 		</div>
@@ -32,8 +32,9 @@ $cs->registerScript('navi-menu', "
 				'itemCssClass' => 'upp',
 				'encodeLabel' => false,
 				'items' => array(
-					array('label' => 'Main control', 'items' => array(
-						array('label' => '&#8250; ' . (Yii::app()->user->roles=='admin' ? 'Member' : 'Account'), 'url'=>array('member/index'))
+                                        array('label' => '<a href="#">Languages / 选择语言</a>', 'items' => array(
+						array('label'=>'English', 'url'=>array("/member/lang?_lang=en")),
+						array('label'=>'中文', 'url'=>array("/member/lang?_lang=cn")),
 						)),
 					),
 				)); ?>
@@ -43,30 +44,41 @@ $cs->registerScript('navi-menu', "
 	<div id="content">
 		<div id="sidebar">
 			<div class="box">
-				<div class="h_title">&#8250; Main control</div>
+				<div class="h_title">&#8250; <?php echo Yii::t('memberpanel', 'MainControl'); ?></div>
 				<?php $this->widget('zii.widgets.CMenu', array(
 					'id' => 'home',
 					// 'activateItems' => true, // uncomment this line if you need it.
 					// 'activeCssClass' => 'current', // uncomment this line if you need it.
 					'itemCssClass' => 'b2',
 					'items' => array(
-						array('label'=>Yii::app()->user->roles == 'admin' ? 'Member' : 'Account', 'url'=>array('member/index'), 'linkOptions'=>array('class'=>'icon report')),
-						array('label'=>'Change password', 'url'=>array('member/changepassword'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
-						array('label'=>'Announcement', 'url'=>array('member/announcement'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
-						array('label'=>'Network', 'url'=>array('member/network'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
+						array('label'=>Yii::app()->user->roles == 'admin' ? Yii::t('memberpanel', 'Member') : Yii::t('memberpanel', 'Account'), 'url'=>array('member/index'), 'linkOptions'=>array('class'=>'icon report')),
+						array('label'=>Yii::t('memberpanel', 'ChangePassword'), 'url'=>array('member/changepassword'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
+						array('label'=>Yii::t('memberpanel', 'Announcement'), 'url'=>array('member/announcement'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
+						array('label'=>Yii::t('memberpanel', 'Network'), 'url'=>array('member/network'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
 						array('label'=>'Binary Network', 'url'=>array('member/binarynetwork'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
-						array('label'=>'Refer a member', 'url'=>array('member/refermember'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
-						array('label'=>'Transaction', 'url'=>array('member/transaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>in_array(Yii::app()->user->roles, array('admin', 'staff'))),
-						array('label'=>'Manual transaction', 'url'=>array('member/manualtransaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
-						array('label'=>'Transaction history', 'url'=>array('member/transactionhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
-						array('label'=>'Purchase history', 'url'=>array('member/purchasehistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
-                        array('label'=>'Withdraw history', 'url'=>array('member/withdrawhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
-						array('label'=>'SMS', 'url'=>array('member/sms'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
-						array('label'=>'Set PIN', 'url'=>array('member/setpin'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
-						array('label'=>'Transfer point', 'url'=>array('member/transfercp'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
+						array('label'=>Yii::t('memberpanel', 'ReferMember'), 'url'=>array('member/refermember'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
+						array('label'=>Yii::t('memberpanel', 'Transaction'), 'url'=>array('member/transaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>in_array(Yii::app()->user->roles, array('admin', 'staff'))),
+						array('label'=>Yii::t('memberpanel', 'ManualTransaction'), 'url'=>array('member/manualtransaction'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
+						array('label'=>Yii::t('memberpanel', 'SMS'), 'url'=>array('member/sms'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
+						array('label'=>Yii::t('memberpanel', 'PIN'), 'url'=>array('member/setpin'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
+						array('label'=>Yii::t('memberpanel', 'TransferPoint'), 'url'=>array('member/transfercp'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
 						// array('label'=>'Transfer CP to RP', 'url'=>array('member/transfercptofp'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='admin'),
-                        array('label'=>'Purchase credit', 'url'=>array('member/purchase'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
-						array('label'=>'Withdrawal', 'url'=>array('member/withdraw'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
+                        array('label'=>Yii::t('memberpanel', 'PurchaseCredit'), 'url'=>array('member/purchase'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
+						array('label'=>Yii::t('memberpanel', 'Withdrawal'), 'url'=>array('member/withdraw'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
+						)
+					)); ?>
+			</div>
+			<div class="box">
+				<div class="h_title">&#8250; <?php echo Yii::t('memberpanel', 'Report'); ?></div>
+				<?php $this->widget('zii.widgets.CMenu', array(
+					'id' => 'home',
+					// 'activateItems' => true, // uncomment this line if you need it.
+					// 'activeCssClass' => 'current', // uncomment this line if you need it.
+					'itemCssClass' => 'b2',
+					'items' => array(
+						array('label'=>Yii::t('memberpanel', 'TransactionHistory'), 'url'=>array('member/transactionhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles!='staff'),
+						array('label'=>Yii::t('memberpanel', 'PurchaseHistory'), 'url'=>array('member/purchasehistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
+                        array('label'=>Yii::t('memberpanel', 'WithdrawalHistory'), 'url'=>array('member/withdrawhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						)
 					)); ?>
 			</div>

@@ -14,7 +14,7 @@ $cs->registerScript('pagination',"
 	");
 ?>
 <div class="full_w">
-        <div class="h_title">Announcement</div>
+        <div class="h_title"><?php echo Yii::t('memberpanel', 'Announcement'); ?></div>
         <?php if (Yii::app()->user->id==1){ ?>
             <div class="form">
                 <?php if(!empty($CMessage)) { ?>
@@ -31,12 +31,12 @@ $cs->registerScript('pagination',"
                             ),
                     )); ?>
                     <div class="element">
-                        <label for="title">Title:</label>
+                        <label for="title"><?php echo Yii::t('memberpanel', 'title'); ?>:</label>
                         <?php echo Chtml::textfield('title','',array('style'=>'width:450px;')); ?><br/><br/>
-                        <label for="message">Content:</label>
+                        <label for="message"><?php echo Yii::t('memberpanel', 'message'); ?>:</label>
                         <?php echo Chtml::textarea('message','',array('style'=>'resize: none;width:450px;height:250px;')); ?>
                     </div><br/>
-                    <button type="submit">Post</button>
+                    <button type="submit"><?php echo Yii::t('memberpanel', 'post'); ?></button>
                 <?php $this->endWidget(); ?>
             </div>
             <div class="entry">
@@ -46,10 +46,10 @@ $cs->registerScript('pagination',"
         <table id="table">
                 <thead>
                         <tr>
-                            <th scope="col" style="width: 70px;">Date Posted</th>    
-                            <th scope="col" style="width: 150px;">Title</th>
-                            <th scope="col">Message</th> 
-                            <?php if (Yii::app()->user->id==1){ echo '<th scope="col" style="width: 35px;">Action</th>'; } ?>
+                            <th scope="col" style="width: 70px;"><?php echo Yii::t('memberpanel', 'date'); ?></th>    
+                            <th scope="col" style="width: 150px;"><?php echo Yii::t('memberpanel', 'title'); ?></th>
+                            <th scope="col"><?php echo Yii::t('memberpanel', 'message'); ?></th> 
+                            <?php if (Yii::app()->user->id==1){ echo '<th scope="col" style="width: 35px;">'.Yii::t('memberpanel', 'Action').'</th>'; } ?>
                         </tr>
                 </thead>
 

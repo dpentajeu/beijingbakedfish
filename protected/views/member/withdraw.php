@@ -15,11 +15,11 @@ $cs->registerScript('pagination',"
 	");
 ?>
 <div class="full_w">
-        <div class="h_title">Withdraw Credit</div>
+        <div class="h_title"><?php echo Yii::t('memberpanel', 'Withdrawal'); ?></div>
             <div class="form">
                 <div class="n_warning">
-                    <p>Note: Please submit your cash point withdrawal request with a minimum amount of RM100 and the service charge for withdrawal is RM5.</p>
-                    <p>Please update your bank account profile before submit a withdrawal request. Click <a href="<?= $baseUrl ?>/member/editmember">here</a> to update.</p>
+                    <p><?php echo Yii::t('memberpanel', 'Withdrawal1'); ?></p>
+                    <p><?php echo Yii::t('memberpanel', 'Withdrawal2'); ?><a href="<?= $baseUrl ?>/member/editmember"><?php echo Yii::t('memberpanel', 'here'); ?></a><?php echo Yii::t('memberpanel', 'Withdrawal3'); ?></p>
                 </div>
                 <?php if(!empty($CMessage)) { ?>
                     <div class="n_error"><p><?= $CMessage; ?></p></div>
@@ -36,12 +36,12 @@ $cs->registerScript('pagination',"
                             ),
                     )); ?>
                     <div class="element">
-                        <label for="title">CP amount:</label>
+                        <label for="title"><?php echo Yii::t('memberpanel', 'CashPoint'); ?>:</label>
                         <?php echo $form->textfield($model, 'amount',array('style'=>'width:450px;')); ?><br/><br/>
-                        <label for="title">Remarks:</label>
+                        <label for="title"><?php echo Yii::t('memberpanel', 'Remark'); ?>:</label>
                         <?php echo $form->textfield($model, 'remark',array('style'=>'width:450px;')); ?>
                     </div><br/>
-                    <button type="submit">Submit</button>
+                    <button type="submit"><?php echo Yii::t('memberpanel', 'Submit'); ?></button>
                 <?php $this->endWidget(); ?>
             </div>
             <div class="entry">
@@ -50,10 +50,10 @@ $cs->registerScript('pagination',"
         <table id="table">
                 <thead>
                         <tr>
-                            <th scope="col" style="width: 70px;">Date</th>    
-                            <th scope="col" style="width: 150px;">Amount</th>
-                            <th scope="col">Remark</th> 
-                            <th scope="col">Status</th> 
+                            <th scope="col" style="width: 70px;"><?php echo Yii::t('memberpanel', 'Date'); ?></th>    
+                            <th scope="col" style="width: 150px;"><?php echo Yii::t('memberpanel', 'Amount'); ?></th>
+                            <th scope="col"><?php echo Yii::t('memberpanel', 'Remark'); ?></th> 
+                            <th scope="col"><?php echo Yii::t('memberpanel', 'Status'); ?></th> 
                         </tr>
                 </thead>
 
