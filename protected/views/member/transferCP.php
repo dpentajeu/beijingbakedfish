@@ -22,8 +22,10 @@
                         <label for="amount"><span style="color: red;">*</span><?php echo Yii::t('memberpanel', 'CashPoint'); ?>:</label>
                         <?php echo Chtml::textField('amount',''); ?>
                         <br/><br/>
+                        <?php if(Yii::app()->user->roles != 'admin'){ ?>
                         <label for="ping"><span style="color: red;">*</span>PIN:</label>
                         <?php echo Chtml::passwordField('pin',''); ?>
+                        <?php } ?>
                 </div><br/>
                 <button type="submit" name="setpin"><?php echo Yii::t('memberpanel', 'Submit'); ?></button>
             <?php $this->endWidget(); ?>

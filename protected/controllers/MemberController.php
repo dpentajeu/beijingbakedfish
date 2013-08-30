@@ -527,11 +527,12 @@ class MemberController extends Controller
 		$CMessage = '';
 		$notice = '';
 
-		if(isset($_POST['amount']) && isset($_POST['ph']) && isset($_POST['pin']))
+		if(isset($_POST['amount']) && isset($_POST['ph']))
 		{
 			$amount = $_POST['amount'];
 			$ph = $_POST['ph'];
-			$pin = $_POST['pin'];
+			if(isset($_POST['pin']))
+				$pin = $_POST['pin'];
 
 			try {
 				if (empty($ph))
@@ -543,8 +544,11 @@ class MemberController extends Controller
 				$member = User::getUserByPhone($ph);
 				$curUser = User::getUser(Yii::app()->user->id);
 
-				if($pin != $curUser->pin)
-					throw new Exception('Please enter a correct pin.');
+				if(Yii::app()->user->roles != 'admin')
+				{
+					if($pin != $curUser->pin)
+						throw new Exception('Please enter a correct pin.');
+				}
 
 				User::transferCP($member,$curUser,$amount);
 
