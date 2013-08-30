@@ -50,7 +50,7 @@ class CronController extends Controller
 			if (!empty($value))
 				$default[$key] = $value;
 
-		$sales = User::model()->with('package')->between($default['start'], $default['end'])->approved()->sales()->find();
+		$sales = User::model()->with('package')->between($default['start'], $default['end'])->activated()->sales()->find();
 		$total_nodes = floatval(Binary::model()->between($default['start'], $default['end'])->count());
 		$total_sales = floatval($sales->total_sales);
 		$admin_bonus = 0;
@@ -112,7 +112,7 @@ class CronController extends Controller
 
 	public function actionAutoplacement()
 	{
-		$model = User::model()->approved()->findAll();
+		$model = User::model()->activated()->findAll();
 		$added = array();
 		foreach ($model as $user) {
 			$b = Binary::model()->findByAttributes(array('userId'=>$user->id));

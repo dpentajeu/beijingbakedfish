@@ -171,8 +171,8 @@ class User extends CActiveRecord
 	public function scopes()
 	{
 		return array(
-			'approved' => array(
-				'condition' => 'isApproved = 1',
+			'activated' => array(
+				'condition' => 'isActivated = 1',
 				),
 			);
 	}
