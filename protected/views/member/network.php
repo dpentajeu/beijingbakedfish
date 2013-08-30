@@ -31,13 +31,13 @@
             <div class="sep"></div>
         </div>
         
-        <h2><?php echo Yii::t('memberpanel', 'Level'); ?> 0</h2>
+        <h2><?php echo Yii::t('memberpanel', 'Level1'); ?>0<?php echo Yii::t('memberpanel', 'Level2'); ?></h2>
         <h3><?php echo $user->name.' ('.$user->packageName.')'; ?></h3>
         <?php  $count = 0;
                foreach($model as $item){
                    if($count != $item['level']) {
                    $count += 1;
-                   echo '<br/><div class="sep"></div><h2>'.Yii::t('memberpanel', 'Level').($count).'</h2>';
+                   echo '<br/><div class="sep"></div><h2>'.Yii::t('memberpanel', 'Level1').($count).Yii::t('memberpanel', 'Level2').'</h2>';
                    }?>
                    <h3><?php echo $item['referral'].' -> '.$item['name'].' ('.$item['package'].') <i>'.Date('Y-m-d',strtotime($item['date'])).'</i>'; ?></h3>
         <?php  } ?>        

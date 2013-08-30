@@ -128,6 +128,8 @@ return array(
         'SponsorNetwork2'=>'Red color indicated member is not activate.',
         'SponsorGuideline'=>'Sponsor Bonus Guidelines',
         'Level'=>'Level',
+        'Level1'=>'Level ',
+        'Level2'=>' ',
         'levels'=>'levels',
         'entitles'=>'entitles',
         'Transaction1'=>'Note: Amount refers to total cash point / redemption point which will be deducted.',
