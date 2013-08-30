@@ -20,9 +20,6 @@ $cs->registerCss('binary-tree', "
 		margin: 0 0 0 50%;
 	}
 	");
-$cs->registerScript('binary-tree', "
-	$('#binary-tree').parent().scrollLeft(3773);
-	");
 ?>
 <div class="full_w">
 	<div class="h_title">Search for customer binary network view</div>
@@ -63,14 +60,14 @@ $cs->registerScript('binary-tree', "
 </div>
 -->
 <div class="full_w">
-<p>You are now viewing <?php echo $model->name; ?>'s binary network: </p>
-<p><?php echo $model->name; ?> owns <?php echo count($model->binaryNodes) . ' ' . Yii::t('plural', 'unit|units', count($model->binaryNodes)); ?>. Click on the following to view his/her binary network.</p>
+<p>You are now viewing <?php echo $view_model->user->name; ?>'s binary network: </p>
+<p><?php echo $view_model->user->name; ?> owns <?php echo count($view_model->user->binaryNodes) . ' ' . Yii::t('plural', 'unit|units', count($view_model->user->binaryNodes)); ?>. Click on the following to view his/her binary network.</p>
 <ol>
 	<?php
 	$param = array('search_id'=>$selector);
-	foreach ($model->binaryNodes as $index => $m) {
+	foreach ($view_model->user->binaryNodes as $index => $m) {
 		$param['node_index'] = $index;
-		$link = CHtml::link($model->name, array_merge(array(''), $param));
+		$link = CHtml::link($view_model->user->name, array_merge(array(''), $param));
 		if ($node_index == $index)
 			$link .= " (You are now viewing here)";
 		echo CHtml::tag('li', array(), $link);
@@ -82,7 +79,6 @@ $cs->registerScript('binary-tree', "
 	<li><?php echo CHtml::image($baseUrl . "/images/i_ok.png", '', array('style'=>'float: left;')); ?><span style="padding: 2px; float: left;">Taken unit</span></li>
 	<li><?php echo CHtml::image($baseUrl . "/images/i_delete.png", '', array('style'=>'float: left;')); ?><span style="padding: 2px; float: left;">Empty unit</span></li>
 </ul>
-<div style="width: 100%; overflow: scroll;">
 <table id="binary-tree">
 <?php
 // Only view the network when the customer is in the binary tree.
@@ -92,6 +88,7 @@ if (!empty($tree)) {
 		foreach (range(0, pow(2, $level - 1) - 1) as $index) {
 			$content_index = 0;
 			$content = array("/images/i_ok.png", "/images/i_delete.png");
+			$before_img = array('htmlOptions'=>array(), 'content'=>'');
 
 			// pow(2, $total_level - $level) determines how many
 			// cells do we need to span through
@@ -111,8 +108,18 @@ if (!empty($tree)) {
 					echo CHtml::tag('div', array('class'=>'lline'), '');
 
 				// draws a vertical line down for each node.
-				echo CHtml::tag('div', array('class'=>'vline'), '');
+				$before_img['htmlOptions'] = array('class'=>'vline');
+				$before_img['content'] = '';
+			} else if ($content_index == 0 && $tree[$level][$index]->level > $view_model->user->binaryNodes[$node_index]->level) {
+				Yii::trace($tree[$level][$index]->id / 2, "application.controllers.MemberController");
+				$parent = floor($tree[$level][$index]->id / 2);
+				$link = CHtml::link('up', array('member/binarynetwork', 'id'=>$parent, 'search_id'=>$selector, 'node_index'=>$node_index));
+				$before_img['content'] = $link;
 			}
+
+			if ($level == 1)
+				Yii::trace($tree[$level][$index]->id, "application.controllers.MemberController");
+			echo CHtml::tag('div', $before_img['htmlOptions'], $before_img['content']);
 
 			// the image of the node.
 			echo CHtml::image($baseUrl . $content[$content_index]);
@@ -121,16 +128,20 @@ if (!empty($tree)) {
 			if ($level < $total_level)
 				echo CHtml::tag('div', array('class'=>'vline'), '', true);
 
+			if ($level == $total_level && $content_index == 0) {
+				$link = CHtml::link('more', array('member/binarynetwork', 'id'=>$tree[$level][$index]->id, 'search_id'=>$selector, 'node_index'=>$node_index));
+				echo CHtml::tag('div', array(), $link);
+			}
+
 			echo CHtml::closeTag('td');
 		}
 		echo CHtml::closeTag('tr');
 	}
 } else {
 	echo CHtml::openTag('tr');
-	echo CHtml::tag('td', array(), $model->name . " is not in the binary network.");
+	echo CHtml::tag('td', array(), $model->user->name . " is not in the binary network.");
 	echo CHtml::closeTag('tr');
 }
 ?>
 </table>
-</div>
 </div>

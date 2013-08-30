@@ -746,20 +746,21 @@ class MemberController extends Controller
             $this->render('refermember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage, 'notice'=>$notice));
     }
 
-	public function actionBinarynetwork()
+	public function actionBinarynetwork($id = null)
 	{
 		$tree = array();
 		$param = array();
-		$total_level = 10;
+		$total_level = 5;
 
 		$member_list = User::getUserDropDownList();
 
 		try {
 			$selector = empty($_GET['search_id']) ? Yii::app()->user->id : $_GET['search_id'];
-			$model = User::model()->with('binaryNodes')->findByAttributes(array('id'=>$selector));
+			// $model = User::model()->with('binaryNodes')->findByAttributes(array('id'=>$selector));
+			$view_model = Binary::model()->with('user')->findByAttributes(array('userId'=>$selector));
 			$node_index = 0;
 
-			if (empty($model))
+			if (empty($view_model))
 				throw new Exception("No such customer found.");
 
 			if (!empty($_POST['insert_id']))
@@ -768,14 +769,18 @@ class MemberController extends Controller
 			if (!empty($_GET['node_index']))
 				$node_index = intval($_GET['node_index']);
 
-			if (!empty($model->binaryNodes[$node_index]))
-				$tree = $model->binaryNodes[$node_index]->getTree($total_level);
+			$model = $view_model->user->binaryNodes[$node_index];
+			if (!empty($id))
+				$model = Binary::model()->with('user')->findByAttributes(array('id'=>$id));
+
+			if (!empty($model))
+				$tree = $model->getTree($total_level);
 		} catch (Exception $e) {
 			throw new CHttpException(404, $e->getMessage());
 		}
 
 		$view = 'binarynetwork';
-		$param = compact('model', 'tree', 'member_list', 'selector', 'total_level', 'node_index');
+		$param = compact('view_model', 'model', 'tree', 'member_list', 'selector', 'total_level', 'node_index');
 
 		$this->render($view, $param);
 	}
