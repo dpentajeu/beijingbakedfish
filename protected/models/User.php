@@ -48,6 +48,8 @@ class User extends CActiveRecord
 	public $newPin2;
 	public $oldPin;
 
+	public $total_sales;
+
 	public static function model($className=__CLASS__)
 	{
 		return parent::model($className);
@@ -164,6 +166,33 @@ class User extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+
+	public function scopes()
+	{
+		return array(
+			'approved' => array(
+				'condition' => 'isApproved = 1',
+				),
+			);
+	}
+
+	public function between($start, $end)
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			'condition' => 'created BETWEEN :start AND :end',
+			'params' => array(':start' => $start, ':end' => $end),
+			));
+		return $this;
+	}
+
+	public function sales()
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			'with' => 'package',
+			'select' => 'SUM(package.value) as total_sales'
+			));
+		return $this;
 	}
 
 	public static function findEmail($email)
@@ -379,7 +408,6 @@ class User extends CActiveRecord
 			$msg = 'Your account is activated, login via www.beijingbakedfish.com/member, with phone number and default password is abc123, thanks.';
 			$this->send_sms($user->contact, $msg);
 		}
-
 	}
 
 	public function disapproveUser($id)

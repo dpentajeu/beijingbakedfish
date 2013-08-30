@@ -14,6 +14,9 @@
  */
 class Binary extends CActiveRecord
 {
+	public $total_sales = 0;
+	public $total_nodes = 0;
+
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
@@ -95,6 +98,26 @@ class Binary extends CActiveRecord
 		));
 	}
 
+	public function between($start, $end)
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			'condition' => 'created BETWEEN :start AND :end',
+			'params' => array(':start' => $start, ':end' => $end),
+			));
+		return $this;
+	}
+
+	public function tree($level = 10)
+	{
+		$this->getDbCriteria()->mergeWith(array(
+			// the following condition is extremely important!!! Do not simply change.
+			'condition' => '(id = :root AND level = :level) OR (id > :root AND level BETWEEN (:level + 1) AND :maxlevel AND floor(id / pow(2, level - :level)) = :root)',
+			'params' => array(':root' => $this->id, ':level' => $this->level, ':maxlevel' => $this->level + $level),
+			'order' => 'id'
+			));
+		return $this;
+	}
+
 	/**
 	 * Get the binary tree with the given starting root id.
 	 * @param integer root_id the first id to act as the root.
@@ -107,13 +130,7 @@ class Binary extends CActiveRecord
 			throw new Exception("Node not found.", 101);
 
 		$result = array();
-		$criteria = new CDbCriteria;
-		// the following condition is extremely important!!! Do not simply change.
-		$criteria->condition = '(id = :root AND level = :level) OR (id > :root AND level BETWEEN (:level + 1) AND :maxlevel AND floor(id / pow(2, level - :level)) = :root)';
-		$criteria->params = array(':root' => $this->id, ':level' => $this->level, ':maxlevel' => $this->level + $level);
-		$criteria->order = 'id';
-
-		$model = $this->findAll($criteria);
+		$model = $this->tree($level)->findAll();
 		if (empty($model))
 			return array();
 
