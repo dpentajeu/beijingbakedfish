@@ -56,11 +56,11 @@ class CronController extends Controller
 		$admin_bonus = 0;
 		$total_bonus = 0;
 		$special_bonus = 0;
-		$model = Binary::model()->between($default['start'], $default['end'])->findAll();
+		$model = Binary::model()->findAll();
 
 		foreach ($model as $b) {
 			$id = $b->id;
-			$tree = $b->tree(10)->find(array(
+			$tree = $b->between($default['start'], $default['end'])->tree(10)->find(array(
 				'select' => 'COUNT(*) as total_nodes',
 				'condition' => 'userId != :id',
 				'params' => array(':id' => $b->userId),
@@ -105,6 +105,7 @@ class CronController extends Controller
 			}
 		}
 		$this->response = compact('datetime', 'total_nodes', 'total_sales', 'admin_bonus', 'total_bonus', 'special_bonus');
+		$this->response = array_merge($default, $this->response);
 		header("content-type: text/plain");
 		var_export($this->response);
 	}
