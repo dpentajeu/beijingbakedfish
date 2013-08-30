@@ -108,4 +108,19 @@ class CronController extends Controller
 		header("content-type: text/plain");
 		var_export($this->response);
 	}
+
+	public function actionAutoplacement()
+	{
+		$model = User::model()->approved()->findAll();
+		$added = array();
+		foreach ($model as $user) {
+			$b = Binary::model()->findByAttributes(array('userId'=>$user->id));
+			if (!empty($b))
+				continue ;
+			Binary::create($user, array('created' => $user->created));
+			$added[] = $user->id . " " . $user->created;
+		}
+		header("content-type: text/plain");
+		var_export($added);
+	}
 }
