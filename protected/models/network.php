@@ -11,10 +11,10 @@ class network{
             if($node->isApproved == 0)$node->name = "<span style='color: red;'>".$node->name."</span>";
             $this->tree[] = array(
                 'level'=>$level,
+                'referral'=>User::getReferralName($node->referral),
                 'id'=>$node->id,
                 'name'=>$node->name,                
                 'package'=>Package::getPackageName($node->packageId),
-                'referral'=>User::getReferralName($node->referral),
                 'date'=>$node->created,
             );
             self::setSponsorNetwork($node->id, ($level + 1));
@@ -23,7 +23,6 @@ class network{
     
     public function getSponsorNetwork()
     {
-//        var_dump($this->tree);
         asort($this->tree);
         return $this->tree;
     }
