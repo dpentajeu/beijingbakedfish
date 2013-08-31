@@ -110,6 +110,48 @@ class CronController extends Controller
 		var_export($this->response);
 	}
 
+	public function actionFlushbonus()
+	{
+		$bonus = 0;
+		$count = 0;
+		$total_bonus = 0;
+		$model = User::model()->findAll();
+
+		foreach ($model as $b) {
+			if($b->id > 4)
+			{
+
+				switch ($b->packageId) {
+					case 1:
+						# code...
+						$bonus = 35;
+						break;
+					case 2:
+						$bonus = (40 * 3);
+						break;
+					case 3:
+						$bonus = (50 * 7);
+					default:
+						# code...						
+						break;
+				}
+				$total_bonus += $bonus;
+				$count += 1;
+
+				if ($bonus > 0) {
+					Transaction::create($b, array(
+						'amount' => $bonus,
+						'type' => 'DEBIT',
+						'point' => Transaction::TRAN_CP,
+						'description' => "Autoplacement CP special bonus (key:{$b->id})",
+						));
+				}
+			}
+		}
+		header("content-type: text/plain");
+		echo "Total bonus is {$total_bonus} out of {$count} of nodes.";
+	}
+
 	public function actionAutoplacement()
 	{
 		$model = User::model()->activated()->findAll();
