@@ -36,6 +36,7 @@ class MemberController extends Controller
 					'purchase',
 					'withdraw',
 					'refermember',
+					'binarynetwork',
 					'lang',
 					),
 				'users'=>array('@'),
@@ -454,6 +455,9 @@ class MemberController extends Controller
 			$id = $_POST['id'];
 			$model->user($id);
 		}
+
+		if(Yii::app()->user->roles != 'admin')
+			$model->user($id);
 
 		$title .= ' (Name : '.User::getReferralName($id).')';
 		$criteria->addSearchCondition('description', $filter);
