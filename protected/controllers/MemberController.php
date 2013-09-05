@@ -719,6 +719,57 @@ class MemberController extends Controller
     	$total = count($list);
     	$this->render('withdrawhistory', array('list'=>$list, 'total'=>$total, 'CMessage'=>$CMessage,'notice'=>$notice));
     }
+
+    public function actionPayment()
+    { 
+        $model = new Bill;        
+        $CMessage = '';
+        $notice = '';
+
+        if(isset($_POST['Bill']))
+        {
+            try{
+            	$model->attributes = $_POST['Bill'];
+                if (!$model->validate())
+                    throw new Exception("Please fill up the form and amount correctly.", 1);
+
+                $model->billPayment($model);
+                $model = new Bill;
+                $notice = 'Your bill payment request is submitted to admin.';
+            }
+            catch (Exception $e) {
+                $CMessage = $e->getMessage();
+            }
+
+        }
+        $list = $model->getAllBills();
+        $total = count($list);
+
+        $this->render('payment', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total, 'notice'=>$notice));
+    }
+    
+    public function actionPaymenthistory($id = null, $action = null)
+    {
+    	$model = new Bill;
+    	$CMessage = '';
+        $notice = '';
+    	
+    	if(!is_null($id))
+    	{
+    		try
+    		{
+    			$model->handleBills($id, $action);
+    			$notice = 'The bill payment request is confirmed / cancelled. Please check the transaction from transaction history.';
+    		}
+    		catch (Exception $e) {
+                $CMessage = $e->getMessage();
+            }
+    	}
+    	
+    	$list = $model->getAllBills();
+    	$total = count($list);
+    	$this->render('paymenthistory', array('list'=>$list, 'total'=>$total, 'CMessage'=>$CMessage,'notice'=>$notice));
+    }
     
     public function actionRefermember()
     {

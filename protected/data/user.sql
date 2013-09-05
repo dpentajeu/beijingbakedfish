@@ -122,3 +122,8 @@ alter table withdrawal add remark nvarchar(500) null;
 create table staff( id int not null primary key, username varchar(100) not null, password varchar(50) not null, dateCreated datetime not null);
 insert into staff values(-1,'staff1',md5('bbfstaff'),now());
 insert into staff values(-2,'staff2',md5('bbfstaff'),now());
+
+/*****20130906*****/
+create table bill( id int unsigned not null primary key auto_increment, walletId int unsigned not null,provider int unsigned not null ,amount float(13,4) not null, balance float(13,4) not null, tranDate datetime not null, status tinyint(1) not null default 0, remark varchar(500) character set utf8 default null, foreign key(walletId) references wallet(id) ) default charset = utf8;
+
+create table provider( id int unsigned not null primary key auto_increment, name varchar(500) not null, dateCreated datetime);

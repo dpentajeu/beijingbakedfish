@@ -728,10 +728,20 @@ class User extends CActiveRecord
 
 	public static function send_sms($sms_to,$sms_msg)  
 	{
-		$query_string = 'api.aspx?apiusername='.'API5Y6NCVIFEQ'.'&apipassword='.'API5Y6NCVIFEQ5Y6NC';
-		$query_string .= "&senderid=".rawurlencode('INFO')."&mobileno=".rawurlencode($sms_to);
-		$query_string .= "&message=".rawurlencode(stripslashes($sms_msg)) . "&languagetype=1";
-		$url = "http://gateway.onewaysms.com.au:10001/".$query_string;
+		if(preg_match("/\p{Han}+/u", $sms_msg))
+		{
+			$query_string = 'apichinese.aspx?apiusername='.'API5Y6NCVIFEQ'.'&apipassword='.'API5Y6NCVIFEQ5Y6NC';
+			$query_string .= "&senderid=".rawurlencode('INFO')."&languagetype=2&mobileno=".rawurlencode($sms_to);
+			$query_string .= "&message=".rawurlencode(stripslashes($sms_msg));
+			$url = "http://gateway80.onewaysms.com.my/".$query_string;
+		}
+		else
+		{
+			$query_string = 'api.aspx?apiusername='.'API5Y6NCVIFEQ'.'&apipassword='.'API5Y6NCVIFEQ5Y6NC';
+			$query_string .= "&senderid=".rawurlencode('INFO')."&mobileno=".rawurlencode($sms_to);
+			$query_string .= "&message=".rawurlencode(stripslashes($sms_msg)) . "&languagetype=1";
+			$url = "http://gateway.onewaysms.com.au:10001/".$query_string;
+		}
 		$fd = @implode ('', file ($url));
 		if ($fd)
 		{
