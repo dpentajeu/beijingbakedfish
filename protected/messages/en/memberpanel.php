@@ -310,11 +310,11 @@ return array(
 	*Payment
 	*/
 	'Payment'=>'Pay for your utilities',
-	'Payment1'=>'Every transaction will charge RM 0.30 service charge.',
+	'Payment1'=>'Every transaction will charge RM 1 service charge.',
 	'Provider'=>'Service provider',
 	'Billremark'=>'Account no / remark',
 	'Paymenthistory'=>'Payment history',
-	'Paymenthistory1'=>'Every transaction will charge RM 0.30 service charge.',
+	'Paymenthistory1'=>'Every transaction will charge RM 1 service charge.',
 	'Utilities'=>'Utilities',
 
 	/*
