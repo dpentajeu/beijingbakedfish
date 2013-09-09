@@ -23,7 +23,7 @@ $cs->registerCss('binary-tree', "
 ?>
 <?php if(Yii::app()->user->roles == 'admin') { ?>
 <div class="full_w">
-	<div class="h_title">Search for customer binary network view</div>
+	<div class="h_title"><?php echo Yii::t('memberpanel', 'Binarysearch'); ?></div>
 	<?php $form = $this->beginWidget('CActiveForm', array(
 		'action'=>array('member/binarynetwork'),
 		'method'=>'GET',
@@ -33,7 +33,7 @@ $cs->registerCss('binary-tree', "
 			),
 		)); ?>
 		<div style="margin: 0 0 .5em;">
-			<label for="search_id">Customer :</label>
+			<label for="search_id"><?php echo Yii::t('memberpanel', 'username'); ?> :</label>
 			<?php echo CHtml::dropDownList('search_id', $selector, $member_list, array('prompt'=>'Select a customer')); ?>
 		</div>
 		<button>Search</button>
@@ -62,7 +62,7 @@ $cs->registerCss('binary-tree', "
 </div>
 -->
 <div class="full_w">
-<div class="h_title">Your auto-placement binary network</div>
+<div class="h_title"><?php echo Yii::t('memberpanel', 'Binarytree'); ?></div>
 <p>You are now viewing <?php echo $view_model->user->name; ?>'s binary network: </p>
 <p><?php echo $view_model->user->name; ?> owns <?php echo count($view_model->user->binaryNodes) . ' ' . Yii::t('plural', 'unit|units', count($view_model->user->binaryNodes)); ?>. Click on the following to view his/her binary network.</p>
 <ol>

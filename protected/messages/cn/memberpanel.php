@@ -301,4 +301,22 @@ return array(
 	*/
 	'block_title'=>'转账不获批准',
 	'block_content'=>'转账不获批准, 请与管理员联系以解除封锁.',
+
+	/*
+	*Payment
+	*/
+	'Payment'=>'支付你的水电费帐单',
+	'Payment1'=>'每一笔交易将收取 RM 0.30 服务费.',
+	'Provider'=>'服务中心',
+	'Billremark'=>'账户号码/备注',
+	'Paymenthistory'=>'水电费帐单记录',
+	'Paymenthistory1'=>'每一笔交易将收取 RM 0.30 服务费.',
+	'Utilities'=>'水电费帐单',
+
+	/*
+	*Binary network
+	*/
+	'Binarynetwork'=>'二进制组织图',
+	'Binarysearch'=>'搜索二进制网络视图',
+	'Binarytree'=>'二进制组织图',
 );

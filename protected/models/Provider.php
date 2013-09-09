@@ -53,6 +53,7 @@ class Provider extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'bill' => array(self::BELONGS_TO, 'Bill', 'id'),
 		);
 	}
 

@@ -6,10 +6,10 @@
  * The followings are the available columns in table 'bill':
  * @property string $id
  * @property string $walletId
- * @property string $provider
+ * @property integar $provider
  * @property double $amount
  * @property double $balance
- * @property string $tranDate
+ * @property datetime $tranDate
  * @property integer $status
  * @property string $remark
  *
@@ -44,11 +44,12 @@ class Bill extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('walletId, provider, amount, balance, tranDate', 'required'),
-			array('status', 'numerical', 'integerOnly'=>true),
-			array('amount, balance', 'numerical'),
-			array('walletId, provider', 'length', 'max'=>10),
+			array('provider, amount', 'required'),
+			array('status, provider', 'numerical', 'integerOnly'=>true),
+			array('amount, balance, provider', 'numerical'),
+			array('walletId', 'length', 'max'=>10),
 			array('remark', 'length', 'max'=>500),
+			array('tranDate, provider', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, walletId, provider, amount, balance, tranDate, status, remark', 'safe', 'on'=>'search'),
@@ -64,6 +65,7 @@ class Bill extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
 			'wallet' => array(self::BELONGS_TO, 'Wallet', 'walletId'),
+			'service' => array(self::HAS_MANY, 'Provider', 'id'),
 		);
 	}
 
@@ -116,6 +118,9 @@ class Bill extends CActiveRecord
 	{
 		$user = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
 
+		if($user->wallet->cashPoint < ($this->amount + 0.3))
+			throw new Exception("Insufficient cash point for bill payment request.", 1);
+		
 		$this->attributes = array(
 			'walletId' => $user->wallet->id,
 			'amount' => $this->amount,
@@ -141,7 +146,7 @@ class Bill extends CActiveRecord
 		{
 			$criteria = new CDbCriteria;
 			$criteria->order = "tranDate desc";
-			$bill = Bill::model()->with('Provider')->findAll($criteria);
+			$bill = Bill::model()->findAll($criteria);
 		}
 		else 
 		{
@@ -149,7 +154,7 @@ class Bill extends CActiveRecord
 			$criteria = new CDbCriteria;
 			$criteria->order = "tranDate desc";
 			$criteria->compare('walletId',$model->wallet->id);
-			$bill = Bill::model()->with('Provider')->findAll($criteria);
+			$bill = Bill::model()->findAll($criteria);
 		}
 		return $bill;
 	}
@@ -161,12 +166,12 @@ class Bill extends CActiveRecord
 	{
 		if($status == "true")
 		{
-			$model = Purchase::model()->findByAttributes(array('id'=>$id));
+			$model = Bill::model()->findByAttributes(array('id'=>$id));
 			$provider = Provider::model()->findByAttributes(array('id'=>$model->provider));
 			Transaction::create($model->wallet->user, array(
 				'amount'=>$model->amount,
 				'point'=>Transaction::TRAN_CP,
-				'type'=>'DEBIT',
+				'type'=>'CREDIT',
 				'description'=>"Bill payment for {$provider->name}.",
 				));
 			$model->status = 1;
@@ -175,10 +180,28 @@ class Bill extends CActiveRecord
 		}
 		else
 		{
-			$model = Purchase::model()->findByAttributes(array('id'=>$id));
+			$model = Bill::model()->findByAttributes(array('id'=>$id));
 			$model->status = 2;
 			if(!$model->save())
 				throw new Exception('Fail to cancel this bill payment.', 102);
 		}
+	}
+
+	public function getProviders()
+	{
+		$providers = Provider::model()->findAll();
+		$result = array();
+
+		foreach ($providers as $provider) {
+			$result[$provider->id] = $provider->name;
+		}
+
+		return $result;
+	}
+
+	public static function getProvider($id)
+	{
+		$provider = Provider::model()->findByAttributes(array('id'=>$id));
+		return $provider->name;
 	}
 }

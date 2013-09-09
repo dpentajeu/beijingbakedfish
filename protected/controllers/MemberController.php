@@ -37,12 +37,13 @@ class MemberController extends Controller
 					'withdraw',
 					'refermember',
 					'binarynetwork',
+					'payment',
 					'lang',
 					),
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember', 'binarynetwork', 'transferCP'),
+				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember', 'binarynetwork', 'transferCP', 'paymenthistory'),
 				'roles'=>array('admin'),
 				),
 			array('allow',
@@ -722,7 +723,8 @@ class MemberController extends Controller
 
     public function actionPayment()
     { 
-        $model = new Bill;        
+        $model = new Bill; 
+        $providerDropDownList = $model->getProviders();       
         $CMessage = '';
         $notice = '';
 
@@ -745,7 +747,7 @@ class MemberController extends Controller
         $list = $model->getAllBills();
         $total = count($list);
 
-        $this->render('payment', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total, 'notice'=>$notice));
+        $this->render('payment', array('list'=>$list, 'model'=>$model,'CMessage'=>$CMessage, 'total'=>$total, 'notice'=>$notice, 'providerDropDownList'=>$providerDropDownList));
     }
     
     public function actionPaymenthistory($id = null, $action = null)

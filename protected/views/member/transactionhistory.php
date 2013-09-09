@@ -32,7 +32,7 @@ $cs->registerCss('label',"
 		)); ?>
 		<div class="h_title"><?php echo Yii::t('memberpanel', 'TransactionHistory'); ?></div><br/>
 		<p>
-			<?php echo CHtml::radioButtonList('filter', $filter['filter'], array('Deduct'=>Yii::t('memberpanel', 'bill'), 'Sponsor bonus'=>Yii::t('memberpanel', 'SponsorBonus'), 'Autoplacement'=>Yii::t('memberpanel', 'AutoplacementBonus'), 'Transfer'=>Yii::t('memberpanel', 'Transfer'), 'Purchase'=>Yii::t('memberpanel', 'PurchaseCredit'), 'Withdraw'=>Yii::t('memberpanel', 'Withdrawal')), array('separator'=>'&nbsp;&nbsp;')); ?>
+			<?php echo CHtml::radioButtonList('filter', $filter['filter'], array('Deduct'=>Yii::t('memberpanel', 'bill'), 'Sponsor bonus'=>Yii::t('memberpanel', 'SponsorBonus'), 'Autoplacement'=>Yii::t('memberpanel', 'AutoplacementBonus'), 'Transfer'=>Yii::t('memberpanel', 'Transfer'), 'Purchase'=>Yii::t('memberpanel', 'PurchaseCredit'), 'Withdraw'=>Yii::t('memberpanel', 'Withdrawal'), 'Bill'=>Yii::t('memberpanel', 'Utilities')), array('separator'=>'&nbsp;&nbsp;')); ?>
 			<?php if(Yii::app()->user->id ==1) echo '<br/><br/>'.Chtml::dropDownList('id',$filter['id'], $userDropDownList, array('prompt'=>'Select a customer')); ?>
 			<div style="margin: 1em 0 1.5em;">
 				<label style="margin: 0 .5em 0;"><?php echo Yii::t('memberpanel', 'from'); ?></label><?php echo CHtml::textField('DateFilter[from]', $filter['from'], array('class'=>'datepicker')); ?>

@@ -115,7 +115,7 @@ return array(
         'Withdrawal1'=>'Note: Please submit your cash point withdrawal request with a minimum amount of RM100 and the service charge for withdrawal is RM5.',
         'Withdrawal2'=>'Please update your bank account profile before submit a withdrawal request. Click ',
         'here'=>'here',
-        'Withdrawal2'=>' to update.',
+        'Withdrawal3'=>' to update.',
         'from'=>'From',
         'to'=>'To',
         'find'=>'Find',
@@ -305,4 +305,22 @@ return array(
 	*/
 	'block_title'=>'Your request to transfer is blocked',
 	'block_content'=>'Please contact your administrator to unblock.',
+
+	/*
+	*Payment
+	*/
+	'Payment'=>'Pay for your utilities',
+	'Payment1'=>'Every transaction will charge RM 0.30 service charge.',
+	'Provider'=>'Service provider',
+	'Billremark'=>'Account no / remark',
+	'Paymenthistory'=>'Payment history',
+	'Paymenthistory1'=>'Every transaction will charge RM 0.30 service charge.',
+	'Utilities'=>'Utilities',
+
+	/*
+	*Binary network
+	*/
+	'Binarynetwork'=>'Binary network',
+	'Binarysearch'=>'Search for customer binary network view',
+	'Binarytree'=>'Your auto-placement binary network',
 );
