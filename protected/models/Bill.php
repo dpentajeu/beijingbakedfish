@@ -118,7 +118,7 @@ class Bill extends CActiveRecord
 	{
 		$user = User::model()->findByAttributes(array('id'=>Yii::app()->user->id));
 
-		if($user->wallet->cashPoint < ($this->amount + 0.3))
+		if($user->wallet->cashPoint < ($this->amount + 1))
 			throw new Exception("Insufficient cash point for bill payment request.", 1);
 		
 		$this->attributes = array(
@@ -169,7 +169,7 @@ class Bill extends CActiveRecord
 			$model = Bill::model()->findByAttributes(array('id'=>$id));
 			$provider = Provider::model()->findByAttributes(array('id'=>$model->provider));
 			Transaction::create($model->wallet->user, array(
-				'amount'=>$model->amount,
+				'amount'=>($model->amount + 1),
 				'point'=>Transaction::TRAN_CP,
 				'type'=>'CREDIT',
 				'description'=>"Bill payment for {$provider->name}.",

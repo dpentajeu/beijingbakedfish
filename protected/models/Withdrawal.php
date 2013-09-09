@@ -165,6 +165,7 @@ class Withdrawal extends CActiveRecord
 			'amount'=>($model->amount + 5),
 			'point'=>Transaction::TRAN_CP,
 			'type'=>'CREDIT',
+			'force'=>true,
 			'description'=>'Withdraw Cash Point RM'.$model->amount.'.',
 			));
 			$model->status = 1;
