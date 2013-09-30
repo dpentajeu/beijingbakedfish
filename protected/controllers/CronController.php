@@ -69,7 +69,7 @@ class CronController extends Controller
 
 			if ($b->id == 1) {
 				$admin_bonus = $bonus;
-				$special_bonus = $admin_bonus / ($total_nodes - 1);
+				$special_bonus = $admin_bonus / ($total_nodes);
 				continue ;
 			}
 
@@ -89,20 +89,20 @@ class CronController extends Controller
 					'description' => "Autoplacement RP bonus (key:{$b->id})",
 					));
 			}
-			if ($special_bonus > 0) {
-				Transaction::create($b->user, array(
-					'amount' => $special_bonus,
-					'type' => 'DEBIT',
-					'point' => Transaction::TRAN_CP,
-					'description' => "Autoplacement CP special bonus (key:{$b->id})",
-					));
-				Transaction::create($b->user, array(
-					'amount' => $special_bonus,
-					'type' => 'DEBIT',
-					'point' => Transaction::TRAN_FP,
-					'description' => "Autoplacement RP special bonus (key:{$b->id})",
-					));
-			}
+			// if ($special_bonus > 0) {
+			// 	Transaction::create($b->user, array(
+			// 		'amount' => $special_bonus,
+			// 		'type' => 'DEBIT',
+			// 		'point' => Transaction::TRAN_CP,
+			// 		'description' => "Autoplacement CP special bonus (key:{$b->id})",
+			// 		));
+			// 	Transaction::create($b->user, array(
+			// 		'amount' => $special_bonus,
+			// 		'type' => 'DEBIT',
+			// 		'point' => Transaction::TRAN_FP,
+			// 		'description' => "Autoplacement RP special bonus (key:{$b->id})",
+			// 		));
+			// }
 		}
 		$this->response = compact('datetime', 'total_nodes', 'total_sales', 'admin_bonus', 'total_bonus', 'special_bonus');
 		$this->response = array_merge($default, $this->response);
