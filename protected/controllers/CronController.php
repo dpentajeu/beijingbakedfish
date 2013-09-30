@@ -124,10 +124,10 @@ class CronController extends Controller
 				switch ($b->packageId) {
 					case 1:
 						# code...
-						$bonus = 35;
+						$bonus = 40;
 						break;
 					case 2:
-						$bonus = (40 * 3);
+						$bonus = (45 * 3);
 						break;
 					case 3:
 						$bonus = (50 * 7);
@@ -145,6 +145,7 @@ class CronController extends Controller
 						'point' => Transaction::TRAN_CP,
 						'description' => "Autoplacement CP special bonus (key:{$b->id})",
 						));
+					echo("{$b->name} Autoplacement CP special bonus RM {$bonus}\n");
 				}
 			}
 		}
