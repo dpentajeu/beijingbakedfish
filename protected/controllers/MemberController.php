@@ -464,7 +464,10 @@ class MemberController extends Controller
 		$criteria->addSearchCondition('description', $filter);
 		$model = $model->findAll($criteria);
 		$total = count($model);
-		$this->render('transactionhistory',array('model'=>$model, 'userDropDownList'=>$userDropDownList, 'total'=>$total, 'title'=>$title, 'filter' => compact('filter', 'from', 'to', 'id')));
+		$total_amount = 0;
+		foreach ($model as $m)
+			$total_amount += $m->amount;
+		$this->render('transactionhistory',array('model'=>$model, 'userDropDownList'=>$userDropDownList, 'total'=>$total, 'total_amount'=>$total_amount, 'title'=>$title, 'filter' => compact('filter', 'from', 'to', 'id')));
 	}
 
 	public function actionNetwork()

@@ -19,33 +19,57 @@ $cs->registerScript('datepicker', "
 		yearRange: '1900:+0'
 	})
 	");
-$cs->registerCss('label',"
-	#main form label{
-		display: inline-block !important;
-	}
-	");
 ?>
 
 <div class="full_w">
 	<?php $form=$this->beginWidget('CActiveForm', array(
 		'action'=>$this->createUrl('member/transactionhistory'),
 		)); ?>
-		<div class="h_title"><?php echo Yii::t('memberpanel', 'TransactionHistory'); ?></div><br/>
-		<p>
-			<?php echo CHtml::radioButtonList('filter', $filter['filter'], array('Deduct'=>Yii::t('memberpanel', 'bill'), 'Sponsor bonus'=>Yii::t('memberpanel', 'SponsorBonus'), 'Autoplacement'=>Yii::t('memberpanel', 'AutoplacementBonus'), 'Transfer'=>Yii::t('memberpanel', 'Transfer'), 'Purchase'=>Yii::t('memberpanel', 'PurchaseCredit'), 'Withdraw'=>Yii::t('memberpanel', 'Withdrawal'), 'Bill'=>Yii::t('memberpanel', 'Utilities')), array('separator'=>'&nbsp;&nbsp;')); ?>
-			<?php if(Yii::app()->user->id ==1) echo '<br/><br/>'.Chtml::dropDownList('id',$filter['id'], $userDropDownList, array('prompt'=>'Select a customer')); ?>
-			<div style="margin: 1em 0 1.5em;">
-				<label style="margin: 0 .5em 0;"><?php echo Yii::t('memberpanel', 'from'); ?></label><?php echo CHtml::textField('DateFilter[from]', $filter['from'], array('class'=>'datepicker')); ?>
-				<label style="margin: 0 .5em 0;"><?php echo Yii::t('memberpanel', 'to'); ?></label><?php echo CHtml::textField('DateFilter[to]', $filter['to'], array('class'=>'datepicker')); ?>
+		<div class="h_title" style="margin: 0 0 1em 0;"><?php echo Yii::t('memberpanel', 'TransactionHistory'); ?></div>
+		<div style="padding: 0 0 0 .2em;">
+			<div style="margin: 0 0 1em 0;">
+				<?php echo CHtml::radioButtonList('filter', $filter['filter'],
+					array(
+						'Deduct'=>Yii::t('memberpanel', 'bill'),
+						'Sponsor bonus'=>Yii::t('memberpanel', 'SponsorBonus'),
+						'Autoplacement'=>Yii::t('memberpanel', 'AutoplacementBonus'),
+						'Transfer'=>Yii::t('memberpanel', 'Transfer'),
+						'Purchase'=>Yii::t('memberpanel', 'PurchaseCredit'),
+						'Withdraw'=>Yii::t('memberpanel', 'Withdrawal'),
+						'Bill'=>Yii::t('memberpanel', 'Utilities')
+						),
+					array(
+						'separator'=>'',
+						'template'=>'<div style="display: inline-block;">{input} {label}</div>',
+						'labelOptions'=>array('style'=>'display: inline-block; margin: 0 1em 0 0;'),
+						)
+					); ?>
+			</div>
+			<?php if(Yii::app()->user->id == 1): ?>
+				<div style="margin: 0 0 1em 0;">
+					<label for="id">User</label>
+					<?php echo Chtml::dropDownList('id',$filter['id'], $userDropDownList, array('prompt'=>'Select a customer')); ?>
+				</div>
+			<?php endif; ?>
+			<div style="margin: 0 0 1em 0;">
+				<div style="display: inline-block; width: 300px;">
+					<label for="DateFilter_from"><?php echo Yii::t('memberpanel', 'from'); ?></label>
+					<?php echo CHtml::textField('DateFilter[from]', $filter['from'], array('class'=>'datepicker')); ?>
+				</div>
+				<div style="display: inline-block; width: 300px;">
+					<label for="DateFilter_to"><?php echo Yii::t('memberpanel', 'to'); ?></label>
+					<?php echo CHtml::textField('DateFilter[to]', $filter['to'], array('class'=>'datepicker')); ?>
+				</div>
 			</div>
 			<button type="submit" name="btnFilter"><?php echo Yii::t('memberpanel', 'find'); ?></button>
-		</p>
+		</div>
 	<?php $this->endWidget(); ?>
 	<div class="entry">
 		<div class="sep"></div>
 	</div>
-	<h3><?= $title; ?></h3>
+	<h3><?php echo $title; ?></h3>
 	<p>* <?php echo Yii::t('memberpanel', 'TransactionHistory1'); ?></p>
+	<div style="padding: 0 15px;">Total amount: <?php echo number_format($total_amount, 2); ?></div>
 	<?php if(!empty($CMessage)) { ?>
 		<div class="n_error"><p><?php echo $CMessage; ?></p></div>
 	<?php } ?>
