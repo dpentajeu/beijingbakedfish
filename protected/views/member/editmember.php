@@ -34,7 +34,7 @@ $cs->registerScript('datepicker',"
 				<?php echo $form->textField($model, 'name'); ?>
 				<br/><br/>
 				<label for="contact"><span style="color: red;">*</span><?php echo Yii::t('memberpanel', 'Phone'); ?>:</label>
-				<?php echo $form->textField($model, 'contact', array('placeholder'=>'Example: 0121235678','disabled'=>'disabled')); ?>
+				<?php echo $form->textField($model, 'contact', array('placeholder'=>'Example: 0121235678')); ?>
 				<br/><br/>
 				<label for="dateOfBirth"><span style="color: red;">*</span><?php echo Yii::t('memberpanel', 'DOB'); ?></label>
 				<?php echo $form->textField($model, 'dateOfBirth', array('id'=>'datepicker')); ?>
