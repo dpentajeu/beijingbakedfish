@@ -390,13 +390,16 @@ class User extends CActiveRecord
 	public function approveUser($id)
 	{
 		$user = User::model()->findByAttributes(array('id'=>$id));
+		if(empty($user))
+			throw new Exception("User is not found!", 1);
+			
 		$first_time_activate = $user->isActivated;
 
 		$user->isApproved = true;
 		if (!$first_time_activate)
 			$user->isActivated = 1;
 
-		if (!$user->update()) {
+		if (!$user->save()) {
 			$error = '';
 			foreach ($user->getErrors() as $key)
 				$error .= $key[0];
@@ -404,7 +407,7 @@ class User extends CActiveRecord
 		}
 
 		if (!$first_time_activate) {
-			Binary::model($user);
+			Binary::create($user);
 			$msg = 'Your account is activated, login via www.beijingbakedfish.com/member, with phone number and default password is abc123, thanks.';
 			$this->send_sms($user->contact, $msg);
 		}
