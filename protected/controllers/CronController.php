@@ -110,17 +110,23 @@ class CronController extends Controller
 		var_export($this->response);
 	}
 
+	/*
+	*	Flush Admin received bonus from autoplacement cron back to downline members
+	*/
 	public function actionFlushbonus()
 	{
 		$bonus = 0;
 		$count = 0;
 		$total_bonus = 0;
+		$members = array(4,6,7,9,16,19,21,50,53,54,56,58,62,63,64,65,68,71,72,73,74,77);
 		$model = User::model()->findAll();
 
 		foreach ($model as $b) {
+			if(!in_array($b->wallet->id, $members))
+				continue;
+
 			if($b->id > 4)
 			{
-
 				switch ($b->packageId) {
 					case 1:
 						# code...
@@ -153,6 +159,9 @@ class CronController extends Controller
 		echo "Total bonus is {$total_bonus} out of {$count} of nodes.";
 	}
 
+	/*
+	*	Run first time before network tree is formed only, extremely dangerous
+	*/
 	public function actionAutoplacement()
 	{
 		$model = User::model()->activated()->findAll();
