@@ -22,6 +22,11 @@
                         <label for="amount"><span style="color: red;">*</span><?php echo Yii::t('memberpanel', 'CashPoint'); ?>:</label>
                         <?php echo Chtml::textField('amount',''); ?>
                         <br/><br/>
+                        <?php if(Yii::app()->user->roles == 'admin'){ ?>
+                        <label for="amountRP"><span style="color: red;">*</span><?php echo Yii::t('memberpanel', 'RedemptionPoint'); ?>:</label>
+                        <?php echo Chtml::textField('amountRP',''); ?>
+                        <br/><br/>
+                        <?php } ?>
                         <?php if(Yii::app()->user->roles != 'admin'){ ?>
                         <label for="ping"><span style="color: red;">*</span>PIN:</label>
                         <?php echo Chtml::passwordField('pin',''); ?>

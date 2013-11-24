@@ -535,9 +535,14 @@ class MemberController extends Controller
 		$CMessage = '';
 		$notice = '';
 
-		if(isset($_POST['amount']) && isset($_POST['ph']))
+		if(isset($_POST['ph']))
 		{
-			$amount = $_POST['amount'];
+			if(isset($_POST['amount']))
+				$amount = $_POST['amount'];
+
+			if(isset($_POST['amountRP']))
+				$amountRP = $_POST['amountRP'];
+
 			$ph = $_POST['ph'];
 			if(isset($_POST['pin']))
 				$pin = $_POST['pin'];
@@ -546,8 +551,8 @@ class MemberController extends Controller
 				if (empty($ph))
 					throw new Exception('Please enter a member contact number.');
 
-				if (empty($amount) || !is_numeric($amount))
-					throw new Exception('Please enter a correct cash point.');
+				if ((empty($amount) || !is_numeric($amount)) && (empty($amountRP) || !is_numeric($amountRP)))
+					throw new Exception('Please enter a correct cash point or redepmtion point.');
 
 				$member = User::getUserByPhone($ph);
 				$curUser = User::getUser(Yii::app()->user->id);
@@ -558,7 +563,11 @@ class MemberController extends Controller
 						throw new Exception('Please enter a correct pin.');
 				}
 
-				User::transferCP($member,$curUser,$amount);
+				if(!empty($amount) && !is_null($amount))
+					User::transferCP($member,$curUser,$amount);
+
+				if(!empty($amountRP) && !is_null($amountRP))
+					User::transferRP($member,$curUser,$amountRP);
 
 				$wallet = $curUser->wallet;
 				$notice = 'Transaction is done successfully! Name: '.$curUser->name.' | Cash Point: '.$wallet->cashPoint;

@@ -534,8 +534,25 @@ class User extends CActiveRecord
 			'description'=>'Transfer Cash Point from '.$curUser->name.'.',
 			));
 	}
+
+	public static function transferRP($member, $curUser, $amount)
+	{
+		Transaction::create($curUser, array(
+			'amount'=>$amount,
+			'point'=>Transaction::TRAN_CP,
+			'type'=>'CREDIT', 
+			'description'=>'Transfer Redemption Point to '.$member->name.'.',
+			));
+
+		Transaction::create($member, array(
+			'amount'=>$amount,
+			'point'=>Transaction::TRAN_FP,
+			'type'=>'DEBIT',
+			'description'=>'Transfer Redemption Point from '.$curUser->name.'.',
+			));
+	}
         
-        public static function transferCPtoFP($member, $amount)
+    public static function transferCPtoFP($member, $amount)
 	{
 		Transaction::create($member, array(
 			'amount'=>$amount,
