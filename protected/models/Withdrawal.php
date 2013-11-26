@@ -114,7 +114,7 @@ class Withdrawal extends CActiveRecord
 	public function withdrawCredit($user)
 	{
 		if($user->wallet->cashPoint < ($this->amount + 5))
-			throw new Exception("Insufficient cash point for withdrawal request.", 1);			
+			throw new Exception("Insufficient cash point for withdrawal request.", 1);
 
 		$model = new Withdrawal;
 		$model->attributes = array(
@@ -161,6 +161,10 @@ class Withdrawal extends CActiveRecord
 		if($status == "true")
 		{
 			$model = Withdrawal::model()->findByAttributes(array('id'=>$id));
+
+			if($model->wallet->cashPoint < ($model->amount + 5))
+				throw new Exception("This user is insufficient cash point to withdrawal.", 1);
+
 			Transaction::create($model->wallet->user, array(
 			'amount'=>($model->amount + 5),
 			'point'=>Transaction::TRAN_CP,
