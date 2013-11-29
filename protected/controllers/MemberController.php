@@ -43,7 +43,7 @@ class MemberController extends Controller
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember', 'binarynetwork', 'transferCP', 'paymenthistory'),
+				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember', 'binarynetwork', 'transferCP', 'paymenthistory','topup'),
 				'roles'=>array('admin'),
 				),
 			array('allow',
@@ -797,7 +797,7 @@ class MemberController extends Controller
                     $model->attributes = $_POST['User'];
 
                     try {
-                            if(!is_numeric($model->contact) || !is_numeric($model->contact))
+                            if(!is_numeric($model->contact))
                             {
                                 throw new Exception("Please enter the right format of contact numbers.");
                             }
@@ -817,6 +817,38 @@ class MemberController extends Controller
             }
 
             $this->render('refermember', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage, 'notice'=>$notice));
+    }
+
+    public function actionTopup()
+    {
+            $model = new User;
+            $packages = Package::getAllPackages();
+            $userDropDownList = $model->getUserDropDownList();
+            $CMessage = '';
+            $notice = '';
+
+            if(isset($_POST['User']))
+            {
+                    $model->attributes = $_POST['User'];
+
+                    try {
+						if (empty($model->id))
+							throw new Exception('Please select a customer.');
+						if (empty($model->packageId))
+							throw new Exception('Please select a package.');
+
+                        $model->topup($model->id);
+                        $notice = 'Member has been topup package succesfully.';
+                        
+                        $model = new User;                            
+                    }
+                    catch (Exception $e) 
+                    {
+                            $CMessage = $e->getMessage();
+                    }
+            }
+
+            $this->render('topup', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage, 'notice'=>$notice, 'userDropDownList'=>$userDropDownList));
     }
 
 	public function actionBinarynetwork($id = null)

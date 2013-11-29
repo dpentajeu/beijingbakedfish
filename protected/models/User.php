@@ -23,6 +23,7 @@
  * @property integer $tac
  * @property integer $isApproved
  * @property integer $isActivated
+ * @property string $remark
  *
  * The followings are the available model relations:
  * @property Wallet[] $wallets
@@ -80,7 +81,7 @@ class User extends CActiveRecord
 			array('password', 'length', 'max'=>512),
 			array('bankAcc', 'length', 'max'=>100),
 			array('bankName', 'length', 'max'=>50),
-			array('id, created, updated, dateOfBirth, password, oldPassword, newPassword, newPassword2','safe'),
+			array('id, created, updated, dateOfBirth, password, oldPassword, newPassword, newPassword2, remark','safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, acc_num, name, email, contact, address, dateOfBirth, country, created, updated, referral, packageId, password, bankAcc, bankName, pin, tac, isApproved, isActivated', 'safe', 'on'=>'search'),
@@ -129,6 +130,7 @@ class User extends CActiveRecord
 			'tac' => 'Tac',
 			'isApproved' => 'Is Approved',
 			'isActivated' => 'Is Activated',
+			'remark' => 'Remark',
 		);
 	}
 
@@ -162,6 +164,7 @@ class User extends CActiveRecord
 		$criteria->compare('tac',$this->tac);
 		$criteria->compare('isApproved',$this->isApproved);
 		$criteria->compare('isActivated',$this->isActivated);
+		$criteria->compare('remark',$this->remark,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -579,13 +582,13 @@ class User extends CActiveRecord
 		}
 	}
         
-        public function referMember()
+    public function referMember()
 	{
 		$this->email = User::findEmail($this->email);
 		$this->contact = User::findContact($this->contact);
 		$this->referral = User::findReferral($this->referral);
 
-                if($this->packageId == 1) $amount = 500;
+        if($this->packageId == 1) $amount = 500;
 		if($this->packageId == 2) $amount = 1500;
 		if($this->packageId == 3) $amount = 3500;
                 
@@ -789,6 +792,46 @@ class User extends CActiveRecord
 		curl_setopt($ch, CURLOPT_URL, $query_string);
 		curl_setopt($ch, CURLOPT_HTTPGET, true);
 		return $ch;
+	}
+
+	public function topup($id)
+	{
+		$user = User::findByAttributes(array('id'=>$id));
+		
+		$user->remark = $user->remark.'Topup from package '.$user->packageId.' to package '.$this->packageId.';';
+
+		$user->packageId = $this->packageId;
+
+		if (!$user->save())
+		{
+			$error = '';
+			foreach ($user->getErrors() as $key) {
+				$error .= $key[0];
+			}
+			throw new Exception($user->getErrors());
+		}
+
+		if($user->packageId == 1) $foodPoint = 600;
+		if($user->packageId == 2) $foodPoint = 1650;
+		if($user->packageId == 3) $foodPoint = 3850;
+
+		$wallet = $user->wallet;
+		$wallet->attributes = array(
+			'foodPoint'=>$wallet->foodPoint+$foodPoint,
+			'modifiedDate' => date('Y-m-d H:i:s'),
+			);
+
+		if (!$wallet->save())
+		{
+			$error = '';
+			foreach ($wallet->getErrors() as $key) {
+				$error .= $key[0];
+			}
+			throw new Exception($wallet->getErrors());
+		}
+
+		Binary::create($user);
+		network::setSponsorBonus($user->id);
 	}
 
 	private function randomWithLength($length)

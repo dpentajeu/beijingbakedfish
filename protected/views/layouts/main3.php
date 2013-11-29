@@ -65,6 +65,7 @@ $cs->registerScript('navi-menu', "
 						array('label'=>Yii::t('memberpanel', 'PurchaseCredit'), 'url'=>array('member/purchase'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
 						array('label'=>Yii::t('memberpanel', 'Withdrawal'), 'url'=>array('member/withdraw'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
 						array('label'=>Yii::t('memberpanel', 'Payment'), 'url'=>array('member/payment'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles =='user'),
+						array('label'=>Yii::t('memberpanel', 'Topup'), 'url'=>array('member/topup'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						)
 					)); ?>
 			</div>

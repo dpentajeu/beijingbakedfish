@@ -323,4 +323,7 @@ return array(
 	'Binarynetwork'=>'Binary network',
 	'Binarysearch'=>'Search for customer binary network view',
 	'Binarytree'=>'Your auto-placement binary network',
+
+	'Topup'=>'Top Up',
+	'Topup1'=>'Note: Please fill in the customer and package carefully.',
 );

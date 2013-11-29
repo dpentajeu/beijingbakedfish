@@ -319,4 +319,7 @@ return array(
 	'Binarynetwork'=>'二进制组织图',
 	'Binarysearch'=>'搜索二进制网络视图',
 	'Binarytree'=>'二进制组织图',
+
+	'Topup'=>'加额',
+	'Topup1'=>'提醒: 请慎重填写会员及等级.',
 );
