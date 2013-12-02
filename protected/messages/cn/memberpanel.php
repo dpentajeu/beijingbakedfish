@@ -322,4 +322,5 @@ return array(
 
 	'Topup'=>'加额',
 	'Topup1'=>'提醒: 请慎重填写会员及等级.',
+	'TopupHistory'=>'加额记录',
 );
