@@ -798,9 +798,15 @@ class User extends CActiveRecord
 	{
 		$user = User::findByAttributes(array('id'=>$id));
 		
-		$user->remark = $user->remark.'Topup from package '.$user->packageId.' to package '.$this->packageId.';';
+		$packageTo = Package::model()->findByAttributes(array('id'=>$this->packageId));
+		$packageFrom = Package::model()->findByAttributes(array('id'=>$user->packageId));
 
-		$user->packageId = $this->packageId;
+		if(is_null($packageTo) || is_null($packageTo)) throw new Exception("Error to get package");
+
+		$user->remark = $user->remark.'Topup '.Package::getPackageName($packageTo->id).';';
+		
+		if($packageTo->value > $packageFrom->value)
+			$user->packageId = $this->packageId;
 
 		if (!$user->save())
 		{

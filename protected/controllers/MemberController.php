@@ -43,7 +43,7 @@ class MemberController extends Controller
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember', 'binarynetwork', 'transferCP', 'paymenthistory','topup'),
+				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember', 'binarynetwork', 'transferCP', 'paymenthistory','topup','topuphistory'),
 				'roles'=>array('admin'),
 				),
 			array('allow',
@@ -849,6 +849,27 @@ class MemberController extends Controller
             }
 
             $this->render('topup', array('model'=>$model, 'packages'=>$packages, 'CMessage'=>$CMessage, 'notice'=>$notice, 'userDropDownList'=>$userDropDownList));
+    }
+
+    public function actionTopuphistory($id = null, $action = null)
+    {
+    	$criteria = new CDbCriteria;
+    	$criteria->addCondition('remark IS NOT NULL');
+    	$model = User::model()->findAll($criteria);
+
+    	$CMessage = '';
+        $notice = '';
+
+        if(!is_null($model))
+    	{
+    		foreach ($model as $m) {
+    			$m->remark = str_replace(';', '.<br/>', $m->remark);
+    		}
+    	}
+    	
+    	$list = $model;
+    	$total = count($list);
+    	$this->render('topuphistory', array('list'=>$list, 'total'=>$total, 'CMessage'=>$CMessage,'notice'=>$notice));
     }
 
 	public function actionBinarynetwork($id = null)
