@@ -49,7 +49,7 @@ class User extends CActiveRecord
 	public $newPin2;
 	public $oldPin;
 
-	public $total_sales;
+	public $total_sales = 0;
 
 	public static function model($className=__CLASS__)
 	{
@@ -193,7 +193,7 @@ class User extends CActiveRecord
 	{
 		$this->getDbCriteria()->mergeWith(array(
 			'with' => 'package',
-			'select' => 'IFNULL(SUM(package.value),0) as total_sales'
+			'select' => 'SUM(package.value) as total_sales'
 			));
 		return $this;
 	}
