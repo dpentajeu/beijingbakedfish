@@ -68,6 +68,9 @@ class CronController extends Controller
 			$bonus = $tree->total_nodes * 5;
 
 			if ($b->id == 1) {
+				if($total_nodes == 0)
+					continue;
+				
 				$admin_bonus = $bonus;
 				$special_bonus = $admin_bonus / ($total_nodes);
 				continue ;
