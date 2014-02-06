@@ -118,7 +118,7 @@ class CronController extends Controller
 		$bonus = 0;
 		$count = 0;
 		$total_bonus = 0;
-		$members = array(7,17,19,20,21,48,50,51,52,54,57,58,62,64,68,73,76,77,78,82);
+		$members = array(7,12,17,20,21,48,50,51,54,56,57,62,64,73,74,77,78);
 		$model = User::model()->findAll();
 
 		foreach ($model as $b) {
