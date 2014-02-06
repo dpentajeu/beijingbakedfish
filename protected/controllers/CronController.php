@@ -52,7 +52,7 @@ class CronController extends Controller
 
 		$sales = User::model()->with('package')->between($default['start'], $default['end'])->activated()->sales()->find();
 		$total_nodes = floatval(Binary::model()->between($default['start'], $default['end'])->count());
-		$total_sales = floatval($sales->total_sales);
+		$total_sales = empty($sales)? 0 : floatval($sales->total_sales);
 		$admin_bonus = 0;
 		$total_bonus = 0;
 		$special_bonus = 0;
