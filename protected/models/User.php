@@ -193,7 +193,7 @@ class User extends CActiveRecord
 	{
 		$this->getDbCriteria()->mergeWith(array(
 			'with' => 'package',
-			'select' => 'SUM(package.value) as total_sales'
+			'select' => 'IFNULL(0,SUM(package.value)) as total_sales'
 			));
 		return $this;
 	}
