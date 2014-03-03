@@ -121,7 +121,7 @@ class CronController extends Controller
 		$bonus = 0;
 		$count = 0;
 		$total_bonus = 0;
-		$members = array(7,12,17,20,21,48,50,51,54,56,57,62,64,73,74,77,78);
+		$members = array(7,8,17,19,20,21,48,50,51,52,57,62,64,74,78);
 		$model = User::model()->findAll();
 
 		foreach ($model as $b) {
@@ -133,13 +133,13 @@ class CronController extends Controller
 				switch ($b->packageId) {
 					case 1:
 						# code...
-						$bonus = 40;
+						$bonus = 35;
 						break;
 					case 2:
-						$bonus = (45 * 3);
+						$bonus = (40 * 3);
 						break;
 					case 3:
-						$bonus = (50 * 7);
+						$bonus = (45 * 7);
 					default:
 						# code...						
 						break;
