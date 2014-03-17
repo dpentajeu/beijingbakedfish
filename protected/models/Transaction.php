@@ -19,6 +19,7 @@
 class Transaction extends CActiveRecord
 {
 	public $name;
+	public $total = 0;
 
 	const TRAN_FP = 1;
 	const TRAN_CP = 2;

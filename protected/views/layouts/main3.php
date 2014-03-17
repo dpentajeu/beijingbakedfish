@@ -82,6 +82,7 @@ $cs->registerScript('navi-menu', "
                         array('label'=>Yii::t('memberpanel', 'WithdrawalHistory'), 'url'=>array('member/withdrawhistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						array('label'=>Yii::t('memberpanel', 'Paymenthistory'), 'url'=>array('member/paymenthistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						array('label'=>Yii::t('memberpanel', 'TopupHistory'), 'url'=>array('member/topuphistory'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
+						array('label'=>Yii::t('memberpanel', 'ROI Report'), 'url'=>array('member/roireport'), 'linkOptions'=>array('class'=>'icon report'), 'visible'=>Yii::app()->user->roles=='admin'),
 						)
 					)); ?>
 			</div>

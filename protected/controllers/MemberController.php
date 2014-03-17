@@ -43,7 +43,7 @@ class MemberController extends Controller
 				'users'=>array('@'),
 				),
 			array('allow',
-				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember', 'binarynetwork', 'transferCP', 'paymenthistory','topup','topuphistory'),
+				'actions'=>array('approve', 'disapprove', 'transaction', 'sms', 'editannouncement', 'purchasehistory','withdrawhistory', 'manualtransaction', 'refermember', 'binarynetwork', 'transferCP', 'paymenthistory','topup','topuphistory','roireport'),
 				'roles'=>array('admin'),
 				),
 			array('allow',
@@ -731,6 +731,38 @@ class MemberController extends Controller
     	$list = $model->getAllWithdrawal();
     	$total = count($list);
     	$this->render('withdrawhistory', array('list'=>$list, 'total'=>$total, 'CMessage'=>$CMessage,'notice'=>$notice));
+    }
+
+    public function actionRoireport()
+    {
+    	$user = User::getAllUser();
+
+    	$list = array();
+
+    	foreach ($user as $key => $u) {
+
+    		if($u->id != 1)
+    		{
+	    		$criteria = new CDbCriteria;
+	    		$criteria->select = "sum(amount) as total";
+	    		$criteria->compare('tranType','DEBIT');
+	    		$criteria->addSearchCondition('description', 'Sponsor bonus');
+	    		$criteria->addSearchCondition('description', 'Autoplacement',true,'OR');
+	    		$trans = Transaction::model();
+	    		$trans->user($u->id);
+	    		$trans = $trans->find($criteria);
+
+	    		$list[] = array(
+	    			'name'=>$u->name,
+	    			'package'=>$u->packageName,
+	    			'amount'=>empty($trans)?0 :$trans->total,
+	    			);
+	    	}
+    	}
+
+    	$total = count($list);
+
+    	$this->render('roireport',array('list'=>$list,'total'=>$total));
     }
 
     public function actionPayment()

@@ -327,4 +327,7 @@ return array(
 	'Topup'=>'Top Up',
 	'Topup1'=>'Note: Please fill in the customer and package carefully.',
 	'TopupHistory'=>'Topup History',
+
+	'ROI Report'=>'ROI Report',
+	'Total ROI'=>'Total ROI',
 );
