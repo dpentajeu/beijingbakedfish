@@ -5,7 +5,7 @@ $cs->registerPackage('jui');
 $cs->registerScript('pagination',"
 	$('#pagination').smartpaginator({ 
 		totalrecords: $total,
-		recordsperpage: 10,
+		recordsperpage: 15,
 		datacontainer: 'table',
 		dataelement: 'tr',
 		theme: 'black' 
